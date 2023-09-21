@@ -21,6 +21,7 @@ const _StackTest = () => {
         initialRouteName="WelcomeTeam"
         screenOptions={{
           headerShown: false,
+          animation: 'slide_from_right',
         }}>
         <Stack.Screen name="WelcomeTeam" component={WelcomeTeam} />
         <Stack.Screen name="Test" component={Test} />
