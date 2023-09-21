@@ -1,11 +1,19 @@
-import {StyleSheet, Text, Image} from 'react-native';
+import {StyleSheet, Text, Image, Pressable} from 'react-native';
 import React from 'react';
 import {LOGO_APP, SPLASH_SCREEN, fontFamily} from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
 import {BackgroundApp} from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {WelcomeTeamStackParamList} from '@navigation';
 
-const _WelcomeTeam = () => {
+type PropsType = NativeStackScreenProps<
+  WelcomeTeamStackParamList,
+  'WelcomeTeam'
+>;
+
+const _WelcomeTeam: React.FC<PropsType> = props => {
+  const {navigation} = props;
   return (
     <BackgroundApp source={SPLASH_SCREEN}>
       <SafeAreaView style={_styles.container}>
@@ -28,7 +36,11 @@ const _WelcomeTeam = () => {
         <Text style={[_styles.textName, {fontFamily: fontFamily.Semibold}]}>
           Lữ Văn Trọng
         </Text>
-        <Image source={LOGO_APP} style={_styles.imageLogo} />
+        <Pressable
+          style={_styles.pressable}
+          onPress={() => navigation.navigate('Test')}>
+          <Image source={LOGO_APP} style={_styles.imageLogo} />
+        </Pressable>
       </SafeAreaView>
     </BackgroundApp>
   );
@@ -59,6 +71,9 @@ const _styles = StyleSheet.create({
     width: DimensionsStyle.width * 0.4,
     height: DimensionsStyle.width * 0.32,
     resizeMode: 'stretch',
+  },
+
+  pressable: {
     position: 'absolute',
     bottom: 0,
   },
