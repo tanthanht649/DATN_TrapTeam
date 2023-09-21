@@ -20,7 +20,7 @@ const _BackgroundApp: React.FC<BackgroundProps> = props => {
   return (
     <ImageBackground
       source={source}
-      style={[styles.container, styleBackground]}>
+      style={[_styles.container, styleBackground]}>
       <StatusBar
         barStyle="light-content"
         backgroundColor={'transparent'}
@@ -31,7 +31,7 @@ const _BackgroundApp: React.FC<BackgroundProps> = props => {
   );
 };
 
-const styles = StyleSheet.create({
+const _styles = StyleSheet.create({
   container: {
     flex: 1,
   },
