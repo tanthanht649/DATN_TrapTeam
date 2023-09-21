@@ -16,7 +16,7 @@ const _WelcomeTeam = () => {
         <Text style={[_styles.textName, {fontFamily: fontFamily.Bold}]}>
           Nguyễn Lê Thuy Ân
         </Text>
-        <Text style={[_styles.textName, {fontFamily: fontFamily.BlackItalic}]}>
+        <Text style={[_styles.textName, {fontFamily: fontFamily.Hairline}]}>
           Huỳnh Phi Long
         </Text>
         <Text style={[_styles.textName, {fontFamily: fontFamily.Regular}]}>
@@ -25,10 +25,9 @@ const _WelcomeTeam = () => {
         <Text style={[_styles.textName, {fontFamily: fontFamily.Light}]}>
           Huỳnh Thị Mỹ Linh
         </Text>
-        <Text style={[_styles.textName, {fontFamily: fontFamily.LightItalic}]}>
+        <Text style={[_styles.textName, {fontFamily: fontFamily.Semibold}]}>
           Lữ Văn Trọng
         </Text>
-
         <Image source={LOGO_APP} style={_styles.imageLogo} />
       </SafeAreaView>
     </BackgroundApp>
