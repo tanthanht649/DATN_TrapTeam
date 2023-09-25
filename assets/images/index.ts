@@ -83,3 +83,4 @@ export const STAR_6 = require('../../assets/images/star_6.png');
 export const PLUS = require('../../assets/images/plus.png');
 export const DELETE = require('../../assets/images/delete.png');
 export const ARROW_LEFT_LINE_BIG = require('../../assets/images/arrow_left_line_big.png');
+export const IMAGE_TEST = require('../../assets/images/image_test.png');
