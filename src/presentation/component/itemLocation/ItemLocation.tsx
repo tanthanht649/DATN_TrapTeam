@@ -6,6 +6,7 @@ import {
   StyleProp,
   TextStyle,
   Pressable,
+  ViewStyle,
 } from 'react-native';
 import React from 'react';
 import {Colors} from '@resources';
@@ -13,6 +14,7 @@ import {TextPlus} from '../textPlus';
 import {LOCATION_3} from '@assets';
 
 export type ItemLocationProps = {
+  containerStyles?: StyleProp<ViewStyle>;
   imageLocation: ImageSourcePropType;
   text: string;
   textStyles?: StyleProp<TextStyle>;
@@ -30,6 +32,7 @@ const _ItemLocation: React.FC<ItemLocationProps> = props => {
       style={[
         _styles.container,
         {backgroundColor: status ? Colors.BLUE : 'transparent'},
+        props.containerStyles,
       ]}
       onPress={statusOnPress ? () => setStatus(!status) : () => {}}>
       <View
