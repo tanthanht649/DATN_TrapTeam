@@ -41,6 +41,8 @@ const _WelcomeTeam: React.FC<PropsType> = props => {
           avatar={AVT}
           onPressAvatar={() => console.log('Avatar')}
           onPressNotification={() => console.log('Notification')}
+          onPressSetting={() => console.log('Setting')}
+          checkNotify={true}
         />
         {/* <Text style={_styles.textTitle}>Welcome Team</Text>
         <Text style={[_styles.textName, {fontFamily: fontFamily.Italic}]}>
