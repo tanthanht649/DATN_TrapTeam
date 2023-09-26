@@ -80,14 +80,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        width: DimensionsStyle.width * 1.01,
-        height: DimensionsStyle.width * 0.25,
+        width: Dimensions.get('window').width*1.01,
+        height: Dimensions.get('window').height*0.15,
         borderWidth: 0.1,
-        elevation: 1
+        elevation: 1,
     },
     icon: {
-        width: DimensionsStyle.width * 0.13,
-        height: DimensionsStyle.width * 0.13,
+        width: Dimensions.get('window').width*0.145,
+        height: Dimensions.get('window').height*0.069,
 
     },
 
@@ -95,16 +95,17 @@ const styles = StyleSheet.create({
         height: DimensionsStyle.width * 0.25,
         justifyContent: 'center',
         alignItems: 'center',
-        left: 60,
+        left: 50,
+
 
     },
     boxLeft: {
-        width: DimensionsStyle.width * 0.3,
+        width: DimensionsStyle.width * 0.35,
         height: DimensionsStyle.width * 0.25,
         justifyContent: 'center',
         alignItems: 'center',
         top: 15,
-        left: -20,
+        left: -15,
 
     },
     boxCenter: {
@@ -126,20 +127,21 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         borderColor: Colors.WHITE,
         backgroundColor: Colors.WHITE,
-        width: DimensionsStyle.width * 0.45,
-        height: DimensionsStyle.width * 0.13,
-        right: 20,
+        width: DimensionsStyle.width * 0.37,
+        height: DimensionsStyle.width * 0.15,
+        right: 40,
 
     },
     imglo: {
-        resizeMode: 'stretch',
-        marginLeft: 7,
-        marginTop: 7,
+        width: Dimensions.get('window').width*0.054,
+        height: Dimensions.get('window').height*0.03,
+        marginLeft: 17,
+        marginTop: 17,
     },
 
     selectDropdown: {
-        width: DimensionsStyle.width * 0.45,
-        height: DimensionsStyle.width * 0.13,
+        width: DimensionsStyle.width * 0.37,
+        height: DimensionsStyle.width * 0.15,
         borderColor: Colors.WHITE,
         backgroundColor: Colors.WHITE,
         borderRadius: 30,
@@ -167,15 +169,16 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         borderColor: Colors.GRAY,
         backgroundColor: Colors.WHITE,
-        width: DimensionsStyle.width * 0.13,
-        height: DimensionsStyle.width * 0.13,
-        left: 60,
-        top: 25
+        width: DimensionsStyle.width * 0.155,
+        height: DimensionsStyle.width * 0.155,
+        left: 55,
+        top: 23
 
     },
     img: {
-        resizeMode: 'stretch',
-        marginLeft: 3,
-        marginTop: 2.5,
+        width: Dimensions.get('window').width*0.126,
+        height: Dimensions.get('window').height*0.06,
+        marginLeft: 4,
+        marginTop: 4,
     },
 })
