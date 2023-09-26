@@ -10,21 +10,21 @@ type Props = {
     viewStyle?: StyleProp<ViewStyle>;
     iconRightStyle?: StyleProp<ImageStyle>;
     onPress?: () => void;
-    onPressLeft?:()=>void;
-    onPressRight?:()=>void;
-
-
+    onPressLeft?: () => void;
+    onPressRight?: () => void;
+    value: string;
+    onChangeText?: (value: string) => void;
 }
+
 const _Input: React.FC<Props> = (props) => {
-    const { imageIconLeft, imageIconRight, label, onPress,onPressLeft,onPressRight } = props;
+    const { imageIconLeft, value, imageIconRight, label, onChangeText, onPress, onPressLeft, onPressRight } = props;
     return (
         <Pressable onPress={onPress} style={StyleSheet.flatten([_styles.container, props.viewStyle])}>
             <View style={_styles.row}>
                 <Pressable onPress={onPressLeft} >
                     <Image source={imageIconLeft} style={_styles.iconLeft} />
                 </Pressable>
-
-                <TextInput placeholder={label} style={_styles.input} ></TextInput>
+                <TextInput placeholder={label} value={value} style={[_styles.input, {fontFamily: value.length == 0 ? fontFamily.Regular: fontFamily.Bold, color:value.length==0?Colors.GRAY:Colors.GREY_DARK, fontSize:value.length==0? 12: 14}]} onChangeText={onChangeText} ></TextInput>
             </View>
             <Pressable onPress={onPressRight} >
                 <Image source={imageIconRight} style={StyleSheet.flatten([_styles.iconRight, props.iconRightStyle])} />
@@ -50,10 +50,7 @@ const _styles = StyleSheet.create({
         alignItems: 'center',
     },
     input: {
-        color: Colors.GREY_MEDIUM,
-        fontFamily: fontFamily.Regular,
-        fontSize: 12,
-        lineHeight: 20,
+        lineHeight: 25,
         width: Dimensions.get('window').width * 0.4
     },
     iconLeft: {

@@ -46,13 +46,13 @@ const _styles = StyleSheet.create({
         width:20,
         height:20,
         marginRight:7,
-        opacity:1
+        display:'none'
     },
     iconRight:{
         width:20,
         height:20,
         marginLeft:10,
-        opacity:1
+        display:'none'
     }
 });
 
