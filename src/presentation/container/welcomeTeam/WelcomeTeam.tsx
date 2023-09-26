@@ -1,6 +1,7 @@
 import {StyleSheet, Text, Image, Pressable} from 'react-native';
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 import {
+  AVT,
   BACKGROUND_HOME,
   BACKGROUND_LOGIN,
   BACKGROUND_WHITE,
@@ -11,7 +12,7 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {BackgroundApp,HeaderHome} from '@components';
+import {BackgroundApp, HeaderHome, HeaderHome2} from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {WelcomeTeamStackParamList} from '@navigation';
@@ -20,21 +21,28 @@ type PropsType = NativeStackScreenProps<
   WelcomeTeamStackParamList,
   'WelcomeTeam'
 >;
-const [check, setcheck] = useState(false)
+// const [check, setcheck] = useState(false);
 
 const _WelcomeTeam: React.FC<PropsType> = props => {
   const {navigation} = props;
-  const go = () => {
-    setcheck(check);
-};
+  // const go = () => {
+  //   setcheck(check);
+  // };
   return (
     <BackgroundApp source={BACKGROUND_HOME}>
-    <HeaderHome
+      {/* <HeaderHome
       iconHeader={(check) ? NOTIFICATION : NOTIFICATION_SELECT}
       
-    />
+    /> */}
+
       <SafeAreaView style={_styles.container}>
-        <Text style={_styles.textTitle}>Welcome Team</Text>
+        <HeaderHome2
+          statusNotification={false}
+          avatar={AVT}
+          onPressAvatar={() => console.log('Avatar')}
+          onPressNotification={() => console.log('Notification')}
+        />
+        {/* <Text style={_styles.textTitle}>Welcome Team</Text>
         <Text style={[_styles.textName, {fontFamily: fontFamily.Italic}]}>
           Trương Tấn Thành
         </Text>
@@ -52,7 +60,7 @@ const _WelcomeTeam: React.FC<PropsType> = props => {
         </Text>
         <Text style={[_styles.textName, {fontFamily: fontFamily.Semibold}]}>
           Lữ Văn Trọng
-        </Text>
+        </Text> */}
         <Pressable
           style={_styles.pressable}
           onPress={() => navigation.navigate('Test')}>
@@ -68,7 +76,6 @@ const _styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
   },
 
   textTitle: {
