@@ -4,11 +4,10 @@ import {
   ImageSourcePropType,
   Image,
   StyleProp,
-  ViewStyle,
   TextStyle,
   Pressable,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Colors} from '@resources';
 import {TextPlus} from '../textPlus';
 import {LOCATION_3} from '@assets';
