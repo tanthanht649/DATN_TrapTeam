@@ -1,14 +1,19 @@
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {WelcomeTeamStackParamList} from '@navigation';
-import {BackgroundApp, ItemLocation} from '@components';
-import {BACKGROUND_WHITE, LOCATION, LOCATION_2} from '@assets';
+import {BackgroundApp, Button, ButtonArrow, Input, ItemLocation} from '@components';
+import {ARROW_LEFT_LINE, ARROW_LEFT_LINE_2, ARROW_LEFT_LINE_BIG, BACKGROUND_WHITE, EMAIL, LOCATION_2, MESSAGING, SEARCH_BOTTOM_TAB} from '@assets';
 
 type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Test'>;
 const _Test: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const [search,setSearch] = useState<string>('');
+  const handleOnchangeText = (value: string) => {
+    setSearch(value);
+    console.log(value)
+}
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView style={_styles.container}>
@@ -21,6 +26,9 @@ const _Test: React.FC<PropsType> = props => {
           textBolds={['2.5 km']}
           statusOnPress={true}
         />
+        <Button title='Next' onPress={()=>{}} viewStyle={{width:278}} imageIconLeft={EMAIL} imageIconRight={MESSAGING}></Button>
+        <ButtonArrow imageIcon={ARROW_LEFT_LINE} onPress={()=>{}} shadow={true}></ButtonArrow>
+        <Input label='search' value={search} onChangeText={handleOnchangeText} imageIconLeft={SEARCH_BOTTOM_TAB} imageIconRight={ARROW_LEFT_LINE_2} iconRightStyle={{opacity:0}} ></Input>
       </SafeAreaView>
     </BackgroundApp>
   );

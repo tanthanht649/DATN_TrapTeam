@@ -1,5 +1,8 @@
 export * from './background';
-export * from './header';
-export * from './itemLocation';
 export * from './textPlus';
-export * from './toptab';
+export * from './itemLocation';
+export * from './button';
+export * from './buttonArrow';
+export * from './input';
+
+

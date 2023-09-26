@@ -13,5 +13,7 @@ export const Colors = {
   BLUE_TEXT: '#53587A',
   SOFT_BLUE: '#F5F4F8',
   GRAY: '#ECEDF8',
+  GRAY_SEARCH:'#F5F4F8',
   OVAN: '#658495',
+  
 };
