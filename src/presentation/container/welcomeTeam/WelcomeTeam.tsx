@@ -2,6 +2,7 @@ import {StyleSheet, Text, Image, Pressable} from 'react-native';
 import React from 'react';
 import {
   BACKGROUND_HOME,
+  BACKGROUND_LOGIN,
   BACKGROUND_WHITE,
   LOGO_APP,
   SPLASH_SCREEN,
@@ -21,7 +22,7 @@ type PropsType = NativeStackScreenProps<
 const _WelcomeTeam: React.FC<PropsType> = props => {
   const {navigation} = props;
   return (
-    <BackgroundApp source={BACKGROUND_HOME}>
+    <BackgroundApp source={SPLASH_SCREEN}>
       <SafeAreaView style={_styles.container}>
         <Text style={_styles.textTitle}>Welcome Team</Text>
         <Text style={[_styles.textName, {fontFamily: fontFamily.Italic}]}>
