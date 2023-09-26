@@ -6,43 +6,63 @@ import {
   StyleProp,
   ViewStyle,
   TextStyle,
+  Pressable,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Colors} from '@resources';
 import {TextPlus} from '../textPlus';
+import {LOCATION_3} from '@assets';
 
 export type ItemLocationProps = {
   imageLocation: ImageSourcePropType;
-  containerStyle?: StyleProp<ViewStyle>;
-  imageLocationContainerStyle?: StyleProp<ViewStyle>;
   text: string;
   textStyles?: StyleProp<TextStyle>;
   textBolds?: string[];
   textBoldStyle?: StyleProp<TextStyle>;
+  statusOnPress: boolean;
 };
 
 const _ItemLocation: React.FC<ItemLocationProps> = props => {
-  const {imageLocation, text, textBolds} = props;
+  const {imageLocation, text, textBolds, statusOnPress} = props;
+  const [status, setStatus] = React.useState(false);
+
   return (
-    <View style={StyleSheet.flatten([_styles.container, props.containerStyle])}>
+    <Pressable
+      style={[
+        _styles.container,
+        {backgroundColor: status ? Colors.BLUE : 'transparent'},
+      ]}
+      onPress={statusOnPress ? () => setStatus(!status) : () => {}}>
       <View
-        style={StyleSheet.flatten([
+        style={[
           _styles.imageLocationContainer,
-          props.imageLocationContainerStyle,
-        ])}>
-        <Image source={imageLocation} style={_styles.imageLocation} />
+          {backgroundColor: status ? Colors.OVAN : Colors.GRAY},
+        ]}>
+        <Image
+          source={status ? LOCATION_3 : imageLocation}
+          style={_styles.imageLocation}
+        />
       </View>
       <View>
         <TextPlus
           text={text}
           textBolds={textBolds ? textBolds : []}
           numberOfLines={2}
-          viewStyle={{width: '90%'}}
-          textStyle={StyleSheet.flatten([props.textStyles, {lineHeight: 20}])}
-          boldStyle={props.textBoldStyle}
+          textStyle={StyleSheet.flatten([
+            props.textStyles,
+            {
+              lineHeight: 20,
+              width: '90%',
+              color: status ? Colors.WHITE : Colors.BLACK,
+            },
+          ])}
+          boldStyle={StyleSheet.flatten([
+            props.textBoldStyle,
+            {color: status ? Colors.WHITE : Colors.BLUE},
+          ])}
         />
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -50,7 +70,7 @@ const _styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     height: 80,
     marginHorizontal: 20,
     paddingHorizontal: 15,
@@ -69,7 +89,7 @@ const _styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50,
-    backgroundColor: Colors.GRAY,
+
     alignItems: 'center',
     justifyContent: 'center',
     marginEnd: 15,
