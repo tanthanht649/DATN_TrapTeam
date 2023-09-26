@@ -10,5 +10,7 @@ export const Colors = {
   GREY_BAREL: 'rgba(161, 165, 193, 1)',
   GREY_MEDIUM: 'rgba(83, 88, 122, 1)',
   GRAY: '#ECEDF8',
+  GRAY_SEARCH:'#F5F4F8',
   OVAN: '#658495',
+  
 };
