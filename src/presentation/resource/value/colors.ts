@@ -9,4 +9,7 @@ export const Colors = {
   GREY_DARK: 'rgba(37, 43, 92, 1)',
   GREY_BAREL: 'rgba(161, 165, 193, 1)',
   GREY_MEDIUM: 'rgba(83, 88, 122, 1)',
+  BLUE_SELECT: '#234F68',
+  BLUE_TEXT: '#53587A',
+  SOFT_BLUE: '#F5F4F8',
 };
