@@ -19,6 +19,7 @@ import {
   LOCATION,
   NOTIFICATION,
   NOTIFICATION_SELECT,
+  SETTING,
   fontFamily,
 } from '@assets';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -28,13 +29,21 @@ const DATA = ['Hà Nội, Việt Nam', 'Đà Nẵng, Việt Nam', 'Hồ Chí Min
 export type HeaderHomeProps = {
   statusNotification: boolean;
   avatar: ImageSourcePropType;
-  onPressNotification: () => void;
-  onPressAvatar: () => void;
+  onPressNotification?: () => void;
+  onPressAvatar?: () => void;
+  onPressSetting?: () => void;
+  checkNotify?: boolean;
 };
 
 const _HeaderHome2: React.FC<HeaderHomeProps> = props => {
-  const {statusNotification, avatar, onPressNotification, onPressAvatar} =
-    props;
+  const {
+    statusNotification,
+    avatar,
+    onPressNotification,
+    onPressAvatar,
+    onPressSetting,
+    checkNotify,
+  } = props;
   return (
     <SafeAreaView style={_styles.container}>
       <View style={_styles.locationContainer}>
@@ -61,14 +70,42 @@ const _HeaderHome2: React.FC<HeaderHomeProps> = props => {
         />
       </View>
       <View style={_styles.notificationAndAvatarContainer}>
-        <Pressable onPress={onPressNotification}>
+        <Pressable
+          onPress={onPressNotification}
+          style={{
+            display: checkNotify ? 'flex' : 'none',
+          }}>
           <Image
             source={statusNotification ? NOTIFICATION : NOTIFICATION_SELECT}
             style={_styles.imageNotification}
           />
         </Pressable>
-        <Pressable style={_styles.containerAvatar} onPress={onPressAvatar}>
+        <Pressable
+          style={[
+            _styles.containerAvatar,
+            {
+              display: checkNotify ? 'flex' : 'none',
+            },
+          ]}
+          onPress={onPressAvatar}>
           <Image source={avatar} />
+        </Pressable>
+        <Pressable
+          style={[
+            _styles.containerAvatar,
+            {
+              display: checkNotify ? 'none' : 'flex',
+            },
+          ]}
+          onPress={onPressSetting}>
+          <Image
+            source={SETTING}
+            style={{
+              width: 20,
+              height: 20,
+              resizeMode: 'stretch',
+            }}
+          />
         </Pressable>
       </View>
     </SafeAreaView>

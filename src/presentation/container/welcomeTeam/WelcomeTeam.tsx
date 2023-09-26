@@ -12,7 +12,7 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {BackgroundApp, HeaderHome, HeaderHome2} from '@components';
+import {BackgroundApp, HeaderHome, HeaderHome2, TopTab} from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {WelcomeTeamStackParamList} from '@navigation';
@@ -41,7 +41,10 @@ const _WelcomeTeam: React.FC<PropsType> = props => {
           avatar={AVT}
           onPressAvatar={() => console.log('Avatar')}
           onPressNotification={() => console.log('Notification')}
+          onPressSetting={() => console.log('Setting')}
+          checkNotify={true}
         />
+        <TopTab isCheck="card" />
         {/* <Text style={_styles.textTitle}>Welcome Team</Text>
         <Text style={[_styles.textName, {fontFamily: fontFamily.Italic}]}>
           Trương Tấn Thành
