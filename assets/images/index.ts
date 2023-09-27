@@ -89,3 +89,5 @@ export const HEART_INACTIVE = require('./Favorite_Inactive.png');
 export const HEART_ACTIVE = require('./Favorite_Active.png');
 export const ICON_BACK = require('./Icon_Back.png');
 export const ICON_LOGOUT = require('./Icon_LogOut.png');
+export const ICON_FILTER = require('./Icon_Filter.png');
+export const ICON_DELETE = require('./Icon_Delete.png');
