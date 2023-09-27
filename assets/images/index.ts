@@ -85,3 +85,7 @@ export const DELETE = require('../../assets/images/delete.png');
 export const ARROW_LEFT_LINE_BIG = require('../../assets/images/arrow_left_line_big.png');
 export const IMAGE_TEST = require('../../assets/images/image_test.png');
 export const AVT = require('../../assets/images/avt.png');
+export const HEART_INACTIVE = require('./Favorite_Inactive.png');
+export const HEART_ACTIVE = require('./Favorite_Active.png');
+export const ICON_BACK = require('./Icon_Back.png');
+export const ICON_LOGOUT = require('./Icon_LogOut.png');

@@ -15,5 +15,7 @@ export const Colors = {
   GRAY: '#ECEDF8',
   GRAY_SEARCH:'#F5F4F8',
   OVAN: '#658495',
-  
+  GREY:'#DFDFDF',
+    GREY_DARK_1:'#252B5C',
+    GREY_SOFT:'#F5F4F8',
 };
