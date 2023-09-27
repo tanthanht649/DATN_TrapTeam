@@ -1,12 +1,11 @@
+import React, { useState, useCallback } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native';
-import React, { useState } from 'react';
 import {
   fontFamily, HORIZONTAL_ACTIVE,
   HORIZONTAL_INACTIVE, VERTICAL_ACTIVE,
   VERTICAL_INACTIVE
 } from '@assets';
 import { Colors, DimensionsStyle } from '@resources';
-import { Dimensions } from 'react-native';
 import { TextPlus } from '../textPlus';
 
 type Props = {
@@ -19,12 +18,12 @@ const _ViewSwitcher: React.FC<Props> = props => {
   const text = quantityEstates ? `Found ${quantityEstates} estates` : 'Không tìm thấy thông tin';
   const [activeTab, setActiveTab] = useState<'horizontal' | 'vertical'>('horizontal');
 
-  const handlePress = (tab: 'horizontal' | 'vertical') => {
+  const handlePress = useCallback((tab: 'horizontal' | 'vertical') => {
     setActiveTab(tab);
     if (onTabChange) {
       onTabChange(tab === 'horizontal' ? 'list' : 'grid');
     }
-  };
+  }, [onTabChange]);
 
   return (
     <View style={_styles.container}>
