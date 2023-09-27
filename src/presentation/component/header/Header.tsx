@@ -1,6 +1,6 @@
 import { Dimensions, Image, ImageSourcePropType, ImageStyle, Pressable, StyleProp, StyleSheet, Text, TextProps, View, ViewStyle } from 'react-native';
 import React from 'react';
-import { HEART_ACTIVE } from '@assets';
+import { HEART_ACTIVE, fontFamily } from '@assets';
 import { Colors } from '@resources';
 
 interface HeaderProps {
@@ -143,8 +143,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     textCenterHeader: {
-        fontFamily: 'Lato',
-        fontWeight: '700',
+        fontFamily: fontFamily.Bold,
         fontSize: 14,
         color: Colors.GREY_DARK_1,
         textAlign: 'center',
@@ -158,8 +157,7 @@ const styles = StyleSheet.create({
         backgroundColor:Colors.GREY,
     },
     textRight: {
-        fontFamily: 'Montserrat',
-        fontWeight: '400',
+        fontFamily: fontFamily.Medium,
         fontSize: 12,
         color: Colors.BLACK,
         textAlign: 'center',
