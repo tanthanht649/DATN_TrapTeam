@@ -2,7 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
-import {WelcomeTeam, Test} from '../container/welcomeTeam';
+import {WelcomeTeam, Test} from '@containers';
 
 type WelcomeTeamProps = {};
 type TestProps = {};
