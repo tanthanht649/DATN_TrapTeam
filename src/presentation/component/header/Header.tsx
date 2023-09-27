@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     iconHeart: {
-        width: 90,
-        height: 90,
+        width: 85,
+        height: 85,
         resizeMode:'stretch',
         marginLeft: 15,
         marginTop: 23,
