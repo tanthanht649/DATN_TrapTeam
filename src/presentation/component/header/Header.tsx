@@ -12,8 +12,8 @@ import {
   ViewStyle,
 } from 'react-native';
 import React from 'react';
-import { HEART, HEART_ACTIVE, HEART_INACTIVE, fontFamily } from '@assets';
-import { Colors } from '@resources';
+import {HEART, HEART_ACTIVE, HEART_INACTIVE, fontFamily} from '@assets';
+import {Colors} from '@resources';
 
 interface HeaderProps {
   iconLeft?: ImageSourcePropType;
@@ -23,6 +23,7 @@ interface HeaderProps {
   iconHeart?: ImageSourcePropType;
   eventLeft?: () => void;
   eventRight?: () => void;
+  eventHeart?: () => void;
   styleIconLeft?: StyleProp<ImageStyle>;
   styleIconCenter?: StyleProp<ImageStyle>;
   styleIconRight?: StyleProp<ImageStyle>;
@@ -39,6 +40,7 @@ const _Header: React.FC<HeaderProps> = ({
   iconHeart,
   eventLeft,
   eventRight,
+  eventHeart,
   styleIconLeft,
   styleIconCenter,
   styleIconRight,
@@ -124,7 +126,8 @@ const _Header: React.FC<HeaderProps> = ({
   const toggleHeartIcon = () => {
     setHeartIcon(isCheckH ? HEART_INACTIVE : HEART_ACTIVE);
     setIsCheckHeart(!isCheckH);
-    console.log('isCheckHeart:',!isCheckH);
+    eventHeart && eventHeart();
+    console.log('isCheckHeart:', !isCheckH);
   };
 
   return (
