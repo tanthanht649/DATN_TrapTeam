@@ -52,29 +52,29 @@ const _Header: React.FC<HeaderProps> = ({
     if (iconLeft) {
       return (
         <Pressable onPress={eventLeft}>
-          <Image source={iconLeft} style={[styles.icon, styleIconLeft]} />
+          <Image source={iconLeft} style={[_styles.icon, styleIconLeft]} />
         </Pressable>
       );
     }
-    return <View style={styles.iconPlaceholder} />;
+    return <View style={_styles.iconPlaceholder} />;
   };
 
   const renderTextCenter = () => {
     if (textCenter) {
       return (
-        <Pressable style={[styles.centerHeaderContainer, styleIconCenter]}>
-          <Text style={styles.textCenterHeader}>{textCenter}</Text>
+        <Pressable style={[_styles.centerHeaderContainer, styleIconCenter]}>
+          <Text style={_styles.textCenterHeader}>{textCenter}</Text>
         </Pressable>
       );
     }
-    return <View style={styles.centerHeaderContainer} />;
+    return <View style={_styles.centerHeaderContainer} />;
   };
 
   const renderIconRight = () => {
     if (isCheck && iconRight) {
       return (
         <Pressable onPress={eventRight}>
-          <Image source={iconRight} style={[styles.icon, styleIconRight]} />
+          <Image source={iconRight} style={[_styles.icon, styleIconRight]} />
         </Pressable>
       );
     } else if (!isCheck && heartIcon && iconRight) {
@@ -86,12 +86,12 @@ const _Header: React.FC<HeaderProps> = ({
             alignItems: 'center',
           }}>
           <Pressable onPress={eventRight}>
-            <Image source={iconRight} style={[styles.icon, styleIconRight]} />
+            <Image source={iconRight} style={[_styles.icon, styleIconRight]} />
           </Pressable>
           <Pressable onPress={toggleHeartIcon}>
             <Image
               source={heartIcon}
-              style={[styles.iconHeart, styleIconRight]}
+              style={[_styles.iconHeart, styleIconRight]}
             />
           </Pressable>
         </View>
@@ -101,24 +101,24 @@ const _Header: React.FC<HeaderProps> = ({
         <Pressable onPress={toggleHeartIcon}>
           <Image
             source={heartIcon}
-            style={[styles.iconHeart, styleIconRight]}
+            style={[_styles.iconHeart, styleIconRight]}
           />
         </Pressable>
       );
     } else if (!isCheck && iconRight) {
       return (
         <Pressable onPress={eventRight}>
-          <Image source={iconRight} style={[styles.icon, styleIconRight]} />
+          <Image source={iconRight} style={[_styles.icon, styleIconRight]} />
         </Pressable>
       );
     } else if (textRight) {
       return (
-        <Pressable style={styles.btnRight} onPress={eventRight}>
-          <Text style={[styles.textRight, styleTextRight]}>{textRight}</Text>
+        <Pressable style={_styles.btnRight} onPress={eventRight}>
+          <Text style={[_styles.textRight, styleTextRight]}>{textRight}</Text>
         </Pressable>
       );
     }
-    return <View style={styles.iconPlaceholder} />;
+    return <View style={_styles.iconPlaceholder} />;
   };
 
   const toggleHeartIcon = () => {
@@ -128,7 +128,7 @@ const _Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={_styles.container}>
       {renderIconLeft()}
       {renderTextCenter()}
       {renderIconRight()}
@@ -136,7 +136,7 @@ const _Header: React.FC<HeaderProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const _styles = StyleSheet.create({
   container: {
     height: 50,
     flexDirection: 'row',
@@ -179,10 +179,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   iconHeart: {
-    width: 85,
-    height: 85,
+    width: 90,
+    height: 90,
     resizeMode: 'stretch',
-    // marginLeft: 15,
     marginTop: 23,
     marginRight: -20,
   },

@@ -1,5 +1,5 @@
-import {StyleSheet, Text, Image, Pressable} from 'react-native';
-import React, {useState} from 'react';
+import { StyleSheet, Text, Image, Pressable } from 'react-native';
+import React, { useState } from 'react';
 import {
   ARROW_LEFT_LINE_2,
   AVT,
@@ -15,17 +15,18 @@ import {
   SPLASH_SCREEN,
   fontFamily,
 } from '@assets';
-import {Colors, DimensionsStyle} from '@resources';
+import { Colors, DimensionsStyle } from '@resources';
 import {
   BackgroundApp,
   HeaderHome,
   HeaderHome2,
   TopTab,
   Header,
+  HeaderMessager,
 } from '@components';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { WelcomeTeamStackParamList } from '@navigation';
 
 type PropsType = NativeStackScreenProps<
   WelcomeTeamStackParamList,
@@ -34,7 +35,7 @@ type PropsType = NativeStackScreenProps<
 // const [check, setcheck] = useState(false);
 
 const _WelcomeTeam: React.FC<PropsType> = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   // const go = () => {
   //   setcheck(check);
   // };
@@ -58,7 +59,7 @@ const _WelcomeTeam: React.FC<PropsType> = props => {
           // textCenter={'Search results'}
           iconLeft={ICON_BACK}
           // iconLeft={LOGO_APP}
-          // styleIconLeft={{width: 80, height: 80, marginLeft: -10}}
+          // styleIconLeft={{ width: 80, height: 80, marginLeft: -10 }}
           iconRight={ICON_LOGOUT}
           // textRight={'Skip'}
           iconHeart={HEART_INACTIVE}
@@ -66,6 +67,13 @@ const _WelcomeTeam: React.FC<PropsType> = props => {
           eventRight={() => console.log('EventRight')}
           isCheck={false}
         />
+        <HeaderMessager
+          avatar={AVT}
+          name={'Milano'}
+          isOnline={true}
+          iconLeft={ICON_BACK}
+          eventLeft={() => console.log('IconLeft')}
+          />
         <TopTab isCheck="review" />
         {/* <Text style={_styles.textTitle}>Welcome Team</Text>
         <Text style={[_styles.textName, {fontFamily: fontFamily.Italic}]}>
