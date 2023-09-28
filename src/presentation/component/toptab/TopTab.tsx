@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   ScrollView,
@@ -11,7 +11,7 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
-import {Colors} from '@resources';
+import { Colors } from '@resources';
 import {
   MASTERCARD,
   MASTERCARD_SELECT,
@@ -38,10 +38,26 @@ type TopTabProps = {
 };
 
 const _TopTab: React.FC<TopTabProps> = props => {
-  const {containerStyle, isCheck, children} = props;
+  const { containerStyle, isCheck, children } = props;
+
+  let data: ItemTab[] = [];
+
+  switch (isCheck) {
+    case 'card':
+      data = DATACARD;
+      break;
+    case 'home':
+      data = DATAHOME;
+      break;
+    case 'review':
+      data = DATAREVIEW;
+      break;
+    default:
+      break;
+  }
   const scrollViewRef = useRef<ScrollView>(null);
   const [selectedIndex, setSelectedIndex] = useState(1);
-  const [status, setStatus] = useState(DATACARD[0].title);
+  const [status, setStatus] = useState(data[0].title);
 
   useEffect(() => {
     if (scrollViewRef.current && selectedIndex >= 0) {
@@ -68,7 +84,7 @@ const _TopTab: React.FC<TopTabProps> = props => {
       scrollToX = Math.min(scrollToX, maxScrollX);
       const offsetX = Math.max(0, scrollToX - (screenWidth - itemWidth) / 2);
 
-      scrollViewRef.current.scrollTo({x: offsetX, animated: true});
+      scrollViewRef.current.scrollTo({ x: offsetX, animated: true });
     }
   }, [selectedIndex]);
 
@@ -80,7 +96,7 @@ const _TopTab: React.FC<TopTabProps> = props => {
     item: ItemTab;
   }
 
-  const ItemTab: React.FC<ItemCardProps> = ({item}) => {
+  const ItemTab: React.FC<ItemCardProps> = ({ item }) => {
     return (
       <TouchableOpacity
         style={[_styles.btnTab, status === item.title && _styles.btnTabActive]}
@@ -104,21 +120,7 @@ const _TopTab: React.FC<TopTabProps> = props => {
       </TouchableOpacity>
     );
   };
-  let data: ItemTab[] = [];
 
-  switch (isCheck) {
-    case 'card':
-      data = DATACARD;
-      break;
-    case 'home':
-      data = DATAHOME;
-      break;
-    case 'review':
-      data = DATAREVIEW;
-      break;
-    default:
-      break;
-  }
   return (
     <View style={containerStyle}>
       <View style={_styles.container}>
@@ -206,7 +208,7 @@ const DATAHOME: ItemTab[] = [
   {
     id: 0,
     title: 'All',
-    onPress: () => {},
+    onPress: () => { },
   },
   {
     id: 1,
