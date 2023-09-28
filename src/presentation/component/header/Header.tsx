@@ -12,8 +12,8 @@ import {
   ViewStyle,
 } from 'react-native';
 import React from 'react';
-import {HEART_ACTIVE, fontFamily} from '@assets';
-import {Colors} from '@resources';
+import { HEART, HEART_ACTIVE, HEART_INACTIVE, fontFamily } from '@assets';
+import { Colors } from '@resources';
 
 interface HeaderProps {
   iconLeft?: ImageSourcePropType;
@@ -23,12 +23,12 @@ interface HeaderProps {
   iconHeart?: ImageSourcePropType;
   eventLeft?: () => void;
   eventRight?: () => void;
-  eventRightHeart?: () => void;
   styleIconLeft?: StyleProp<ImageStyle>;
   styleIconCenter?: StyleProp<ImageStyle>;
   styleIconRight?: StyleProp<ImageStyle>;
   styleTextRight?: StyleProp<TextProps>;
   isCheck?: boolean;
+  isCheckHeart?: boolean;
 }
 
 const _Header: React.FC<HeaderProps> = ({
@@ -39,15 +39,15 @@ const _Header: React.FC<HeaderProps> = ({
   iconHeart,
   eventLeft,
   eventRight,
-  eventRightHeart,
   styleIconLeft,
   styleIconCenter,
   styleIconRight,
   styleTextRight,
   isCheck,
+  isCheckHeart,
 }) => {
   const [heartIcon, setHeartIcon] = React.useState(iconHeart);
-
+  const [isCheckH, setIsCheckHeart] = React.useState(isCheckHeart);
   const renderIconLeft = () => {
     if (iconLeft) {
       return (
@@ -122,15 +122,9 @@ const _Header: React.FC<HeaderProps> = ({
   };
 
   const toggleHeartIcon = () => {
-    if (heartIcon === iconHeart) {
-      setHeartIcon(HEART_ACTIVE);
-      eventRightHeart && eventRightHeart();
-      console.log('iconHeartActive');
-    } else {
-      setHeartIcon(iconHeart);
-      eventRightHeart && eventRightHeart();
-      console.log('iconHeart');
-    }
+    setHeartIcon(isCheckH ? HEART_INACTIVE : HEART_ACTIVE);
+    setIsCheckHeart(!isCheckH);
+    console.log('isCheckHeart:',!isCheckH);
   };
 
   return (
