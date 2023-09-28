@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, ImageSourcePropType, Pressable, StyleProp, ImageStyle } from 'react-native';
 import { Colors, DimensionsStyle } from '@resources';
+import { fontFamily } from '@assets';
 
 type HeaderMessagerProps = {
     avatar: ImageSourcePropType;
@@ -75,7 +76,6 @@ const _styles = StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: 20,
         marginTop: 20,
-        // backgroundColor:Colors.BLACK,
     },
     avatarRender: {
         flexDirection: 'row',
@@ -101,8 +101,8 @@ const _styles = StyleSheet.create({
     },
     name: {
         color: Colors.GREY_DARK_1,
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 15,
+        fontFamily: fontFamily.Bold,
     },
     statusContainer: {
         flexDirection: 'row',
@@ -127,16 +127,19 @@ const _styles = StyleSheet.create({
         height: 10,
         borderRadius: 5,
         backgroundColor: Colors.GREEN_1,
+        marginLeft: 1,
     },
     offlineIndicator: {
         width: 10,
         height: 10,
         borderRadius: 5,
         backgroundColor: Colors.GREY_LIGHT,
+        marginLeft: 1,
     },
     status: {
-        fontSize: 12,
+        fontSize: 10,
         color: Colors.GREY_MEDIUM_1,
+        fontFamily: fontFamily.Semibold,
     },
     icon: {
         width: 50,
