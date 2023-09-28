@@ -55,7 +55,7 @@ const _WelcomeTeam: React.FC<PropsType> = props => {
           checkNotify={true}
         /> */}
         <Header
-          textCenter={'Search results'}
+          // textCenter={'Search results'}
           iconLeft={ICON_BACK}
           // iconLeft={LOGO_APP}
           // styleIconLeft={{width: 80, height: 80, marginLeft: -10}}
