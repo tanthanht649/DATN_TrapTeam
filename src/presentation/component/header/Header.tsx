@@ -170,8 +170,8 @@ const _styles = StyleSheet.create({
   btnRight: {
     borderWidth: 1,
     borderRadius: 100,
-    paddingHorizontal: 30,
-    paddingVertical: 8,
+    paddingHorizontal: 35,
+    paddingVertical: 12,
     borderColor: Colors.GREY,
     backgroundColor: Colors.GREY,
   },

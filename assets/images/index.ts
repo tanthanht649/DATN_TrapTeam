@@ -94,3 +94,4 @@ export const ICON_DELETE = require('./Icon_Delete.png');
 export const ONBOARDING_1 = require('./onboarding_1.png');
 export const ONBOARDING_2 = require('./onboarding_2.png');
 export const ONBOARDING_3 = require('./onboarding_3.png');
+export const LINE_ONBOARDING = require('./line_onboarding.png');
