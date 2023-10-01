@@ -91,3 +91,6 @@ export const ICON_BACK = require('./Icon_Back.png');
 export const ICON_LOGOUT = require('./Icon_LogOut.png');
 export const ICON_FILTER = require('./Icon_Filter.png');
 export const ICON_DELETE = require('./Icon_Delete.png');
+export const ONBOARDING_1 = require('./onboarding_1.png');
+export const ONBOARDING_2 = require('./onboarding_2.png');
+export const ONBOARDING_3 = require('./onboarding_3.png');
