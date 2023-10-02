@@ -9,28 +9,41 @@ type Props = {
     label: string;
     viewStyle?: StyleProp<ViewStyle>;
     iconRightStyle?: StyleProp<ImageStyle>;
+    iconLeftStyle?: StyleProp<ImageStyle>;
     onPress?: () => void;
     onPressLeft?: () => void;
     onPressRight?: () => void;
     value: string;
     onChangeText?: (value: string) => void;
+    hidePassword?: boolean;
 }
 
 const _Input: React.FC<Props> = (props) => {
-    const { imageIconLeft, value, imageIconRight, label, onChangeText, onPress, onPressLeft, onPressRight } = props;
-    return (
+    const { imageIconLeft, value, hidePassword, imageIconRight, label, onChangeText, onPress, onPressLeft, onPressRight } = props;
+
+    return hidePassword ? (
         <Pressable onPress={onPress} style={StyleSheet.flatten([_styles.container, props.viewStyle])}>
             <View style={_styles.row}>
                 <Pressable onPress={onPressLeft} >
-                    <Image source={imageIconLeft} style={_styles.iconLeft} />
+                    <Image source={imageIconLeft} style={StyleSheet.flatten([_styles.iconLeft, props.iconLeftStyle])} />
                 </Pressable>
-                <TextInput placeholder={label} value={value} style={[_styles.input, {fontFamily: value.length == 0 ? fontFamily.Regular: fontFamily.Bold, color:value.length==0?Colors.GRAY:Colors.GREY_DARK, fontSize:value.length==0? 12: 14}]} onChangeText={onChangeText} ></TextInput>
+                <TextInput secureTextEntry={true} placeholder={label} value={value} style={[_styles.input, { fontFamily: value.length == 0 ? fontFamily.Regular : fontFamily.Bold, color: value.length == 0 ? Colors.GRAY : Colors.GREY_DARK, fontSize: value.length == 0 ? 12 : 14 }]} onChangeText={onChangeText} ></TextInput>
+            </View>
+        </Pressable>
+    ) : (
+        <Pressable onPress={onPress} style={StyleSheet.flatten([_styles.container, props.viewStyle])}>
+            <View style={_styles.row}>
+                <Pressable onPress={onPressLeft} >
+                    <Image source={imageIconLeft} style={StyleSheet.flatten([_styles.iconLeft, props.iconLeftStyle])} />
+                </Pressable>
+                <TextInput placeholder={label} value={value} style={[_styles.input, { fontFamily: value.length == 0 ? fontFamily.Regular : fontFamily.Bold, color: value.length == 0 ? Colors.GRAY : Colors.GREY_DARK, fontSize: value.length == 0 ? 12 : 14 }]} onChangeText={onChangeText} ></TextInput>
             </View>
             <Pressable onPress={onPressRight} >
                 <Image source={imageIconRight} style={StyleSheet.flatten([_styles.iconRight, props.iconRightStyle])} />
             </Pressable>
         </Pressable>
     )
+
 }
 
 
