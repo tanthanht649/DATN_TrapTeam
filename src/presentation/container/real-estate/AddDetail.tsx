@@ -7,7 +7,7 @@ import { BackgroundApp, Button, ButtonArrow, Input, ItemLocation, ViewSwitcher }
 import { ARROW_LEFT_LINE, ARROW_LEFT_LINE_2, ARROW_LEFT_LINE_BIG, BACKGROUND_WHITE, EMAIL, LOCATION_2, MESSAGING, SEARCH_BOTTOM_TAB } from '@assets';
 
 type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Test'>;
-const _Test: React.FC<PropsType> = props => {
+const _AddDetail: React.FC<PropsType> = props => {
   const { navigation } = props;
   const [search, setSearch] = useState<string>('');
   const handleOnchangeText = (value: string) => {
@@ -28,13 +28,12 @@ const _Test: React.FC<PropsType> = props => {
           textBolds={['2.5 km']}
           statusOnPress={true}
         />
-        <Button title='Next' onPress={() =>navigation.navigate('LoginOption')} viewStyle={{ width: 278 }} imageIconLeft={EMAIL} imageIconRight={MESSAGING}></Button>
+        <Button title='Next' onPress={() => { }} viewStyle={{ width: 278 }} imageIconLeft={EMAIL} imageIconRight={MESSAGING}></Button>
         <ButtonArrow imageIcon={ARROW_LEFT_LINE} onPress={() => { }} shadow={true}></ButtonArrow>
         <Input label='search' value={search} onChangeText={handleOnchangeText} imageIconLeft={SEARCH_BOTTOM_TAB} imageIconRight={ARROW_LEFT_LINE_2} iconRightStyle={{ opacity: 0 }} ></Input>
         <ViewSwitcher
           quantityEstates={22}
-          onTabChange={setListViewType} 
-          />
+          onTabChange={setListViewType} />
       </SafeAreaView>
     </BackgroundApp>
   );
@@ -50,4 +49,4 @@ const _styles = StyleSheet.create({
   },
 });
 
-export const Test = React.memo(_Test);
+export const AddDetail = React.memo(_AddDetail);

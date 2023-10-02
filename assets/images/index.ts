@@ -5,6 +5,7 @@ export const BACKGROUND_HOME = require('../../assets/images/background_home.jpg'
 export const ARROW_LEFT_LINE = require('../../assets/images/arrow_left_line.png');
 export const ARROW_LEFT_LINE_2 = require('../../assets/images/arrow_left_line_2.png');
 export const EMAIL = require('../../assets/images/email.png');
+export const EMAIL_LOGIN = require('../../assets/images/email_login.png');
 export const LOCK = require('../../assets/images/lock.png');
 export const BACKGROUND_LOGIN = require('../../assets/images/background_login.jpg');
 export const FULL_NAME = require('../../assets/images/full_name.png');
