@@ -1,7 +1,14 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
-import {BackgroundApp, Button, Header, TextPlus} from '@components';
 import {
+  BackgroundApp,
+  Button,
+  ButtonArrow,
+  Header,
+  TextPlus,
+} from '@components';
+import {
+  ARROW_LEFT_LINE,
   BACKGROUND_WHITE,
   HEART_INACTIVE,
   ICON_BACK,
@@ -9,6 +16,7 @@ import {
   LINE_ONBOARDING,
   LOGO_APP,
   ONBOARDING_1,
+  ONBOARDING_2,
   fontFamily,
 } from '@assets';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -17,10 +25,10 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {WelcomeTeamStackParamList} from '@navigation';
 type PropsType = NativeStackScreenProps<
   WelcomeTeamStackParamList,
-  'OnboardingNextOne'
+  'OnboardingNextTwo'
 >;
 
-const _OnboardingNextOne: React.FC<PropsType> = props => {
+const _OnboardingNextTwo: React.FC<PropsType> = props => {
   const {navigation} = props;
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -44,8 +52,8 @@ const _OnboardingNextOne: React.FC<PropsType> = props => {
           />
 
           <TextPlus
-            text={`Find best place\nto stay in good price`}
-            textBolds={['good price']}
+            text={`Fast sell your property\nin just one click`}
+            textBolds={['one click']}
             textStyle={_styles.textFind}
             boldStyle={{fontSize: 25}}
             viewStyle={{marginStart: 30}}
@@ -64,7 +72,7 @@ const _OnboardingNextOne: React.FC<PropsType> = props => {
             marginBottom: DimensionsStyle.width * 0.025,
           }}>
           <Image
-            source={ONBOARDING_1}
+            source={ONBOARDING_2}
             style={{
               width: '100%',
               height: DimensionsStyle.height * 0.6,
@@ -90,16 +98,31 @@ const _OnboardingNextOne: React.FC<PropsType> = props => {
                 marginBottom: 15,
               }}
             />
-            <Button
-              title="Next"
-              onPress={() => navigation.navigate('OnboardingNextTwo')}
-              imageIconLeft={LOGO_APP}
-              imageIconRight={LOGO_APP}
-              viewStyle={{
-                width: DimensionsStyle.width * 0.5,
-                marginBottom: 20,
-              }}
-            />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '70%',
+                marginStart: -30,
+              }}>
+              <ButtonArrow
+                imageIcon={ARROW_LEFT_LINE}
+                onPress={() => navigation.goBack()}
+                shadow={false}
+                viewStyle={{marginTop: -35}}
+              />
+              <Button
+                title="Next"
+                onPress={() => navigation.navigate('OnboardingNextThree')}
+                imageIconLeft={LOGO_APP}
+                imageIconRight={LOGO_APP}
+                viewStyle={{
+                  width: DimensionsStyle.width * 0.5,
+                  marginBottom: 20,
+                }}
+              />
+            </View>
           </View>
         </View>
       </SafeAreaView>
@@ -123,4 +146,5 @@ const _styles = StyleSheet.create({
     marginTop: 20,
   },
 });
-export const OnboardingNextOne = React.memo(_OnboardingNextOne);
+
+export const OnboardingNextTwo = React.memo(_OnboardingNextTwo);

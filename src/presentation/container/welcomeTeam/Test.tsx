@@ -1,22 +1,39 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { WelcomeTeamStackParamList } from '@navigation';
-import { BackgroundApp, Button, ButtonArrow, Input, ItemLocation, ViewSwitcher, ViewSwitcherProfile } from '@components';
-import { ARROW_LEFT_LINE, ARROW_LEFT_LINE_2, ARROW_LEFT_LINE_BIG, BACKGROUND_WHITE, EMAIL, LOCATION_2, MESSAGING, SEARCH_BOTTOM_TAB } from '@assets';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {WelcomeTeamStackParamList} from '@navigation';
+import {
+  BackgroundApp,
+  Button,
+  ButtonArrow,
+  Input,
+  ItemLocation,
+  ViewSwitcher,
+  ViewSwitcherProfile,
+} from '@components';
+import {
+  ARROW_LEFT_LINE,
+  ARROW_LEFT_LINE_2,
+  ARROW_LEFT_LINE_BIG,
+  BACKGROUND_WHITE,
+  EMAIL,
+  LOCATION_2,
+  MESSAGING,
+  SEARCH_BOTTOM_TAB,
+} from '@assets';
 
 type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Test'>;
 const _Test: React.FC<PropsType> = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const [search, setSearch] = useState<string>('');
   const handleOnchangeText = (value: string) => {
     setSearch(value);
-    console.log(value)
-  }
+    console.log(value);
+  };
   const testAddCard = () => {
-    console.log('testAddCard')
-  }
+    console.log('testAddCard');
+  };
   const [listViewType, setListViewType] = useState<'list' | 'grid'>('list');
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -31,27 +48,38 @@ const _Test: React.FC<PropsType> = props => {
           textBolds={['2.5 km']}
           statusOnPress={true}
         />
-        <Button title='Next' onPress={() => { }} viewStyle={{ width: 278 }} imageIconLeft={EMAIL} imageIconRight={MESSAGING}></Button>
-        <ButtonArrow imageIcon={ARROW_LEFT_LINE} onPress={() => { }} shadow={true}></ButtonArrow>
-        <Input label='search' value={search} onChangeText={handleOnchangeText} imageIconLeft={SEARCH_BOTTOM_TAB} imageIconRight={ARROW_LEFT_LINE_2} iconRightStyle={{ opacity: 0 }} ></Input>
-        <ViewSwitcher
-          quantityEstates={22}
-          onTabChange={setListViewType} />
+        <Button
+          title="Next"
+          onPress={() => navigation.navigate('OnboardingNextOne')}
+          viewStyle={{width: 278}}
+          imageIconLeft={EMAIL}
+          imageIconRight={MESSAGING}></Button>
+        <ButtonArrow
+          imageIcon={ARROW_LEFT_LINE}
+          onPress={() => {}}
+          shadow={true}></ButtonArrow>
+        <Input
+          label="search"
+          value={search}
+          onChangeText={handleOnchangeText}
+          imageIconLeft={SEARCH_BOTTOM_TAB}
+          imageIconRight={ARROW_LEFT_LINE_2}
+          iconRightStyle={{opacity: 0}}></Input>
+        <ViewSwitcher quantityEstates={22} onTabChange={setListViewType} />
         <ViewSwitcherProfile
           onAddCardPress={() => {
-            testAddCard()
+            testAddCard();
           }}
           quantityEstates={73}
-          textProfile='listings'
+          textProfile="listings"
           showAddCard={true}
         />
         <ViewSwitcherProfile
           quantityEstates={21}
-          textProfile='transactions'
+          textProfile="transactions"
           showAddCard={false}
         />
       </SafeAreaView>
-
     </BackgroundApp>
   );
 };
