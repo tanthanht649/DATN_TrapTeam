@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native';
 import {
   fontFamily, HORIZONTAL_ACTIVE,
@@ -13,9 +13,25 @@ type Props = {
   onTabChange: (tab: 'list' | 'grid') => void;
 };
 
+const TabButton: React.FC<{ onPress: () => void; source: any; isActive: boolean }> = ({ onPress, source, isActive }) => (
+  <TouchableOpacity
+    style={[_styles.tabButton, isActive && _styles.activeTabButton]}
+    onPress={onPress}
+  >
+    <Image
+      source={source}
+      style={_styles.tabImage}
+    />
+  </TouchableOpacity>
+);
+
 const _ViewSwitcher: React.FC<Props> = props => {
   const { quantityEstates, onTabChange } = props;
-  const text = quantityEstates ? `Found ${quantityEstates} estates` : 'Không tìm thấy thông tin';
+
+  const text = useMemo(() => {
+    return quantityEstates ? `Found ${quantityEstates} estates` : 'Không tìm thấy thông tin';
+  }, [quantityEstates]);
+
   const [activeTab, setActiveTab] = useState<'horizontal' | 'vertical'>('horizontal');
 
   const handlePress = useCallback((tab: 'horizontal' | 'vertical') => {
@@ -35,24 +51,16 @@ const _ViewSwitcher: React.FC<Props> = props => {
         boldStyle={StyleSheet.flatten([_styles.textBold])}
       />
       <View style={_styles.containerBtn}>
-        <TouchableOpacity
-          style={[_styles.tabButton, activeTab === 'vertical' && _styles.activeTabButton]}
+        <TabButton
           onPress={() => handlePress('vertical')}
-        >
-          <Image
-            source={activeTab === 'vertical' ? VERTICAL_ACTIVE : VERTICAL_INACTIVE}
-            style={_styles.tabImage}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[_styles.tabButton, activeTab === 'horizontal' && _styles.activeTabButton]}
+          source={activeTab === 'vertical' ? VERTICAL_ACTIVE : VERTICAL_INACTIVE}
+          isActive={activeTab === 'vertical'}
+        />
+        <TabButton
           onPress={() => handlePress('horizontal')}
-        >
-          <Image
-            source={activeTab === 'horizontal' ? HORIZONTAL_ACTIVE : HORIZONTAL_INACTIVE}
-            style={_styles.tabImage}
-          />
-        </TouchableOpacity>
+          source={activeTab === 'horizontal' ? HORIZONTAL_ACTIVE : HORIZONTAL_INACTIVE}
+          isActive={activeTab === 'horizontal'}
+        />
       </View>
     </View>
   );
