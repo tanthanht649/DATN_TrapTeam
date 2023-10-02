@@ -6,7 +6,7 @@ import { WelcomeTeamStackParamList } from '@navigation';
 import { BackgroundApp, Button, ButtonArrow, Input, ItemLocation, ViewSwitcher } from '@components';
 import { ARROW_LEFT_LINE, ARROW_LEFT_LINE_2, ARROW_LEFT_LINE_BIG, BACKGROUND_WHITE, EMAIL, LOCATION_2, MESSAGING, SEARCH_BOTTOM_TAB } from '@assets';
 
-type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Test'>;
+type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'AllReviews'>;
 const _AllReviews: React.FC<PropsType> = props => {
   const { navigation } = props;
   const [search, setSearch] = useState<string>('');
