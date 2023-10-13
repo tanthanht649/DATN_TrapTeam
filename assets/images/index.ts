@@ -96,3 +96,6 @@ export const ONBOARDING_1 = require('./onboarding_1.png');
 export const ONBOARDING_2 = require('./onboarding_2.png');
 export const ONBOARDING_3 = require('./onboarding_3.png');
 export const LINE_ONBOARDING = require('./line_onboarding.png');
+export const SHAPE_1 = require('./Shape.png');
+export const SHAPE_2 = require('./Shape_2.png');
+export const SHAPE_3 = require('./Shape_3.png');

@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@mindinventory/react-native-stagger-view": "^1.2.1",
     "@react-native-community/clipboard": "^1.5.1",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/bottom-tabs": "^6.5.8",
