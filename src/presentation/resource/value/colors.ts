@@ -22,5 +22,6 @@ export const Colors = {
   GREY_LIGHT: '#A1A5C1',
   GREEN_1: '#8BC83F',
   BLUE_DARK:'#1F4C6B',
+  BLUE_SOFT:'#1F4C6BB0',
   GREEN_SOFT:'#234F68B0',
 };
