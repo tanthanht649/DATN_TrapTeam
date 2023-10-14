@@ -17,10 +17,6 @@ import {
   Register,
   RegisterOTP,
   FavoriteEmpty,
-  FavoriteHorizontal,
-  FavoriteVertical,
-  MessagesList,
-  MessagesChat,
   NotificationsList,
 } from '@containers';
 
@@ -38,10 +34,6 @@ type ProfileProps = {};
 type RegisterProps = {};
 type RegisterOTPProps = {};
 type FavoriteEmptyProps = {};
-type FavoriteHorizontalProps = {};
-type FavoriteVerticalProps = {};
-type MessagesListProps = {};
-type MessagesChatProps = {};
 type NotificationsListProps = {};
 
 export type WelcomeTeamStackParamList = {
@@ -59,10 +51,6 @@ export type WelcomeTeamStackParamList = {
   Register: RegisterProps | undefined;
   RegisterOTP: RegisterOTPProps | undefined;
   FavoriteEmpty: FavoriteEmptyProps | undefined;
-  FavoriteHorizontal: FavoriteHorizontalProps | undefined;
-  FavoriteVertical: FavoriteVerticalProps | undefined;
-  MessagesList: MessagesListProps | undefined;
-  MessagesChat: MessagesChatProps | undefined;
   NotificationsList: NotificationsListProps | undefined;
 };
 
@@ -91,10 +79,6 @@ const _StackTest = () => {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="RegisterOTP" component={RegisterOTP} />
         <Stack.Screen name="FavoriteEmpty" component={FavoriteEmpty} />
-        <Stack.Screen name="FavoriteHorizontal" component={FavoriteHorizontal} />
-        <Stack.Screen name="FavoriteVertical" component={FavoriteVertical} />
-        <Stack.Screen name="MessagesList" component={MessagesList} />
-        <Stack.Screen name="MessagesChat" component={MessagesChat} />
         <Stack.Screen name="NotificationsList" component={NotificationsList} />
       </Stack.Navigator> 
     </NavigationContainer>
