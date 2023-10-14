@@ -28,7 +28,6 @@ export interface Item {
 const _FavoriteEmpty: React.FC<PropsType> = props => {
     const { navigation } = props;
     const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
-
     const [data, setData] = useState<Item[]>([
         { id: 1, image: SHAPE_1, type: "Villa", price: "3.200.000", monthday: "/tháng", name: "The Laurels Villa", star: "4.9", location: "Quận 1, Hồ Chí Minh" },
         { id: 2, image: SHAPE_2, type: "Căn hộ", price: "2.200.000", monthday: "/tháng", name: "Wayside Modern House", star: "4.4", location: "Bình Thạnh, Hồ Chí Minh" },
