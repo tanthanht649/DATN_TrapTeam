@@ -1,7 +1,5 @@
-import { StyleSheet, View, Image, Text, ImageSourcePropType, ListRenderItem, Pressable, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Image, Text, ImageSourcePropType, ListRenderItem, Pressable, ActivityIndicator, ListRenderItemInfo } from 'react-native';
 import React, { useState } from 'react';
-
-
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { WelcomeTeamStackParamList } from '@navigation';
@@ -29,7 +27,7 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
     const { navigation } = props;
     const [listViewType, setListViewType] = useState<'list' | 'grid'>('list');
 
-    const data: Item[] = [
+    const [data, setData] = useState<Item[]>([
         { id: 1, image: SHAPE_1, price: "3.200.000", monthday: "/tháng", name: "The Laurels Villa", star: "4.9", location: "Quận 1, Hồ Chí Minh" },
         { id: 2, image: SHAPE_2, price: "2.200.000", monthday: "/tháng", name: "Wayside Modern House", star: "4.4", location: "Bình Thạnh, Hồ Chí Minh" },
         { id: 3, image: SHAPE_3, price: "2.200.000", monthday: "/tháng", name: "Wings Tower", star: "4.9", location: "Nhà Bè, Hồ Chí Minh" },
@@ -38,30 +36,22 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
         { id: 6, image: SHAPE_3, price: "2.200.000", monthday: "/ngày", name: "Wings Tower", star: "4.9", location: "Quận 12, Hồ Chí Minh" },
         { id: 7, image: SHAPE_1, price: "3.200.000", monthday: "/tháng", name: "The Laurels Villa", star: "4.9", location: "Quận 4, Hồ Chí Minh" },
         { id: 8, image: SHAPE_2, price: "2.200.000", monthday: "/đêm", name: "Wayside Modern House", star: "4.4", location: "Thủ Đức, Hồ Chí Minh" },
-    ];
-    const [hiddenItems, setHiddenItems] = useState<number[]>([]);
-    const onHeart = (itemId: number) => {
+    ]);
+    const onDelete = (itemId: number) => {
         console.log("Id: " + itemId);
-        if (hiddenItems.includes(itemId)) {
-            setHiddenItems(hiddenItems.filter(id => id !== itemId));
-        } else {
-            setHiddenItems([...hiddenItems, itemId]);
-        }
-    }
-
-    const renderChildren: ListRenderItem<Item> = ({ item }) => {
-        if (hiddenItems.includes(item.id)) {
-            return null;
-        }
+        const updatedData = data.filter((item) => item.id !== itemId);
+        setData(updatedData);
+    };
+    const renderChildren = ({ item }: ListRenderItemInfo<Item>) => {
         return (
-            <View style={getChildrenStyle()} key={item.id}>
+            <View style={_styles.getChildrenStyle} key={item.id}>
                 <Image
                     onError={() => { }}
                     style={_styles.img}
                     source={item.image}
                     resizeMode='cover'
                 />
-                <Pressable onPress={() => onHeart(item.id)} style={_styles.styleHeartView}>
+                <Pressable onPress={() => onDelete(item.id)} style={_styles.styleHeartView}>
                     <Image source={HEART_ACTIVE} style={_styles.styleHeart} />
                 </Pressable>
                 <View style={_styles.stylePriceView}>
@@ -85,18 +75,6 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
         );
     };
 
-    const getChildrenStyle = () => {
-        return {
-            backgroundColor: Colors.GREY_SOFT,
-            margin: 7,
-            borderRadius: 25,
-            paddingHorizontal: 8,
-            paddingBottom: 16,
-            paddingTop: 8,
-        };
-    };
-
-
     return (
         <SafeAreaView style={_styles.container}>
             <Header
@@ -110,7 +88,7 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
                 onTabChange={setListViewType} />
             <View style={_styles.nextView1}>
                 <StaggeredList<Item>
-                    data={data.filter(item => !hiddenItems.includes(item.id))}
+                    data={data}
                     animationType='FADE_IN_FAST'
                     contentContainerStyle={_styles.contentContainer}
                     showsVerticalScrollIndicator={false}
@@ -179,6 +157,14 @@ const _styles = StyleSheet.create({
         fontFamily: fontFamily.Regular,
     },
 
+    getChildrenStyle: {
+        backgroundColor: Colors.GREY_SOFT,
+        margin: 7,
+        borderRadius: 25,
+        paddingHorizontal: 8,
+        paddingBottom: 16,
+        paddingTop: 8,
+    },
     nextView1: {
         flex: 1,
         marginBottom: 10,
