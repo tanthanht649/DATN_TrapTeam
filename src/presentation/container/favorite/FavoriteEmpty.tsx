@@ -27,7 +27,7 @@ export interface Item {
 
 const _FavoriteEmpty: React.FC<PropsType> = props => {
     const { navigation } = props;
-    const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
+    const [listViewType, setListViewType] = useState<'grid' | 'list'>('list');
     const [data, setData] = useState<Item[]>([
         { id: 1, image: SHAPE_1, type: "Villa", price: "3.200.000", monthday: "/tháng", name: "The Laurels Villa", star: "4.9", location: "Quận 1, Hồ Chí Minh" },
         { id: 2, image: SHAPE_2, type: "Căn hộ", price: "2.200.000", monthday: "/tháng", name: "Wayside Modern House", star: "4.4", location: "Bình Thạnh, Hồ Chí Minh" },
@@ -117,7 +117,9 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
     );
     const renderNull = () => (
         <View style={_styles.nextView}>
-            <Image source={ALERT_SUCCESS_PLUS} style={{ height: 142, width: 142 }} />
+            <TouchableOpacity onPress={() => console.log("goHome")}>
+                <Image source={ALERT_SUCCESS_PLUS} style={{ height: 142, width: 142 }} />
+            </TouchableOpacity>
             <TextPlus
                 text={"Your favorite page is\nempty"}
                 textBolds={["empty"]}
