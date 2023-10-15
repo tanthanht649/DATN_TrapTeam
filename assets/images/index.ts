@@ -46,6 +46,7 @@ export const SHARE = require('../../assets/images/share.png');
 export const CALENDAR_FILL = require('../../assets/images/calendar_fill.png');
 export const TICKET = require('../../assets/images/ticket.png');
 export const SETTING = require('../../assets/images/setting.png');
+export const SETTING_PROFILE = require('../../assets/images/setting_profile.png');
 export const HORIZONTAL_ACTIVE = require('../../assets/images/horizontal_active.png');
 export const VERTICAL_INACTIVE = require('../../assets/images/vertical_inactive.png');
 export const CLOSE = require('../../assets/images/close.png');
@@ -96,3 +97,7 @@ export const ONBOARDING_1 = require('./onboarding_1.png');
 export const ONBOARDING_2 = require('./onboarding_2.png');
 export const ONBOARDING_3 = require('./onboarding_3.png');
 export const LINE_ONBOARDING = require('./line_onboarding.png');
+export const CLOCK = require('./clock.png');
+export const EDITITEM = require('./editItem.png');
+
+
