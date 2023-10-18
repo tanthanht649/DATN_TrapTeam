@@ -14,14 +14,19 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Header, Input, ViewSwitcher} from '@components';
 import {
   EMAIL_LOGIN,
+  FAVORITE,
   FIND,
+  HEART,
+  HEART_ACTIVE,
   HEART_INACTIVE,
   ICON_BACK,
   ICON_LOGOUT,
   IMAGE_FEATURED_LIST,
   IMAGE_FEATURED_LIST_2,
   IMAGE_FEATURED_LIST_3,
+  LOCATION,
   SETTING,
+  START_SMALL,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
@@ -34,6 +39,7 @@ interface Estates {
   images: ImageSourcePropType[];
   description: string;
   isFavorite: boolean;
+  star?: number;
 }
 
 const DATA_ESTATES: Estates[] = [
@@ -45,6 +51,7 @@ const DATA_ESTATES: Estates[] = [
     images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
     description: 'Description 1',
     isFavorite: false,
+    star: 4.9,
   },
   {
     id: '2',
@@ -54,6 +61,7 @@ const DATA_ESTATES: Estates[] = [
     images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
     description: 'Description 2',
     isFavorite: true,
+    star: 4.9,
   },
   {
     id: '3',
@@ -63,6 +71,7 @@ const DATA_ESTATES: Estates[] = [
     images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
     description: 'Description 3',
     isFavorite: false,
+    star: 4.9,
   },
   {
     id: '4',
@@ -72,6 +81,7 @@ const DATA_ESTATES: Estates[] = [
     images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
     description: 'Description 2',
     isFavorite: true,
+    star: 4.9,
   },
   {
     id: '5',
@@ -81,6 +91,7 @@ const DATA_ESTATES: Estates[] = [
     images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
     description: 'Description 3',
     isFavorite: false,
+    star: 4.9,
   },
   {
     id: '6',
@@ -90,6 +101,7 @@ const DATA_ESTATES: Estates[] = [
     images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
     description: 'Description 3',
     isFavorite: false,
+    star: 4.9,
   },
   {
     id: '7',
@@ -99,6 +111,7 @@ const DATA_ESTATES: Estates[] = [
     images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
     description: 'Description 3',
     isFavorite: false,
+    star: 4.9,
   },
 ];
 
@@ -108,24 +121,31 @@ type ItemProps = {
 };
 
 const ItemEstates = ({item, onPress}: ItemProps) => (
-  <View
-    style={{
-      width: DimensionsStyle.width * 0.42,
-      backgroundColor: Colors.GRAY,
-      margin: 5,
-      borderRadius: 25,
-      padding: 8,
-    }}>
+  <View style={_styles.containerItem}>
+    <Image style={_styles.imageEstates} source={item.images[0]} />
+    <Text style={[_styles.nameEstates, {marginVertical: 7, marginStart: 7}]}>
+      {item.name}
+    </Text>
+    <View style={[_styles.containerStarLocation, {marginStart: 7}]}>
+      <View
+        style={[
+          _styles.containerStarLocation,
+          {width: DimensionsStyle.width * 0.1},
+        ]}>
+        <Image source={START_SMALL} style={_styles.imageStar} />
+        <Text style={_styles.textStart}>{item.star}</Text>
+      </View>
+      <View style={_styles.containerStarLocation}>
+        <Image source={LOCATION} style={_styles.imageStar} />
+        <Text style={[_styles.textStart, {fontFamily: fontFamily.Regular}]}>
+          {item.address}
+        </Text>
+      </View>
+    </View>
     <Image
-      style={{
-        width: '100%',
-        height: DimensionsStyle.width * 0.4,
-        resizeMode: 'stretch',
-        borderRadius: 25,
-      }}
-      source={item.images[0]}
+      source={item.isFavorite ? HEART : FAVORITE}
+      style={_styles.imageHeart}
     />
-    <Text>{item.name}</Text>
   </View>
 );
 
@@ -298,6 +318,55 @@ const _styles = StyleSheet.create({
   containerListFeatured: {
     marginHorizontal: 20,
     alignSelf: 'center',
+  },
+
+  containerStarLocation: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+
+  imageStar: {
+    width: 15,
+    height: 15,
+    resizeMode: 'stretch',
+    marginEnd: 3,
+  },
+
+  containerItem: {
+    width: DimensionsStyle.width * 0.42,
+    backgroundColor: Colors.GRAY,
+    margin: 5,
+    borderRadius: 25,
+    padding: 8,
+  },
+
+  imageEstates: {
+    width: '100%',
+    height: DimensionsStyle.width * 0.4,
+    resizeMode: 'stretch',
+    borderRadius: 25,
+  },
+
+  nameEstates: {
+    fontFamily: fontFamily.Bold,
+    fontSize: 15,
+    color: Colors.BLACK,
+    lineHeight: 21,
+  },
+
+  textStart: {
+    fontFamily: fontFamily.Bold,
+    fontSize: 11,
+    color: Colors.BLACK,
+  },
+
+  imageHeart: {
+    width: 30,
+    height: 30,
+    position: 'absolute',
+    top: 20,
+    right: 20,
   },
 });
 
