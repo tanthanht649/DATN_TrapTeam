@@ -99,3 +99,4 @@ export const LINE_ONBOARDING = require('./line_onboarding.png');
 export const IMAGE_FEATURED_LIST = require('./image_featured_list.png');
 export const IMAGE_FEATURED_LIST_2 = require('./image_featured_list_2.png');
 export const IMAGE_FEATURED_LIST_3 = require('./image_featured_list_3.png');
+export const SETTING_BG = require('./setting_bg.png');

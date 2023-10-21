@@ -17,6 +17,7 @@ import {
   Register,
   RegisterOTP,
   FeaturedListHome,
+  FeaturedListDetail,
 } from '@containers';
 
 type WelcomeTeamProps = {};
@@ -33,6 +34,7 @@ type ProfileProps = {};
 type RegisterProps = {};
 type RegisterOTPProps = {};
 type FeaturedListHomeProps = {};
+type FeaturedListDetailProps = {};
 
 export type WelcomeTeamStackParamList = {
   WelcomeTeam: WelcomeTeamProps | undefined;
@@ -49,6 +51,7 @@ export type WelcomeTeamStackParamList = {
   Register: RegisterProps | undefined;
   RegisterOTP: RegisterOTPProps | undefined;
   FeaturedListHome: FeaturedListHomeProps | undefined;
+  FeaturedListDetail: FeaturedListDetailProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
@@ -57,7 +60,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="FeaturedListHome"
+        initialRouteName="FeaturedListDetail"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
@@ -79,6 +82,10 @@ const _StackTest = () => {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="RegisterOTP" component={RegisterOTP} />
         <Stack.Screen name="FeaturedListHome" component={FeaturedListHome} />
+        <Stack.Screen
+          name="FeaturedListDetail"
+          component={FeaturedListDetail}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

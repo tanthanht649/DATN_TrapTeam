@@ -11,8 +11,9 @@ import {
 } from 'react-native';
 import React, {useState, useMemo, useEffect, useRef} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Header, Input, ViewSwitcher} from '@components';
+import {BackgroundApp, Header, Input, ViewSwitcher} from '@components';
 import {
+  BACKGROUND_WHITE,
   EMAIL_LOGIN,
   FAVORITE,
   FIND,
@@ -179,70 +180,72 @@ const _FeaturedListHome = () => {
   };
 
   return (
-    <SafeAreaView style={_styles.container}>
-      <Header
-        iconLeft={ICON_BACK}
-        iconRight={SETTING}
-        styleIconRight={{width: 20, height: 20}}
-        iconHeart={HEART_INACTIVE}
-        eventLeft={() => console.log('IconLeft')}
-        eventRight={() => console.log('EventRight')}
-        isCheck={true}
-      />
-      {hideElement ? null : (
-        <View style={[_styles.containerImageTop]}>
-          <View style={_styles.containerImageTopLeft}>
-            <Image style={_styles.image} source={IMAGE_FEATURED_LIST} />
-          </View>
-          <View style={_styles.containerImageTopCenter}></View>
-          <View style={_styles.containerImageTopRight}>
-            <View style={_styles.containerImageTopRightTop}>
-              <Image style={_styles.image} source={IMAGE_FEATURED_LIST_2} />
+    <BackgroundApp source={BACKGROUND_WHITE}>
+      <SafeAreaView style={_styles.container}>
+        <Header
+          iconLeft={ICON_BACK}
+          iconRight={SETTING}
+          styleIconRight={{width: 20, height: 20}}
+          iconHeart={HEART_INACTIVE}
+          eventLeft={() => console.log('IconLeft')}
+          eventRight={() => console.log('EventRight')}
+          isCheck={true}
+        />
+        {hideElement ? null : (
+          <View style={[_styles.containerImageTop]}>
+            <View style={_styles.containerImageTopLeft}>
+              <Image style={_styles.image} source={IMAGE_FEATURED_LIST} />
             </View>
-            <View style={_styles.containerImageTopRightBottom}>
-              <Image style={_styles.image} source={IMAGE_FEATURED_LIST_3} />
+            <View style={_styles.containerImageTopCenter}></View>
+            <View style={_styles.containerImageTopRight}>
+              <View style={_styles.containerImageTopRightTop}>
+                <Image style={_styles.image} source={IMAGE_FEATURED_LIST_2} />
+              </View>
+              <View style={_styles.containerImageTopRightBottom}>
+                <Image style={_styles.image} source={IMAGE_FEATURED_LIST_3} />
+              </View>
             </View>
           </View>
+        )}
+
+        <View style={_styles.containetTextCenter}>
+          <Text style={_styles.textCenterTop}>Featured Estates</Text>
+          <Text style={_styles.textCenterBottom}>
+            Our recommended real estates exclusive for you.
+          </Text>
         </View>
-      )}
+        <View>
+          <Input
+            imageIconLeft={FIND}
+            imageIconRight={EMAIL_LOGIN}
+            iconLeftStyle={{height: 25, width: 25}}
+            label="Search in villa’s category"
+            iconRightStyle={{opacity: 0}}
+            value={searchName}
+            onChangeText={text => setSearchName(text)}
+            viewStyle={{
+              borderRadius: 20,
+              backgroundColor: Colors.GRAY,
+            }}
+          />
+        </View>
+        <View>
+          <ViewSwitcher quantityEstates={22} onTabChange={setListViewType} />
+        </View>
 
-      <View style={_styles.containetTextCenter}>
-        <Text style={_styles.textCenterTop}>Featured Estates</Text>
-        <Text style={_styles.textCenterBottom}>
-          Our recommended real estates exclusive for you.
-        </Text>
-      </View>
-      <View>
-        <Input
-          imageIconLeft={FIND}
-          imageIconRight={EMAIL_LOGIN}
-          iconLeftStyle={{height: 25, width: 25}}
-          label="Search in villa’s category"
-          iconRightStyle={{opacity: 0}}
-          value={searchName}
-          onChangeText={text => setSearchName(text)}
-          viewStyle={{
-            borderRadius: 20,
-            backgroundColor: Colors.GRAY,
-          }}
-        />
-      </View>
-      <View>
-        <ViewSwitcher quantityEstates={22} onTabChange={setListViewType} />
-      </View>
-
-      <View style={_styles.containerListFeatured}>
-        <Animated.FlatList
-          data={DATA_ESTATES}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          numColumns={2}
-          style={{height: DimensionsStyle.height * 0.6}}
-          showsVerticalScrollIndicator={false}
-          onScroll={handleScroll}
-        />
-      </View>
-    </SafeAreaView>
+        <View style={_styles.containerListFeatured}>
+          <Animated.FlatList
+            data={DATA_ESTATES}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+            numColumns={2}
+            style={{height: DimensionsStyle.height * 0.6}}
+            showsVerticalScrollIndicator={false}
+            onScroll={handleScroll}
+          />
+        </View>
+      </SafeAreaView>
+    </BackgroundApp>
   );
 };
 
