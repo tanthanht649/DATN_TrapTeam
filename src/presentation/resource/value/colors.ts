@@ -18,6 +18,7 @@ export const Colors = {
   GREY: '#DFDFDF',
   GREY_DARK_1: '#252B5C',
   GREY_SOFT: '#F5F4F8',
+  GREY_SOFT_2: '#ECEDF3',
   GREY_MEDIUM_1: '#53587A',
   GREY_LIGHT: '#A1A5C1',
   GREEN_1: '#8BC83F',

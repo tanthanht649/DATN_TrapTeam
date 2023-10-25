@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: Dimensions.get('window').width * 1.01,
-    height: Dimensions.get('window').height * 0.15,
+    height: Dimensions.get('window').height * 0.12,
     borderWidth: 0.1,
-    elevation: 1,
+    elevation: 0.2,
   },
   icon: {
     width: Dimensions.get('window').width * 0.145,
