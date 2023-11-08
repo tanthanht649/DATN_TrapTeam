@@ -345,11 +345,8 @@ const _styles = StyleSheet.create({
         marginHorizontal: 20,
         marginBottom: 10,
         backgroundColor: Colors.GREY_SOFT,
-        // backgroundColor: Colors.BLACK,
         padding: 8,
         borderRadius: 25,
-        // flex: 1,
-        // width: '100%',
     },
     itemImage: {
         width: 180,

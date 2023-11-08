@@ -24,4 +24,5 @@ export const Colors = {
   BLUE_DARK:'#1F4C6B',
   BLUE_SOFT:'#1F4C6BB0',
   GREEN_SOFT:'#234F68B0',
+  GREY_BARELY_MEDIUM:'#A1A5C1',
 };
