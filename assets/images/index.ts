@@ -99,5 +99,7 @@ export const ONBOARDING_3 = require('./onboarding_3.png');
 export const LINE_ONBOARDING = require('./line_onboarding.png');
 export const CLOCK = require('./clock.png');
 export const EDITITEM = require('./editItem.png');
+export const HOUSE = require('./house.png');
+
 
 

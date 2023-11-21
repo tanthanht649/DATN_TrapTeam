@@ -17,6 +17,7 @@ import {
   Register,
   RegisterOTP,
 } from '@containers';
+import { AddDetail } from '../container/real-estate';
 
 type WelcomeTeamProps = {};
 type TestProps = {};
@@ -31,6 +32,8 @@ type LoginOptionProps = {};
 type ProfileProps = {};
 type RegisterProps = {};
 type RegisterOTPProps = {};
+type AddDetailProps = {};
+
 
 export type WelcomeTeamStackParamList = {
   WelcomeTeam: WelcomeTeamProps | undefined;
@@ -46,6 +49,7 @@ export type WelcomeTeamStackParamList = {
   Profile: ProfileProps | undefined;
   Register: RegisterProps | undefined;
   RegisterOTP: RegisterOTPProps | undefined;
+  AddDetail: AddDetailProps|undefined;
 };
 
 const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
@@ -54,7 +58,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Profile"
+        initialRouteName="AddDetail"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
@@ -75,6 +79,7 @@ const _StackTest = () => {
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="RegisterOTP" component={RegisterOTP} />
+        <Stack.Screen name="AddDetail" component={AddDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );
