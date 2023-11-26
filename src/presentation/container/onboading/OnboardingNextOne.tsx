@@ -31,28 +31,28 @@ const _OnboardingNextOne: React.FC<PropsType> = props => {
         <View>
           <Header
             iconLeft={LOGO_APP}
-            textRight={'Skip'}
+            textRight={'Bỏ qua'}
             eventLeft={() => console.log('IconLeft')}
             eventRight={() => console.log('EventRight')}
             isCheck={true}
             styleIconLeft={{
-              width: DimensionsStyle.width * 0.3,
-              height: DimensionsStyle.width * 0.25,
+              width: DimensionsStyle.width * 0.1,
+              height: DimensionsStyle.width * 0.12,
               resizeMode: 'stretch',
-              marginStart: -12,
             }}
           />
 
           <TextPlus
-            text={`Find best place\nto stay in good price`}
-            textBolds={['good price']}
+            text={`Tìm địa điểm tốt nhất\nvới giá tốt nhất`}
+            textBolds={['tốt nhất']}
             textStyle={_styles.textFind}
             boldStyle={{fontSize: 25}}
             viewStyle={{marginStart: 30}}
           />
 
           <Text style={_styles.textLorem}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed.
+            Điều quan trọng là phải có dịch vụ khách hàng,{'\n'}nhưng sau đó nó
+            sẽ là dịch vụ khách hàng.
           </Text>
         </View>
         <View
@@ -91,7 +91,7 @@ const _OnboardingNextOne: React.FC<PropsType> = props => {
               }}
             />
             <Button
-              title="Next"
+              title="Tiếp"
               onPress={() => navigation.navigate('OnboardingNextTwo')}
               imageIconLeft={LOGO_APP}
               imageIconRight={LOGO_APP}
@@ -121,6 +121,7 @@ const _styles = StyleSheet.create({
     fontSize: 12,
     marginStart: 30,
     marginTop: 20,
+    lineHeight: 18,
   },
 });
 export const OnboardingNextOne = React.memo(_OnboardingNextOne);
