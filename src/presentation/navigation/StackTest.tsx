@@ -36,6 +36,7 @@ type RegisterOTPProps = {};
 type FeaturedListHomeProps = {};
 type FeaturedListDetailProps = {};
 
+
 export type WelcomeTeamStackParamList = {
   WelcomeTeam: WelcomeTeamProps | undefined;
   Test: TestProps | undefined;
@@ -60,7 +61,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="Profile"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',

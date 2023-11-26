@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { WelcomeTeamStackParamList } from '@navigation';
-import { BackgroundApp, Header, ViewSwitcherProfile } from '@components';
-import { BACKGROUND_WHITE, CLOCK, EDIT, EDITITEM, FAVORITE, FAVORITE_BLUE, IMAGE_TEST, LOCATION, SETTING_PROFILE, STAR_4, fontFamily } from '@assets';
+import { BackgroundApp, Header, Input, ViewSwitcherProfile } from '@components';
+import { BACKGROUND_WHITE, BLOG_PROFILE, EDIT, FAVORITE, FAVORITE_BLUE, HEART_PROFILE, HISTORY, IMAGE_TEST, LOCATION, LOGO_PROFILE, LOG_OUT, POLICY, STAR_4, VERSION, fontFamily } from '@assets';
 import { Colors, DimensionsStyle } from '@resources';
 type Item = {
   id: string;
@@ -91,7 +91,7 @@ const _Profile: React.FC<PropsType> = props => {
                   <Image source={item.heart ? FAVORITE : FAVORITE_BLUE} style={_styles.heart}></Image>
                   <Text style={[_styles.name, { fontSize: 12, textAlign: 'left', marginTop: 10 }]}>{item.title}</Text>
                   <View style={[_styles.row, { justifyContent: 'flex-start' }]}>
-                    <Image style={_styles.icon} source={CLOCK}></Image>
+                    {/* <Image style={_styles.icon} source={CLOCK}></Image> */}
                     <Text style={_styles.textItem}>{item.time}</Text>
                   </View>
                 </View>
@@ -104,7 +104,7 @@ const _Profile: React.FC<PropsType> = props => {
                   <Image source={item.heart ? FAVORITE : FAVORITE_BLUE} style={_styles.heart}></Image>
                   <Text style={[_styles.name, { fontSize: 12, textAlign: 'left', marginTop: 10 }]}>{item.title}</Text>
                   <View style={[_styles.row, { justifyContent: 'flex-start' }]}>
-                    <Image style={_styles.icon} source={CLOCK}></Image>
+                    {/* <Image style={_styles.icon} source={CLOCK}></Image> */}
                     <Text style={_styles.textItem}>{item.time}</Text>
                   </View>
                 </View>
@@ -130,8 +130,8 @@ const _Profile: React.FC<PropsType> = props => {
                 <View style={_styles.item} key={item.id}>
 
                   <Image source={item.image} style={_styles.imageItem}></Image>
-                  <TouchableOpacity  style={_styles.editItem} onPress={() => handleItemClick(item.id)} >
-                    <Image source={EDITITEM}></Image>
+                  <TouchableOpacity style={_styles.editItem} onPress={() => handleItemClick(item.id)} >
+                    {/* <Image source={EDITITEM}></Image> */}
                   </TouchableOpacity>
                   <Image source={item.heart ? FAVORITE : FAVORITE_BLUE} style={_styles.heart}></Image>
                   <Text style={[_styles.name, { fontSize: 12, textAlign: 'left', marginTop: 10 }]}>{item.title}</Text>
@@ -151,7 +151,7 @@ const _Profile: React.FC<PropsType> = props => {
                   <Image source={item.image} style={_styles.imageItem}></Image>
                   <Image source={item.heart ? FAVORITE : FAVORITE_BLUE} style={_styles.heart}></Image>
                   <TouchableOpacity style={_styles.editItem} onPress={() => handleItemClick(item.id)} >
-                    <Image source={EDITITEM} ></Image>
+                    {/* <Image source={EDITITEM} ></Image> */}
                   </TouchableOpacity>
                   <Text style={[_styles.name, { fontSize: 12, textAlign: 'left', marginTop: 10 }]}>{item.title}</Text>
                   <View style={[_styles.row, { justifyContent: 'flex-start' }]}>
@@ -183,7 +183,7 @@ const _Profile: React.FC<PropsType> = props => {
                 <Image source={item.heart ? FAVORITE : FAVORITE_BLUE} style={_styles.heart}></Image>
                 <Text style={[_styles.name, { fontSize: 12, textAlign: 'left', marginTop: 10 }]}>{item.title}</Text>
                 <View style={[_styles.row, { justifyContent: 'flex-start' }]}>
-                  <Image style={_styles.icon} source={CLOCK}></Image>
+                  {/* <Image style={_styles.icon} source={CLOCK}></Image> */}
                   <Text style={_styles.textItem}>{item.time}</Text>
                 </View>
               </View>
@@ -196,7 +196,7 @@ const _Profile: React.FC<PropsType> = props => {
                 <Image source={item.heart ? FAVORITE : FAVORITE_BLUE} style={_styles.heart}></Image>
                 <Text style={[_styles.name, { fontSize: 12, textAlign: 'left', marginTop: 10 }]}>{item.title}</Text>
                 <View style={[_styles.row, { justifyContent: 'flex-start' }]}>
-                  <Image style={_styles.icon} source={CLOCK}></Image>
+                  {/* <Image style={_styles.icon} source={CLOCK}></Image> */}
                   <Text style={_styles.textItem}>{item.time}</Text>
                 </View>
               </View>
@@ -211,7 +211,7 @@ const _Profile: React.FC<PropsType> = props => {
     <BackgroundApp source={BACKGROUND_WHITE}>
       <ScrollView showsHorizontalScrollIndicator={false}>
         <SafeAreaView style={_styles.container}>
-          <Header textCenter='Trang cá nhân' iconRight={SETTING_PROFILE} styleIconRight={{ height: 50, width: 50 }}></Header>
+          <Header textCenter='Thông tin cá nhân' iconRight={EDIT} styleIconRight={{ height: 50, width: 50, opacity: 0 }} ></Header>
           <View style={_styles.avatar}>
             <Image style={_styles.image} source={IMAGE_TEST}></Image>
             <Pressable>
@@ -220,24 +220,40 @@ const _Profile: React.FC<PropsType> = props => {
           </View>
           <View>
             <Text style={_styles.name}>Mathew Adam</Text>
-            <Text style={_styles.email}>mathew@email.com</Text>
+            {/* <Text style={_styles.email}>mathew@email.com</Text> */}
           </View>
           <View style={_styles.row}>
-            <View style={_styles.border}>
-              <Text style={_styles.name}>30</Text>
+            <Pressable onPress={() => { }} style={_styles.border}>
+              <Image style={[_styles.image, { width: 24, height: 24, alignSelf: 'center' }]} source={HEART_PROFILE}></Image>
               <Text style={[_styles.email, { fontFamily: fontFamily.Medium, color: Colors.GREY_DARK_1, }]}>Yêu thích</Text>
-            </View>
-            <View style={_styles.border}>
-              <Text style={_styles.name}>12</Text>
-              <Text style={[_styles.email, { fontFamily: fontFamily.Medium, color: Colors.GREY_DARK_1, }]}>Đã tham gia</Text>
-            </View>
-            <View style={_styles.border}>
-              <Text style={_styles.name}>28</Text>
-              <Text style={[_styles.email, { fontFamily: fontFamily.Medium, color: Colors.GREY_DARK_1, }]}>Đánh giá</Text>
-            </View>
+            </Pressable>
+            <Pressable onPress={() => { }} style={_styles.border}>
+              <Image style={[_styles.image, { width: 24, height: 24, alignSelf: 'center' }]} source={HISTORY}></Image>
+              <Text style={[_styles.email, { fontFamily: fontFamily.Medium, color: Colors.GREY_DARK_1, }]}>Lịch sử</Text>
+            </Pressable>
+            <Pressable onPress={() => { }} style={_styles.border}>
+              <Image style={[_styles.image, { width: 20, height: 18, borderRadius: 0, alignSelf: 'center' }]} source={BLOG_PROFILE}></Image>
+              <Text style={[_styles.email, { fontFamily: fontFamily.Medium, color: Colors.GREY_DARK_1, }]}>Bài viết</Text>
+            </Pressable>
           </View>
+          <Pressable onPress={() => { }} style={_styles.card}>
+            <Image style={[_styles.image, { width: 22, height: 22, marginRight:10, borderRadius:0 }]} source={POLICY}></Image>
+            <Text style={[_styles.email, { fontFamily: fontFamily.Medium, color: Colors.BLUE_TEXT,  fontSize:16}]}>Điều khoản và chính sách</Text>
+          </Pressable>
+          <Pressable onPress={() => { }} style={_styles.card}>
+            <Image style={[_styles.image, { width: 24, height: 27, marginRight:8,borderRadius:0 }]} source={VERSION}></Image>
+            <Text style={[_styles.email, { fontFamily: fontFamily.Medium, color: Colors.BLUE_TEXT,  fontSize:16}]}>Điều khoản và chính sách</Text>
+          </Pressable>
+          <Pressable onPress={() => { }} style={_styles.card}>
+            <Image style={[_styles.image, { width: 18, height: 23, marginRight:15, borderRadius:0 }]} source={LOG_OUT}></Image>
+            <Text style={[_styles.email, { fontFamily: fontFamily.Medium, color: Colors.BLUE_TEXT,  fontSize:16}]}>Đăng xuất</Text>
+          </Pressable>
+          <Image style={[_styles.image, { width: 100, height: 120, alignSelf:'center', marginTop:20 , borderRadius:0}]} source={LOGO_PROFILE}></Image>
 
-          <View style={_styles.switchButton}>
+
+
+
+          {/* <View style={_styles.switchButton}>
             <View style={_styles.bordertab}>
               <TouchableOpacity onPress={() => setSelectTab(0)} style={[_styles.button, { backgroundColor: selectTab == 0 ? Colors.WHITE : Colors.GRAY_SEARCH }]}>
                 <Text style={[_styles.text, { color: selectTab == 0 ? Colors.GREY_DARK_1 : Colors.GREY_LIGHT }]}>Yêu Thích</Text>
@@ -252,7 +268,8 @@ const _Profile: React.FC<PropsType> = props => {
             <View>
               {renderTopTab(selectTab)}
             </View>
-          </View>
+          </View> */}
+          {/* Đừng xóa của Linh */}
         </SafeAreaView>
       </ScrollView>
 
@@ -262,7 +279,9 @@ const _Profile: React.FC<PropsType> = props => {
 
 const _styles = StyleSheet.create({
   container: {
-    marginHorizontal: 24
+    paddingHorizontal: 24,
+    backgroundColor:Colors.GREY_SOFT,
+    height:DimensionsStyle.height*1
   },
   avatar: {
     height: 100,
@@ -315,9 +334,22 @@ const _styles = StyleSheet.create({
     height: DimensionsStyle.width * 0.2,
     width: DimensionsStyle.width * 0.27,
     marginTop: 19,
-    borderColor: Colors.GREY_SOFT,
+    borderColor: Colors.GREY_SOFT2,
     flexDirection: 'column',
     justifyContent: 'center',
+  },
+  card: {
+    borderRadius: 15,
+    borderWidth: 1,
+    height: DimensionsStyle.width * 0.13,
+    width: DimensionsStyle.width * 0.87,
+    marginTop: 19,
+    borderColor: Colors.GREY_SOFT2,
+    backgroundColor:Colors.WHITE,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems:'center',
+    paddingHorizontal:25
   },
   switchButton: {
     height: '100%',
