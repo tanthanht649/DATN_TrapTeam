@@ -40,28 +40,28 @@ const _OnboardingNextThree: React.FC<PropsType> = props => {
         <View>
           <Header
             iconLeft={LOGO_APP}
-            textRight={'Skip'}
+            textRight={'Bỏ qua'}
             eventLeft={() => console.log('IconLeft')}
             eventRight={() => console.log('EventRight')}
             isCheck={true}
             styleIconLeft={{
-              width: DimensionsStyle.width * 0.3,
-              height: DimensionsStyle.width * 0.25,
+              width: DimensionsStyle.width * 0.1,
+              height: DimensionsStyle.width * 0.12,
               resizeMode: 'stretch',
-              marginStart: -12,
             }}
           />
 
           <TextPlus
-            text={`Fast sell your property\nin just one click`}
-            textBolds={['one click']}
+            text={`Tìm lựa chọn hoàn hảo cho\nchuyến đi tương lại của bạn`}
+            textBolds={['lựa chọn hoàn hảo']}
             textStyle={_styles.textFind}
             boldStyle={{fontSize: 25}}
             viewStyle={{marginStart: 30}}
           />
 
           <Text style={_styles.textLorem}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed.
+            Điều quan trọng là phải có dịch vụ khách hàng,{'\n'}nhưng sau đó sẽ
+            là dịch vụ khách hàng.
           </Text>
         </View>
         <View
@@ -114,8 +114,10 @@ const _OnboardingNextThree: React.FC<PropsType> = props => {
                 viewStyle={{marginTop: -35}}
               />
               <Button
-                title="Next"
-                onPress={() => {}}
+                title="Tiếp"
+                onPress={() => {
+                  navigation.navigate('Login');
+                }}
                 imageIconLeft={LOGO_APP}
                 imageIconRight={LOGO_APP}
                 viewStyle={{
@@ -145,6 +147,7 @@ const _styles = StyleSheet.create({
     fontSize: 12,
     marginStart: 30,
     marginTop: 20,
+    lineHeight: 18,
   },
 });
 
