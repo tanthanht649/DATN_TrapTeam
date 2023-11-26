@@ -115,7 +115,9 @@ const _OnboardingNextThree: React.FC<PropsType> = props => {
               />
               <Button
                 title="Tiếp"
-                onPress={() => {}}
+                onPress={() => {
+                  navigation.navigate('Login');
+                }}
                 imageIconLeft={LOGO_APP}
                 imageIconRight={LOGO_APP}
                 viewStyle={{

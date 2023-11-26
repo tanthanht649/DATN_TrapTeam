@@ -100,3 +100,7 @@ export const IMAGE_FEATURED_LIST = require('./image_featured_list.png');
 export const IMAGE_FEATURED_LIST_2 = require('./image_featured_list_2.png');
 export const IMAGE_FEATURED_LIST_3 = require('./image_featured_list_3.png');
 export const SETTING_BG = require('./setting_bg.png');
+export const IMAGE_LOGIN_1 = require('./image_login_1.png');
+export const IMAGE_LOGIN_2 = require('./image_login_2.png');
+export const IMAGE_LOGIN_3 = require('./image_login_3.png');
+export const IMAGE_LOGIN_4 = require('./image_login_4.png');
