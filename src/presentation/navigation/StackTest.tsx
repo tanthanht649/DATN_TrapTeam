@@ -33,7 +33,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="HomeFull"
+        initialRouteName="Review"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',

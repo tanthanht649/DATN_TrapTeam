@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, ScrollView, Dimensions, TouchableOpacity, FlatList } from 'react-native'
 import React from 'react'
 import { Colors, DimensionsStyle } from '@resources';
-import { APARTMENT, ARROW_LEFT_LINE, ARROW_RIGHT_LINE, BACKGROUND_WHITE, CALENDAR, EMAIL, FAVORITE_BLUE, HEART, ICON_BACK, ICON_LOGOUT, LOCATION, MESSAGING, OVAN, PAYPAL, SALE, TICKET, TICKET_2, TOWER, fontFamily, } from '@assets';
+import { APARTMENT, ARROW_LEFT_LINE, ARROW_RIGHT_LINE, BACKGROUND_WHITE, CALENDAR, EMAIL, FAVORITE_BLUE, HEART, ICON_BACK, ICON_LOGOUT, LOCATION, MESSAGING, MOMO, OVAN, PAYPAL, SALE, TICKET, TICKET_2, TOWER, fontFamily, } from '@assets';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { WelcomeTeamStackParamList } from '@navigation';
@@ -12,7 +12,7 @@ type PropsType = NativeStackScreenProps<
     'Summary'
 >;
 
-const [text, setText] = React.useState('........an@email.com')
+const [text, setText] = React.useState('***********123')
 
 
 const _Summary: React.FC<PropsType> = props => {
@@ -22,7 +22,7 @@ const _Summary: React.FC<PropsType> = props => {
         <BackgroundApp source={BACKGROUND_WHITE}>
             <Header
                 iconLeft={ICON_BACK}
-                textCenter='Transaction review'
+                textCenter='Thanh toán'
             />
             <ScrollView style={_styles.container}>
                 <SafeAreaView style={_styles.itemEstates}>
@@ -30,48 +30,44 @@ const _Summary: React.FC<PropsType> = props => {
                         <SafeAreaView style={_styles.gr1}>
                             <Image source={TOWER} style={_styles.imageEstates} />
                             <Image source={FAVORITE_BLUE} style={_styles.iconheart} />
-                            <SafeAreaView style={_styles.boxname}>
-                                <Text style={_styles.name}>Apartment</Text>
-                            </SafeAreaView>
+                           
                         </SafeAreaView>
                     </SafeAreaView>
                     <SafeAreaView style={_styles.grEstates}>
-                        <Text style={_styles.textEstates}>Sky Dandelions Apartment</Text>
+                        <Text style={_styles.textEstates}>Hồ Hoàn Kiếm</Text>
                         <SafeAreaView style={_styles.grouplocation}>
                             <Image source={LOCATION} style={_styles.iconlocation} />
                             <Text style={_styles.textlocation}>Hà Nội, Việt Nam</Text>
                         </SafeAreaView>
-                        <SafeAreaView style={_styles.box}>
-                            <Text style={_styles.nameR}>Rent</Text>
-                        </SafeAreaView>
+                       
                     </SafeAreaView>
                 </SafeAreaView>
-                <Text style={_styles.titlePay}>Payment Detail</Text>
+                <Text style={_styles.titlePay}>Chi Tiết Thanh Toán</Text>
                 <SafeAreaView style={_styles.boxOrder}>
                     <SafeAreaView style={_styles.cardOrder}>
                         <SafeAreaView style={_styles.information}>
-                            <Text style={_styles.time}>Period time</Text>
+                            <Text style={_styles.time}>    Người lớn x2</Text>
                             <SafeAreaView>
-                                <Text style={_styles.month}>2 month</Text>
+                                <Text style={_styles.month}>  13, 380, 000 VND</Text>
                             </SafeAreaView>
                         </SafeAreaView>
                         <SafeAreaView style={_styles.information1}>
-                            <Text style={_styles.payment}>Monthly payment</Text>
+                            <Text style={_styles.payment}> Trẻ em x3</Text>
                             <SafeAreaView>
-                                <Text style={_styles.tien}>$ 220</Text>
+                                <Text style={_styles.tien}> 1, 800, 000 VND</Text>
                             </SafeAreaView>
                         </SafeAreaView>
                         <SafeAreaView style={_styles.information2}>
-                            <Text style={_styles.discount}>Discount</Text>
+                            <Text style={_styles.discount}> Giảm Giá</Text>
                             <SafeAreaView>
-                                <Text style={_styles.tienam}>-$ 88</Text>
+                                <Text style={_styles.tienam}>    - 380, 000 VND </Text>
                             </SafeAreaView>
                         </SafeAreaView>
                         <SafeAreaView style={_styles.bill}>
                             <SafeAreaView style={_styles.information2}>
-                                <Text style={_styles.total}>Total</Text>
+                                <Text style={_styles.total}>Tổng</Text>
                                 <SafeAreaView>
-                                    <Text style={_styles.tiensave}>$352</Text>
+                                    <Text style={_styles.tiensave}>14, 800, 000 VND</Text>
                                 </SafeAreaView>
                             </SafeAreaView>
                         </SafeAreaView>
@@ -79,13 +75,13 @@ const _Summary: React.FC<PropsType> = props => {
                 </SafeAreaView>
              
                 <SafeAreaView style={_styles.boxVoucher}>
-                    <Text style={_styles.titleVoucher}>Payment Method</Text>
+                    <Text style={_styles.titleVoucher}>Phương thức thanh toán</Text>
                     <TouchableOpacity style={_styles.btnSeeAll}>
-                        <Text style={_styles.seeAll}>Change</Text>
+                        <Text style={_styles.seeAll}>thay đổi</Text>
                     </TouchableOpacity>
                 </SafeAreaView>
                 <Input
-                 imageIconLeft={PAYPAL}
+                 imageIconLeft={MOMO}
                  imageIconRight={MESSAGING}
                  iconRightStyle={{ opacity: 0 }}
                  label=''
@@ -95,8 +91,8 @@ const _Summary: React.FC<PropsType> = props => {
 
                 />
                  <SafeAreaView style={_styles.boxButton}>
-                <Button title='Pay rent' onPress={() => { }} viewStyle={{ width: 200, marginTop: '7%' }} imageIconLeft={EMAIL} imageIconRight={MESSAGING}></Button>
-                <ButtonArrow imageIcon={ARROW_RIGHT_LINE} onPress={() => { }} shadow={true} viewStyle={{ marginTop: '7%' }}></ButtonArrow>
+                <Button title='Thanh toán' onPress={() => { }} viewStyle={{ width: 200, marginTop: '7%',  marginRight:'10%'}} imageIconLeft={EMAIL} imageIconRight={MESSAGING}></Button>
+                {/* <ButtonArrow imageIcon={ARROW_RIGHT_LINE} onPress={() => { }} shadow={true} viewStyle={{ marginTop: '7%' }}></ButtonArrow> */}
                 </SafeAreaView>
 
             </ScrollView>
@@ -142,7 +138,7 @@ const _styles = StyleSheet.create({
         width: Dimensions.get('screen').width * 0.43,
         height: Dimensions.get('screen').height * 0.19,
         marginTop: - Dimensions.get('screen').height * 0.03,
-        marginLeft: - Dimensions.get('screen').width * 0.27,
+        marginLeft: - Dimensions.get('screen').width * 0.06,
         borderRadius: 25,
         flexShrink: 0,
         resizeMode: 'stretch'
@@ -177,12 +173,12 @@ const _styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: - Dimensions.get('window').height * 0.22,
-        marginLeft: Dimensions.get('window').height * 0.05,
+        marginLeft: Dimensions.get('window').height * 0.1,
     },
 
     grouplocation: {
         marginTop: Dimensions.get('window').height * 0.05,
-        marginLeft: - Dimensions.get('window').height * 0.19,
+        marginLeft: - Dimensions.get('window').height * 0.23,
         width: '100%',
         flexDirection: 'row',
         borderTopStartRadius: 5,
@@ -197,6 +193,7 @@ const _styles = StyleSheet.create({
         lineHeight: 18,
         letterSpacing: 0.36,
         fontFamily: fontFamily.Bold,
+        marginLeft:  Dimensions.get('window').height * 0.2,
     },
     textlocation: {
         color: Colors.GREY_DARK,
@@ -238,26 +235,13 @@ const _styles = StyleSheet.create({
     },
    
    
-      payment:{
-        fontFamily: fontFamily.Medium,
-        fontSize: 12,
-        color: Colors.GREY_MEDIUM,
-        marginLeft: -Dimensions.get('screen').width * 0.01,
-        marginTop: - Dimensions.get('screen').height * 0.03,
-      },
-      tien: {
-        fontFamily: fontFamily.Medium,
-        fontSize: 12,
-        color: Colors.GREY_MEDIUM,
-        marginTop: - Dimensions.get('screen').height * 0.06,
-        marginLeft:  Dimensions.get('screen').width * 0.4,
-      },
+    
       month: {
         fontFamily: fontFamily.Medium,
         fontSize: 12,
         color: Colors.GREY_MEDIUM,
         marginTop: - Dimensions.get('screen').height * 0.01,
-        marginLeft:  Dimensions.get('screen').width * 0.45,
+        marginLeft:  Dimensions.get('screen').width * 0.32,
       },
     
       time: {
@@ -267,9 +251,23 @@ const _styles = StyleSheet.create({
         fontSize: 12,
         color: Colors.GREY_MEDIUM,
       },
+      payment:{
+        fontFamily: fontFamily.Medium,
+        fontSize: 12,
+        color: Colors.GREY_MEDIUM,
+        marginLeft: Dimensions.get('screen').width * 0.01,
+        marginTop: - Dimensions.get('screen').height * 0.03,
+      },
+      tien: {
+        fontFamily: fontFamily.Medium,
+        fontSize: 12,
+        color: Colors.GREY_MEDIUM,
+        marginTop: - Dimensions.get('screen').height * 0.06,
+        marginLeft:  Dimensions.get('screen').width * 0.4,
+      },
       discount:{ 
       marginTop: - Dimensions.get('screen').height * 0.07,
-      marginLeft: -Dimensions.get('screen').width * 0.01,
+      marginLeft: Dimensions.get('screen').width * 0.02,
       fontFamily: fontFamily.Medium,
       fontSize: 12,
       color: Colors.GREY_MEDIUM,
@@ -278,7 +276,7 @@ const _styles = StyleSheet.create({
         fontSize: 12,
         color: Colors.GREY_MEDIUM,
         marginTop: - Dimensions.get('screen').height * 0.1,
-        marginLeft:  Dimensions.get('screen').width * 0.52,
+        marginLeft:  Dimensions.get('screen').width * 0.4,
     },
       information: {
         flexDirection: 'row',
@@ -345,14 +343,14 @@ const _styles = StyleSheet.create({
         fontSize: 14,
         color: Colors.GREY_DARK,
         fontFamily: fontFamily.Bold,
-        marginLeft: - Dimensions.get('screen').width * 0.01,
+        marginLeft:  Dimensions.get('screen').width * 0.05,
         marginTop: -Dimensions.get('screen').height * 0.025,
     },
     tiensave: {
         fontSize: 14,
         color: Colors.GREY_DARK,
         fontFamily: fontFamily.Bold,
-        marginLeft: Dimensions.get('screen').width * 0.55,
+        marginLeft: Dimensions.get('screen').width * 0.37,
         marginTop: -Dimensions.get('screen').height * 0.055,
       },
       boxVoucher: {

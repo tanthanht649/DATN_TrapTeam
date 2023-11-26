@@ -96,3 +96,12 @@ export const BOGOC = require('./bogoc.png');
 export const VECTOR = require('./vector.png');
 export const APARTMENT = require('./apartment.png');
 export const TOWER = require('./tower.png');
+
+
+export const AVT_HOME = require('./avt-home.png');
+export const LOGO_HOME = require('./logo-home.png');
+export const MOMO = require('./momo.png');
+export const ZALO_PAY = require('./zalopay.png');
+export const VIETTEL_PAY = require('./viettelpay.png');
+
+

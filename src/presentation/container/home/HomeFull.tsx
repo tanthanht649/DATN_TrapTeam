@@ -42,68 +42,64 @@ const _HomeFull: React.FC<PropsType> = props => {
   };
   const [text, setText] = React.useState('')
 
-  interface Item {
-    id: number;
-    title: string;
-    titlemini: string;
-    image: any;
-    imageview: any;
-    iamgevector: any;
+  // interface Item {
+  //   id: number;
+  //   title: string;
+  //   titlemini: string;
+  //   image: any;
+  //   imageview: any;
+  //   iamgevector: any;
 
-  }
-  const DATA: Item[] = [
-    { id: 1, title: "Halloween Sale!", titlemini: 'All disccount up to 60%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-    { id: 2, title: "Halloween Sale!", titlemini: 'All disccount up to 60%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-    { id: 3, title: "Halloween Sale!", titlemini: 'All disccount up to 60%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-    { id: 4, title: "Halloween Sale!", titlemini: 'All disccount up to 60%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-    { id: 5, title: "Halloween Sale!", titlemini: 'All disccount up to 60%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-    { id: 6, title: "Halloween Sale!", titlemini: 'All disccount up to 60%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-    { id: 7, title: "Halloween Sale!", titlemini: 'All disccount up to 60%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-    { id: 8, title: "Halloween Sale!", titlemini: 'All disccount up to 60%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-    { id: 9, title: "Halloween Sale!", titlemini: 'All disccount up to 60%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-    { id: 10, title: "Halloween Sale!", titlemini: 'All disccount up to 60%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-  ]
+  // }
+  // const DATA: Item[] = [
+  //   { id: 1, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
+  //   { id: 2, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
+  //   { id: 3, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
+  //   { id: 4, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
+  //   { id: 5, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
+  //   { id: 6, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
+  //   { id: 7, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
+  //   { id: 8, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
+  //   { id: 9, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
+  //   { id: 10, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
+  // ]
 
-  const renderItem = ({ item }: { item: Item }) => (
-    <SafeAreaView style={_styles.item}>
-      <SafeAreaView style={_styles.card}>
-        <SafeAreaView>
-          <Image source={item.image} style={_styles.image} />
-          <Text style={_styles.text}>{item.title}</Text>
-          <Text style={_styles.textmini}>{item.titlemini}</Text>
-        </SafeAreaView>
-      </SafeAreaView>
-      <SafeAreaView style={_styles.gr}>
-        <Image source={item.imageview} style={_styles.imageview} />
-        <Image source={item.iamgevector} style={_styles.imagevector} />
-      </SafeAreaView>
-    </SafeAreaView>
-  );
+  // const renderItem = ({ item }: { item: Item }) => (
+  //   <SafeAreaView style={_styles.item}>
+  //     <SafeAreaView style={_styles.card}>
+  //       <SafeAreaView>
+  //         <Image source={item.image} style={_styles.image} />
+  //         <Text style={_styles.text}>{item.title}</Text>
+  //         <Text style={_styles.textmini}>{item.titlemini}</Text>
+  //       </SafeAreaView>
+  //     </SafeAreaView>
+  //     <SafeAreaView style={_styles.gr}>
+  //       <Image source={item.imageview} style={_styles.imageview} />
+  //       <Image source={item.iamgevector} style={_styles.imagevector} />
+  //     </SafeAreaView>
+  //   </SafeAreaView>
+  // );
 
   interface ItemEstates {
     id: number;
     title: string;
-    review: string;
     location: string;
     money: string;
-    date: string;
     image: any;
-    name: string;
 
 
   }
   const DATAESTATES: ItemEstates[] = [
-    { id: 1, title: "Sky Dandelions Apartment", review: "4.9", location: "Hà Nội, Việt Nam", money: "$ 290", date: "/month", image: require("../../../../assets/images/apartment.png"), name: "Apartment" },
-    { id: 2, title: "Sky Dandelions Apartment", review: "4.9", location: "Hà Nội, Việt Nam", money: "$ 290", date: "/month", image: require("../../../../assets/images/apartment.png"), name: "Apartment" },
-    { id: 3, title: "Sky Dandelions Apartment", review: "4.9", location: "Hà Nội, Việt Nam", money: "$ 290", date: "/month", image: require("../../../../assets/images/apartment.png"), name: "Apartment" },
-    { id: 4, title: "Sky Dandelions Apartment", review: "4.9", location: "Hà Nội, Việt Nam", money: "$ 290", date: "/month", image: require("../../../../assets/images/apartment.png"), name: "Apartment" },
-    { id: 5, title: "Sky Dandelions Apartment", review: "4.9", location: "Hà Nội, Việt Nam", money: "$ 290", date: "/month", image: require("../../../../assets/images/apartment.png"), name: "Apartment" },
-    { id: 6, title: "Sky Dandelions Apartment", review: "4.9", location: "Hà Nội, Việt Nam", money: "$ 290", date: "/month", image: require("../../../../assets/images/apartment.png"), name: "Apartment" },
-    { id: 7, title: "Sky Dandelions Apartment", review: "4.9", location: "Hà Nội, Việt Nam", money: "$ 290", date: "/month", image: require("../../../../assets/images/apartment.png"), name: "Apartment" },
-    { id: 8, title: "Sky Dandelions Apartment", review: "4.9", location: "Hà Nội, Việt Nam", money: "$ 290", date: "/month", image: require("../../../../assets/images/apartment.png"), name: "Apartment" },
-    { id: 9, title: "Sky Dandelions Apartment", review: "4.9", location: "Hà Nội, Việt Nam", money: "$ 290", date: "/month", image: require("../../../../assets/images/apartment.png"), name: "Apartment" },
-    { id: 10, title: "Sky Dandelions Apartment", review: "4.9", location: "Hà Nội, Việt Nam", money: "$ 290", date: "/month", image: require("../../../../assets/images/apartment.png"), name: "Apartment" },
-
+    { id: 1, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
+    { id: 2, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
+    { id: 3, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
+    { id: 4, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
+    { id: 5, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
+    { id: 6, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
+    { id: 7, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
+    { id: 8, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
+    { id: 9, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
+    { id: 10, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
   ]
 
   const renderItemEstates = ({ item }: { item: ItemEstates }) => (
@@ -112,24 +108,22 @@ const _HomeFull: React.FC<PropsType> = props => {
         <SafeAreaView style={_styles.gr1}>
           <Image source={item.image} style={_styles.imageEstates} />
           <Image source={HEART} style={_styles.iconheart} />
-          <SafeAreaView style={_styles.boxname}>
-            <Text style={_styles.name}>{item.name}</Text>
-          </SafeAreaView>
+         
         </SafeAreaView>
       </SafeAreaView>
       <SafeAreaView style={_styles.grEstates}>
         <Text style={_styles.textEstates}>{item.title}</Text>
-        <SafeAreaView style={_styles.groupreview}>
+        {/* <SafeAreaView style={_styles.groupreview}>
           <Image source={START_SMALL} style={_styles.iconreview} />
           <Text style={_styles.textreview}>{item.review}</Text>
-        </SafeAreaView>
+        </SafeAreaView> */}
         <SafeAreaView style={_styles.grouplocation}>
           <Image source={LOCATION} style={_styles.iconlocation} />
           <Text style={_styles.textlocation}>{item.location}</Text>
         </SafeAreaView>
         <SafeAreaView style={_styles.groupmoney}>
           <Text style={_styles.money}>{item.money}</Text>
-          <Text style={_styles.date}>{item.date}</Text>
+         
         </SafeAreaView>
       </SafeAreaView>
     </SafeAreaView>
@@ -138,7 +132,7 @@ const _HomeFull: React.FC<PropsType> = props => {
   interface ItemNearby {
     id: number;
     title: string;
-    review: string;
+   
     location: string;
     image: any;
     money: string;
@@ -147,17 +141,17 @@ const _HomeFull: React.FC<PropsType> = props => {
   }
 
   const DATANEARBY: ItemNearby[] = [
-    { id: 1, title: "Wings Tower", review: "4.9", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/month" },
-    { id: 2, title: "Wings Tower", review: "4.9", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/month" },
-    { id: 3, title: "Wings Tower", review: "4.9", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/month" },
-    { id: 4, title: "Wings Tower", review: "4.9", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/month" },
-    { id: 5, title: "Wings Tower", review: "4.9", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/month" },
-    { id: 6, title: "Wings Tower", review: "4.9", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/month" },
-    { id: 7, title: "Wings Tower", review: "4.9", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/month" },
-    { id: 8, title: "Wings Tower", review: "4.9", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/month" },
-    { id: 9, title: "Wings Tower", review: "4.9", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/month" },
-    { id: 10, title: "Wings Tower", review: "4.9", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/month" },
-
+    { id: 1, title: "Đền Ngọc Sơn", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/tour" },
+    { id: 2, title: "Cầu Long Biên", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 271", date: "/tour" },
+    { id: 3, title: "Chùa Hương", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 235", date: "/tour" },
+    { id: 4, title: "Chợ Đồng Xuân", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/tour" },
+    { id: 5, title: "Đền Ngọc Sơn",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/tour" },
+    { id: 6, title: "Cầu Long Biên",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 271", date: "/tour" },
+    { id: 7, title: "Chùa Hương",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 235", date: "/tour" },
+    { id: 8, title: "Chợ Đồng Xuân",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/tour" },
+    { id: 9, title: "Đền Ngọc Sơn",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/tour" },
+    { id: 10, title: "Cầu Long Biên",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 271", date: "/tour" },
+    
   ]
 
   const renderItemNearby = ({ item }: { item: ItemNearby }) => (
@@ -177,10 +171,10 @@ const _HomeFull: React.FC<PropsType> = props => {
       <SafeAreaView style={_styles.grNearby}>
         <Text style={_styles.textNearby}>{item.title}</Text>
         <SafeAreaView style={_styles.boxgr}>
-          <SafeAreaView style={_styles.groupreviewNearby}>
+          {/* <SafeAreaView style={_styles.groupreviewNearby}>
             <Image source={START_SMALL} style={_styles.iconreviewNearby} />
             <Text style={_styles.textreviewNearby}>{item.review}</Text>
-          </SafeAreaView>
+          </SafeAreaView> */}
           <SafeAreaView style={_styles.grouplocationNearby}>
             <Image source={LOCATION} style={_styles.iconlocationNearby} />
             <Text style={_styles.textlocationNearby}>{item.location}</Text>
@@ -195,11 +189,11 @@ const _HomeFull: React.FC<PropsType> = props => {
   return (
     <BackgroundApp source={BACKGROUND_HOME}>
       <HeaderHome
-        iconHeader={(check) ? NOTIFICATION : NOTIFICATION_SELECT} />
+         />
       <ScrollView style={_styles.container}>
         <TextPlus
-          textBolds={['Trap Team!']}
-          text={"Xin chào, Trap Team! \nHãy bắt đầu khám phá"}
+          textBolds={['Thuy Ân!']}
+          text={"Xin chào, Thuy Ân! \nHãy bắt đầu khám phá"}
           boldStyle={{ fontFamily: fontFamily.Bold, color: Colors.GREY_DARK_1, fontSize: 25, lineHeight: 40, letterSpacing: 0.75, }}
           textStyle={
             {
@@ -213,7 +207,7 @@ const _HomeFull: React.FC<PropsType> = props => {
           imageIconLeft={FIND}
           imageIconRight={FIND}
           iconRightStyle={{ opacity:0}}
-          label='Tìm kiếm nhà, căn hộ,...'
+          label='Tìm kiếm địa điểm, tour'
           value={text}
           onChangeText={(text) => setText(text)}
           viewStyle={{ marginTop: '7%', marginBottom: '3%', width: '85%'}}
@@ -221,17 +215,17 @@ const _HomeFull: React.FC<PropsType> = props => {
         <TopTab
           isCheck="home"
         />
-        <FlatList
+        {/* <FlatList
           data={DATA}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           horizontal
-          showsHorizontalScrollIndicator={false} />
+          showsHorizontalScrollIndicator={false} /> */}
         <SafeAreaView style={_styles.boxEstates}>
           <SafeAreaView style={_styles.boxCard}>
-            <Text style={_styles.title}>Bất động sản</Text>
+            <Text style={_styles.title}>Địa Điểm Yêu Thích</Text>
             <TouchableOpacity style={_styles.btnSeeAll}>
-              <Text style={_styles.seeAll}>Xem tất cả</Text>
+              <Text style={_styles.seeAll}>xem tất cả</Text>
             </TouchableOpacity>
           </SafeAreaView>
           <FlatList
@@ -243,9 +237,9 @@ const _HomeFull: React.FC<PropsType> = props => {
         </SafeAreaView>
         <SafeAreaView style={_styles.boxEstates}>
           <SafeAreaView style={_styles.boxCard}>
-            <Text style={_styles.title}>Bất động sản</Text>
+            <Text style={_styles.title}>Địa Điểm Phổ Biến</Text>
             <TouchableOpacity style={_styles.btnSeeAll}>
-              <Text style={_styles.seeAll}>Xem tất cả</Text>
+              <Text style={_styles.seeAll}>xem tất cả</Text>
             </TouchableOpacity>
           </SafeAreaView>
           <FlatList
@@ -257,10 +251,8 @@ const _HomeFull: React.FC<PropsType> = props => {
         </SafeAreaView>
         <SafeAreaView style={_styles.boxEstates}>
           <SafeAreaView style={_styles.boxCard1}>
-            <Text style={_styles.title}>Bất động sản lân cận</Text>
-            <TouchableOpacity style={_styles.btnSeeAll}>
-              <Text style={_styles.seeAll}>Xem tất cả</Text>
-            </TouchableOpacity>
+            <Text style={_styles.title}>Tour  Nổi Bật</Text>
+           
           </SafeAreaView>
           <FlatList
             data={DATANEARBY}
@@ -354,7 +346,7 @@ const _styles = StyleSheet.create({
   boxCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: - Dimensions.get('screen').height * 0.08,
+    marginTop: - Dimensions.get('screen').height * 0.05,
     marginVertical: - Dimensions.get('screen').height * 0.02,
   },
   boxCard1: {
@@ -414,7 +406,7 @@ const _styles = StyleSheet.create({
     width: Dimensions.get('screen').width * 0.43,
     height: Dimensions.get('screen').height * 0.19,
     marginTop: - Dimensions.get('screen').height * 0.03,
-    marginLeft: - Dimensions.get('screen').width * 0.25,
+    marginLeft: - Dimensions.get('screen').width * 0.35,
     borderRadius: 25,
     flexShrink: 0,
     resizeMode:'stretch'
@@ -422,7 +414,7 @@ const _styles = StyleSheet.create({
   },
   iconheart: {
     marginTop: - Dimensions.get('screen').height * 0.16,
-    marginLeft: - Dimensions.get('screen').width * 0.42,
+    marginLeft: - Dimensions.get('screen').width * 0.5,
     width: 40,
     height: 40,
     resizeMode: 'stretch',
@@ -616,7 +608,7 @@ const _styles = StyleSheet.create({
   },
   grouplocationNearby: {
     marginTop: - Dimensions.get('window').height * 0.02,
-    marginLeft: - Dimensions.get('window').height * 0.1,
+    marginLeft: - Dimensions.get('window').height * 0.05,
     width: '100%',
     flexDirection: 'row',
     borderTopStartRadius: 5,
@@ -658,6 +650,8 @@ const _styles = StyleSheet.create({
     color: Colors.GREY_DARK,
     fontSize: 10,
     fontFamily: fontFamily.Medium,
+    width: 100,
+    
 
   },
   iconlocationNearby: {

@@ -51,7 +51,8 @@ const _styles = StyleSheet.create({
     },
     input: {
         lineHeight: 25,
-        width: Dimensions.get('window').width * 0.4
+        width: Dimensions.get('window').width * 0.4,
+        
     },
     iconLeft: {
         width: 20,

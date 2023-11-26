@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, ScrollView, Dimensions, TouchableOpacity, FlatList } from 'react-native'
 import React from 'react'
 import { Colors, DimensionsStyle } from '@resources';
-import { APARTMENT, ARROW_LEFT_LINE, ARROW_RIGHT_LINE, BACKGROUND_WHITE, CALENDAR, EMAIL, FAVORITE_BLUE, HEART, ICON_BACK, ICON_LOGOUT, LOCATION, LOCATION_GREEN, MESSAGING, OVAN, SALE, TICKET, TICKET_2, TOWER, fontFamily, } from '@assets';
+import { APARTMENT, ARROW_LEFT_LINE, ARROW_RIGHT_LINE, BACKGROUND_WHITE, CALENDAR, EMAIL, FAVORITE_BLUE, HEART, ICON_BACK, ICON_LOGOUT, LOCATION, LOCATION_GREEN, MESSAGING, MOMO, OVAN, SALE, TICKET, TICKET_2, TOWER, VIETTEL_PAY, ZALO_PAY, fontFamily, } from '@assets';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { WelcomeTeamStackParamList } from '@navigation';
@@ -20,72 +20,13 @@ const _Review: React.FC<PropsType> = props => {
     const { navigation } = props;
 
 
-    interface Item {
-        id: number;
-        icon: any;
-        bogoc: any;
-        image: any;
-        title: string;
-        titlemini: string;
-        price: string;
-        imageview: any;
-
-
-    }
-    const DATA: Item[] = [
-        { id: 1, icon: require("../../../../assets/images/radio_active.png"), bogoc: require("../../../../assets/images/Shape.png"), image: require("../../../../assets/images/Safar_Small.png"), title: "1222", titlemini: 'Balance', price: '$ 31,250', imageview: require("../../../../assets/images/mastercard_select.png"), },
-        { id: 2, icon: require("../../../../assets/images/radio_inactive.png"), bogoc: require("../../../../assets/images/Shape_Gray.png"), image: require("../../../../assets/images/Safar_Small.png"), title: "1542", titlemini: 'Balance', price: '$ 54,200', imageview: require("../../../../assets/images/mastercard_select.png"), },
-        { id: 3, icon: require("../../../../assets/images/radio_active.png"), bogoc: require("../../../../assets/images/Shape.png"), image: require("../../../../assets/images/Safar_Small.png"), title: "1222", titlemini: 'Balance', price: '$ 31,250', imageview: require("../../../../assets/images/mastercard_select.png"), },
-        { id: 4, icon: require("../../../../assets/images/radio_inactive.png"), bogoc: require("../../../../assets/images/Shape_Gray.png"), image: require("../../../../assets/images/Safar_Small.png"), title: "1542", titlemini: 'Balance', price: '$ 54,200', imageview: require("../../../../assets/images/mastercard_select.png"), },
-        { id: 5, icon: require("../../../../assets/images/radio_active.png"), bogoc: require("../../../../assets/images/Shape.png"), image: require("../../../../assets/images/Safar_Small.png"), title: "1222", titlemini: 'Balance', price: '$ 31,250', imageview: require("../../../../assets/images/mastercard_select.png"), },
-
-    ]
-
-    const renderItem = ({ item }: { item: Item }) => (
-        <SafeAreaView style={_styles.itemPay}>
-            <SafeAreaView style={_styles.cardPay}>
-                <SafeAreaView>
-                    <Image source={item.bogoc} style={_styles.bogocPay} />
-                    <SafeAreaView style={_styles.grPay1}>
-                        <Image source={item.image} style={_styles.imagePay} />
-                        <Image source={item.icon} style={_styles.iconPay} />
-                    </SafeAreaView>
-                    <SafeAreaView style={_styles.grPay}>
-                        <SafeAreaView style={_styles.groupreview}>
-                            <Image source={OVAN} style={_styles.iconPayment} />
-                            <Image source={OVAN} style={_styles.iconPayment} />
-                            <Image source={OVAN} style={_styles.iconPayment} />
-                            <Image source={OVAN} style={_styles.iconPayment} />
-                            <Image source={OVAN} style={_styles.iconPayment} />
-                            <Image source={OVAN} style={_styles.iconPayment} />
-                            <Image source={OVAN} style={_styles.iconPayment} />
-                            <Image source={OVAN} style={_styles.iconPayment} />
-                            <Text style={_styles.textPay}>{item.title}</Text>
-                            <SafeAreaView style={_styles.groupmini}>
-                                <Text style={_styles.textmini}>{item.titlemini}</Text>
-                                <Text style={_styles.textPrice}>{item.price}</Text>
-                            </SafeAreaView>
-                            <Image source={item.imageview} style={_styles.imageview} />
-                        </SafeAreaView>
-
-                    </SafeAreaView>
-
-                </SafeAreaView>
-
-            </SafeAreaView>
-
-        </SafeAreaView>
-
-
-
-    );
 
 
     return (
         <BackgroundApp source={BACKGROUND_WHITE}>
             <Header
                 iconLeft={ICON_BACK}
-                textCenter='Transaction summary'
+                textCenter='Đặt tour'
             />
             <ScrollView style={_styles.container}>
                 <SafeAreaView style={_styles.itemEstates}>
@@ -93,31 +34,29 @@ const _Review: React.FC<PropsType> = props => {
                         <SafeAreaView style={_styles.gr1}>
                             <Image source={TOWER} style={_styles.imageEstates} />
                             <Image source={FAVORITE_BLUE} style={_styles.iconheart} />
-                            <SafeAreaView style={_styles.boxname}>
-                                <Text style={_styles.name}>Apartment</Text>
-                            </SafeAreaView>
+                            {/* <SafeAreaView style={_styles.boxname}>
+                                <Text style={_styles.name}>Phổ biến</Text>
+                            </SafeAreaView> */}
                         </SafeAreaView>
                     </SafeAreaView>
                     <SafeAreaView style={_styles.grEstates}>
-                        <Text style={_styles.textEstates}>Sky Dandelions Apartment</Text>
+                        <Text style={_styles.textEstates}>Hồ Hoàn Kiếm</Text>
                         <SafeAreaView style={_styles.grouplocation}>
-                            <Image source={LOCATION_GREEN} style={_styles.iconlocation} />
+                            <Image source={LOCATION} style={_styles.iconlocation} />
                             <Text style={_styles.textlocation}>Hà Nội, Việt Nam</Text>
                         </SafeAreaView>
-                        <SafeAreaView style={_styles.box}>
-                            <Text style={_styles.nameR}>Rent</Text>
-                        </SafeAreaView>
+                       
                     </SafeAreaView>
                 </SafeAreaView>
-                <SafeAreaView style={_styles.boxCalender}>
+                {/* <SafeAreaView style={_styles.boxCalender}>
                     <SafeAreaView style={_styles.boxCard}>
-                        <Text style={_styles.title}>Period</Text>
+                        <Text style={_styles.title}>Kế Hoạch Chuyến Đi</Text>
                         <SafeAreaView style={_styles.card}>
                             <Input
                                 imageIconLeft={CALENDAR}
                                 imageIconRight={CALENDAR}
                                 iconRightStyle={{ opacity: 0 }}
-                                label='Check in'
+                                label='Ngày bắt đầu'
                                 value={text}
                                 onChangeText={(text) => setText(text)}
                                 viewStyle={{
@@ -129,7 +68,7 @@ const _Review: React.FC<PropsType> = props => {
                                 imageIconLeft={CALENDAR}
                                 imageIconRight={CALENDAR}
                                 iconRightStyle={{ opacity: 0 }}
-                                label='Check out'
+                                label='Ngày kết thúc'
                                 value={text}
                                 onChangeText={(text) => setText(text)}
                                 viewStyle={{
@@ -140,40 +79,34 @@ const _Review: React.FC<PropsType> = props => {
 
                         </SafeAreaView>
                     </SafeAreaView>
-                </SafeAreaView>
+                </SafeAreaView> */}
                 <SafeAreaView style={_styles.boxNote}>
-                    <Text style={_styles.title}>Note for Owner</Text>
+                    <Text style={_styles.title}>Ghi chú</Text>
                     <SafeAreaView style={_styles.cardNote}>
                         <Input
                             imageIconLeft={MESSAGING}
                             imageIconRight={MESSAGING}
                             iconRightStyle={{ opacity: 0 }}
-                            label='Write your note in here'
+                            label='Viết ghi chú vào đây'
                             value={textNote}
                             onChangeText={(textNote) => setTextNote(textNote)}
-                            viewStyle={{ marginTop: '7%', marginBottom: '3%', width: '75%', borderRadius: 25, }}
+                            viewStyle={{ marginTop: '7%', marginBottom: '3%', width: '80%', borderRadius: 25, }}
 
                         />
                     </SafeAreaView>
 
                 </SafeAreaView>
 
-                <Text style={_styles.titlePay}>Payment Method</Text>
-                <FlatList
-                    data={DATA}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id.toString()}
-                    horizontal
-                    showsHorizontalScrollIndicator={false} />
-                <SafeAreaView style={_styles.boxVoucher}>
-                    <Text style={_styles.titleVoucher}>Have a voucher?</Text>
-                    <TouchableOpacity style={_styles.btnSeeAll}>
-                        <Text style={_styles.seeAll}>Check in here</Text>
-                    </TouchableOpacity>
+                <Text style={_styles.titlePay}>Thanh toán</Text>
+                <SafeAreaView style={_styles.groupreview}>
+                <Image source={MOMO}  style={_styles.momo}/>
+                <Image source={ZALO_PAY}   style={_styles.zalo}/>
+                <Image source={VIETTEL_PAY}   style={_styles.viettel}/>
                 </SafeAreaView>
+
                 <SafeAreaView style={_styles.boxButton}>
-                <Button title='Next' onPress={() => { }} viewStyle={{ width: 200, marginTop: '20%' }} imageIconLeft={EMAIL} imageIconRight={MESSAGING}></Button>
-                <ButtonArrow imageIcon={ARROW_RIGHT_LINE} onPress={() => { }} shadow={true} viewStyle={{ marginTop: '20%' }}></ButtonArrow>
+                <Button title='Tiếp' onPress={() => { }} viewStyle={{ width: 200, marginTop: '20%', marginRight:'10%' }} imageIconLeft={EMAIL} imageIconRight={MESSAGING}></Button>
+                {/* <ButtonArrow imageIcon={ARROW_RIGHT_LINE} onPress={() => { }} shadow={true} viewStyle={{ marginTop: '20%' }}></ButtonArrow> */}
                 </SafeAreaView>
             </ScrollView>
 
@@ -220,7 +153,7 @@ const _styles = StyleSheet.create({
         width: Dimensions.get('screen').width * 0.43,
         height: Dimensions.get('screen').height * 0.19,
         marginTop: - Dimensions.get('screen').height * 0.03,
-        marginLeft: - Dimensions.get('screen').width * 0.27,
+        marginLeft: - Dimensions.get('screen').width * 0.06,
         borderRadius: 25,
         flexShrink: 0,
         resizeMode: 'stretch'
@@ -272,12 +205,12 @@ const _styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: - Dimensions.get('window').height * 0.22,
-        marginLeft: Dimensions.get('window').height * 0.05,
+        marginLeft: Dimensions.get('window').height * 0.1,
     },
 
     grouplocation: {
         marginTop: Dimensions.get('window').height * 0.05,
-        marginLeft: - Dimensions.get('window').height * 0.19,
+        marginLeft: - Dimensions.get('window').height * 0.23,
         width: '100%',
         flexDirection: 'row',
         borderTopStartRadius: 5,
@@ -292,6 +225,7 @@ const _styles = StyleSheet.create({
         lineHeight: 18,
         letterSpacing: 0.36,
         fontFamily: fontFamily.Bold,
+        marginLeft:  Dimensions.get('window').height * 0.2,
     },
     textlocation: {
         color: Colors.GREY_DARK,
@@ -304,6 +238,7 @@ const _styles = StyleSheet.create({
         height: Dimensions.get('window').height * 0.02,
         marginLeft: - Dimensions.get('window').height * 0.23,
         resizeMode: 'stretch'
+
 
     },
     boxCalender: {},
@@ -337,7 +272,7 @@ const _styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginLeft: - Dimensions.get('screen').width * 0.42,
+        marginLeft: - Dimensions.get('screen').width * 0.22,
     },
     titlePay: {
         fontSize: 18,
@@ -345,7 +280,7 @@ const _styles = StyleSheet.create({
         letterSpacing: 0.54,
         fontFamily: fontFamily.Bold,
         marginLeft: Dimensions.get('screen').width * 0.07,
-        marginTop: Dimensions.get('screen').height * 0.05,
+        marginTop: Dimensions.get('screen').height * 0.02,
     },
     itemPay: {
         flexDirection: 'row',
@@ -408,14 +343,13 @@ const _styles = StyleSheet.create({
     },
 
     groupreview: {
-        marginTop: - Dimensions.get('window').height * 0.04,
-        marginLeft: - Dimensions.get('window').height * 0.015,
+        marginTop: Dimensions.get('window').height * 0.02,
+        marginLeft: Dimensions.get('window').height * 0.02,
         width: '100%',
         flexDirection: 'row',
         borderTopStartRadius: 5,
         borderBottomStartRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
+       
     },
 
     iconPayment: {
@@ -499,5 +433,14 @@ const _styles = StyleSheet.create({
         marginVertical: 8,
         marginHorizontal: 8,
 
+    },
+    momo:{
+        marginLeft:  Dimensions.get('screen').width * 0.03,
+    },
+    zalo:{
+        marginLeft: Dimensions.get('screen').width * 0.05,
+    },
+    viettel:{
+        marginLeft: Dimensions.get('screen').width * 0.05,
     },
 })

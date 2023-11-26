@@ -45,12 +45,12 @@ const _AddReview: React.FC<PropsType> = props => {
         <BackgroundApp source={BACKGROUND_WHITE}>
             <Header
                 iconLeft={ICON_BACK}
-                textCenter='Add Review'
+                textCenter='Thêm đánh giá'
             />
             <SafeAreaView style={_styles.container}>
                 <TextPlus
-                    textBolds={["Hi","overall experience?"]}
-                    text={"Hi, how was your overall \nexperience?"}
+                    textBolds={["trải nghiệm"]}
+                    text={"Xin chào, trải nghiệm \n của bạn như thế nào?"}
                     boldStyle={{ fontFamily: fontFamily.Bold, color: Colors.GREY_DARK_1, fontSize: 25, lineHeight: 40, letterSpacing: 0.75, }}
                     textStyle={
                         {
@@ -61,32 +61,19 @@ const _AddReview: React.FC<PropsType> = props => {
                     numberOfLines={2}
                 />
 
-                <Text style={_styles.text}>lorem ipsum dolor sit amet</Text>
-                <SafeAreaView  style={_styles.group}>
-                    <Image source={STAR_5} style={_styles.imagereview} />
-                    <Image source={STAR_5} style={_styles.imagereview} />
-                    <Image source={STAR_5} style={_styles.imagereview} />
-                    <Image source={STAR_5} style={_styles.imagereview} />
-                    <Image source={STAR_5} style={_styles.imagereview} />
-                    <Text style={_styles.title}>0.0</Text>
-
-
-                </SafeAreaView>
+                <Text style={_styles.text}>Bạn có thể mô tả các khía cạnh tích cực và tiêu cực của tour</Text>
+               
                 <Input
                     imageIconLeft={MESSAGING}
                     imageIconRight={MESSAGING}
                     iconRightStyle={{ opacity: 0 }}
-                    label='Write your experience in here (optional)'
+                    label='Viết vào đây trải nghiệm của bạn'
                     value={textNote}
                     onChangeText={(textNote) => setTextNote(textNote)}
-                    viewStyle={{ marginTop: '8%', marginBottom: '3%', width: '82%',height:'15%', borderRadius: 25, marginLeft:'9%' }}
+                    viewStyle={{ marginTop: '20%', marginBottom: '3%', width: '82%',height:'15%', borderRadius: 25, marginLeft:'9%' }}
 
                 />
-                <SafeAreaView style={_styles.box}>
-                    <Image source={PLUS} style={_styles.add} />
-                </SafeAreaView>
-
-                <Button title='Submit' onPress={() => { }} viewStyle={{ width: 250, marginTop: '40%' }} imageIconLeft={EMAIL} imageIconRight={MESSAGING}></Button>
+                <Button title='Đăng' onPress={() => { }} viewStyle={{ width: 250, marginTop: '85%',  }} imageIconLeft={EMAIL} imageIconRight={MESSAGING}></Button>
 
             </SafeAreaView>
 
@@ -107,7 +94,7 @@ const _styles = StyleSheet.create({
         fontFamily: fontFamily.Medium,
         fontSize: 12,
         marginTop: Dimensions.get('screen').height * 0.03,
-        marginLeft: Dimensions.get('screen').width * 0.11,
+        marginLeft: Dimensions.get('screen').width * 0.07,
 
     },
     group: {
