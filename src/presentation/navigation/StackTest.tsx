@@ -69,7 +69,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Version"
+        initialRouteName="Login"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',

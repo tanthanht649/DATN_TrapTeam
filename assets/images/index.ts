@@ -120,6 +120,7 @@ export const AVT_HOME = require('./avt-home.png');
 export const LOGO_HOME = require('./logo-home.png');
 export const LOGO_RULE = require('./logo_rule.png');
 export const LOGO_VERSION = require('./logo_version.png');
+export const LINE= require('./line.png');
 
 
 export const MOMO = require('./momo.png');
