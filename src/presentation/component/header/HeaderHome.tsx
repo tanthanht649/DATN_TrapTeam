@@ -14,63 +14,42 @@ import React from 'react';
 import {Colors, DimensionsStyle} from '@resources';
 import {
   AVT,
+  AVT_HOME,
   CHEVRON_DOWN,
   LOCATION,
+  LOGO_HOME,
   NOTIFICATION,
   NOTIFICATION_SELECT,
   fontFamily,
 } from '@assets';
 import SelectDropdown from 'react-native-select-dropdown';
 
-const DATA = ['Hà Nội, Việt Nam', 'Đà Nẵng, Việt Nam', 'Hồ Chí Minh, Việt Nam'];
 
 interface HeaderProps extends TextProps {
   leftHeader?: () => void;
   //
-  iconHeader?: ImageSourcePropType;
-  centerHeader?: () => void;
+ 
   //
   rightHeader?: () => void;
 }
 
 const _HeaderHome: React.FC<HeaderProps> = props => {
-  const {centerHeader, iconHeader} = props;
-  const EvenCenter = () => {
-    if (iconHeader) {
-      return (
-        <TouchableOpacity style={styles.button} onPress={centerHeader}>
-          <Image source={iconHeader} style={styles.icon} />
-        </TouchableOpacity>
-      );
-    }
-    return null;
-  };
+  
   return (
     <SafeAreaView style={styles.container}>
       <SafeAreaView style={styles.boxLeft}>
         <TouchableOpacity>
           <SafeAreaView style={styles.gr}>
-            <Image source={LOCATION} style={styles.imglo} />
-            <SelectDropdown
-              data={DATA}
-              buttonStyle={styles.selectDropdown}
-              buttonTextStyle={styles.textDefault}
-              rowTextStyle={styles.textDropdown}
-              renderDropdownIcon={isOpened => {
-                return <Image source={CHEVRON_DOWN} />;
-              }}
-              dropdownIconPosition="right"
-              onSelect={(selectedItem, index) => {}}
-              defaultButtonText={'Hà Nội, Việt Nam'}
-            />
+            <Image source={LOGO_HOME} style={styles.imglo} />
+           
           </SafeAreaView>
         </TouchableOpacity>
       </SafeAreaView>
-      <SafeAreaView style={styles.boxCenter}>{EvenCenter()}</SafeAreaView>
+    
       <SafeAreaView style={styles.boxRight}>
         <TouchableOpacity>
           <SafeAreaView style={styles.grimg}>
-            <Image source={AVT} style={styles.img} />
+            <Image source={AVT_HOME} style={styles.img} />
           </SafeAreaView>
         </TouchableOpacity>
       </SafeAreaView>
@@ -85,10 +64,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    width: Dimensions.get('window').width * 1.01,
-    height: Dimensions.get('window').height * 0.15,
+    width: Dimensions.get('window').width * 1.0,
+    height: Dimensions.get('window').height * 0.13,
     borderWidth: 0.1,
-    elevation: 1,
+    elevation: 0.2,
   },
   icon: {
     width: Dimensions.get('window').width * 0.145,
@@ -123,17 +102,14 @@ const styles = StyleSheet.create({
   gr: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderRadius: 30,
-    borderColor: Colors.WHITE,
-    backgroundColor: Colors.WHITE,
     width: DimensionsStyle.width * 0.37,
     height: DimensionsStyle.width * 0.15,
     right: 40,
   },
   imglo: {
-    width: Dimensions.get('window').width * 0.054,
-    height: Dimensions.get('window').height * 0.03,
-    marginLeft: 17,
+    width: Dimensions.get('window').width * 0.115,
+    height: Dimensions.get('window').height * 0.065,
+    marginLeft: 5,
     marginTop: 17,
   },
 
