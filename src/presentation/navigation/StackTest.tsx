@@ -69,7 +69,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Version"
+        initialRouteName="HomeFull"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
@@ -93,7 +93,6 @@ const _StackTest = () => {
         <Stack.Screen name="FeaturedListHome" component={FeaturedListHome} />
         <Stack.Screen name="Rule" component={Rule} />
         <Stack.Screen name="Version" component={Version} />
-
         <Stack.Screen
           name="FeaturedListDetail"
           component={FeaturedListDetail}

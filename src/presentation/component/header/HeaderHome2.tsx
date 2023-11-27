@@ -17,6 +17,7 @@ import {
   AVT,
   CHEVRON_DOWN,
   LOCATION,
+  LOGO_APP,
   NOTIFICATION,
   NOTIFICATION_SELECT,
   SETTING,
@@ -27,26 +28,26 @@ import SelectDropdown from 'react-native-select-dropdown';
 const DATA = ['Hà Nội, Việt Nam', 'Đà Nẵng, Việt Nam', 'Hồ Chí Minh, Việt Nam'];
 
 export type HeaderHomeProps = {
-  statusNotification: boolean;
+  // statusNotification: boolean;
   avatar: ImageSourcePropType;
-  onPressNotification?: () => void;
+  // onPressNotification?: () => void;
   onPressAvatar?: () => void;
-  onPressSetting?: () => void;
+  // onPressSetting?: () => void;
   checkNotify?: boolean;
 };
 
 const _HeaderHome2: React.FC<HeaderHomeProps> = props => {
   const {
-    statusNotification,
+    // statusNotification,
     avatar,
-    onPressNotification,
+    // onPressNotification,
     onPressAvatar,
-    onPressSetting,
+    // onPressSetting,
     checkNotify,
   } = props;
   return (
     <SafeAreaView style={_styles.container}>
-      <View style={_styles.locationContainer}>
+      {/* <View style={_styles.locationContainer}>
         <Image source={LOCATION} style={_styles.imageLocation} />
         <SelectDropdown
           data={DATA}
@@ -68,9 +69,12 @@ const _HeaderHome2: React.FC<HeaderHomeProps> = props => {
             marginStart: 7,
           }}
         />
+      </View> */}
+      <View>
+        <Image source={LOGO_APP} style={_styles.imageLogo} />
       </View>
       <View style={_styles.notificationAndAvatarContainer}>
-        <Pressable
+        {/* <Pressable
           onPress={onPressNotification}
           style={{
             display: checkNotify ? 'flex' : 'none',
@@ -79,7 +83,7 @@ const _HeaderHome2: React.FC<HeaderHomeProps> = props => {
             source={statusNotification ? NOTIFICATION : NOTIFICATION_SELECT}
             style={_styles.imageNotification}
           />
-        </Pressable>
+        </Pressable> */}
         <Pressable
           style={[
             _styles.containerAvatar,
@@ -90,7 +94,7 @@ const _HeaderHome2: React.FC<HeaderHomeProps> = props => {
           onPress={onPressAvatar}>
           <Image source={avatar} />
         </Pressable>
-        <Pressable
+        {/* <Pressable
           style={[
             _styles.containerAvatar,
             {
@@ -106,7 +110,7 @@ const _HeaderHome2: React.FC<HeaderHomeProps> = props => {
               resizeMode: 'stretch',
             }}
           />
-        </Pressable>
+        </Pressable> */}
       </View>
     </SafeAreaView>
   );
@@ -122,6 +126,7 @@ const _styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: 35,
   },
 
   locationContainer: {
@@ -140,6 +145,12 @@ const _styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: '100%',
+  },
+
+  imageLogo: {
+    width: 40,
+    height: 45,
+    resizeMode: 'stretch',
   },
 
   imageLocation: {

@@ -1,16 +1,32 @@
-import { StyleSheet, Text, Image, ScrollView, Pressable, Dimensions, FlatList, TouchableOpacity } from 'react-native';
-import React from 'react';
 import {
+  StyleSheet,
+  Text,
+  Image,
+  ScrollView,
+  Pressable,
+  Dimensions,
+  FlatList,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
+import {
+  AVT_HOME,
   BACKGROUND_HOME,
   FIND,
   HEART,
+  HEART_ACTIVE,
+  HEART_INACTIVE,
+  ICON_BACK,
   LOCATION,
+  LOGO_APP,
   NOTIFICATION,
   NOTIFICATION_SELECT,
+  SETTING,
   START_SMALL,
   fontFamily,
 } from '@assets';
-import { Colors, DimensionsStyle } from '@resources';
+import {Colors, DimensionsStyle} from '@resources';
 import {
   BackgroundApp,
   HeaderHome,
@@ -20,267 +36,823 @@ import {
   HeaderMessager,
   Button,
   TextPlus,
-  Input
-
+  Input,
 } from '@components';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { WelcomeTeamStackParamList } from '@navigation';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {WelcomeTeamStackParamList} from '@navigation';
 
-type PropsType = NativeStackScreenProps<
-  WelcomeTeamStackParamList,
-  'HomeFull'
->;
+type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'HomeFull'>;
+
+//Banner
+interface Banner {
+  id: number;
+  image: string;
+  title: string;
+}
+
+const DATABANNER: Banner[] = [
+  {
+    id: 1,
+    image:
+      'https://th.bing.com/th/id/R.957bb2fa15d85ee8502355045f2b9995?rik=7lPOeXlelRZv%2bw&pid=ImgRaw&r=0',
+    title: 'Chợ nổi Cái răng',
+  },
+  {
+    id: 2,
+    image:
+      'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2022/12/ha-long.jpg',
+    title: 'Vịnh Hạ Long',
+  },
+  {
+    id: 3,
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    title: 'Đà Nẵng',
+  },
+  {
+    id: 4,
+    image:
+      'https://th.bing.com/th/id/R.8ca75c2872c4c28fe560df7a172832d3?rik=j1GMaO4zmCqAjw&pid=ImgRaw&r=0',
+    title: 'Hà Nội',
+  },
+];
+
+const ItemBanner = ({item}: {item: Banner}) => {
+  return (
+    <Pressable
+      onPress={() => {
+        console.log(item.id);
+      }}>
+      <Image
+        source={{uri: item.image}}
+        style={{
+          width: Dimensions.get('screen').width * 0.7,
+          height: Dimensions.get('screen').width * 0.5,
+          resizeMode: 'stretch',
+          borderRadius: 25,
+          marginEnd: 15,
+        }}
+      />
+      <View
+        style={{
+          position: 'absolute',
+          right: 25,
+          top: 10,
+          backgroundColor: `rgba(163, 204, 227, 0.85)`,
+          padding: 10,
+          borderRadius: 10,
+        }}>
+        <Text
+          style={{
+            color: Colors.BLUE_SELECT,
+            fontFamily: fontFamily.Bold,
+            fontSize: 14,
+          }}>
+          {item.title}
+        </Text>
+      </View>
+    </Pressable>
+  );
+};
+
+//Tour yêu thích
+interface Tour {
+  id: number;
+  tourist_destinationId: number;
+  provide: string;
+  name: string;
+  description: string;
+  available_seats: number;
+  duration: number;
+  image: string;
+  price: number;
+  departure_date: string;
+  departure_location: string;
+  note: string;
+  schedule: string;
+  status: boolean;
+}
+
+const DATATOUR: Tour[] = [
+  {
+    id: 1,
+    tourist_destinationId: 1,
+    provide: 'Vietnam Travel',
+    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    available_seats: 10,
+    duration: 1,
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    price: 4450000,
+    departure_date: '2021-10-10',
+    departure_location: 'Hà Nội, Việt Nam',
+    note: 'Không được hủy',
+    schedule: 'Hà Nội',
+    status: true,
+  },
+  {
+    id: 2,
+    tourist_destinationId: 1,
+    provide: 'Vietnam Travel',
+    name: 'Tour Hồ Hoàn Kiếm',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    available_seats: 10,
+    duration: 1,
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    price: 4450000,
+    departure_date: '2021-10-10',
+    departure_location: 'Hà Nội, Việt Nam',
+    note: 'Không được hủy',
+    schedule: 'Hà Nội',
+    status: true,
+  },
+  {
+    id: 3,
+    tourist_destinationId: 1,
+    provide: 'Vietnam Travel',
+    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    available_seats: 10,
+    duration: 1,
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    price: 4450000,
+    departure_date: '2021-10-10',
+    departure_location: 'Hồ Chí Minh, Việt Nam',
+    note: 'Không được hủy',
+    schedule: 'Hà Nội',
+    status: true,
+  },
+];
+
+const ItemTourFavorite = ({item}: {item: Tour}) => {
+  return (
+    <View
+      style={{
+        width: DimensionsStyle.width * 0.7,
+        height: DimensionsStyle.width * 0.35,
+        flexDirection: 'row',
+        marginEnd: 15,
+        backgroundColor: Colors.SOFT_BLUE,
+        borderRadius: 20,
+        overflow: 'hidden',
+      }}>
+      <View
+        style={{
+          width: '50%',
+          padding: 7,
+        }}>
+        <Image
+          source={{uri: item.image}}
+          style={{
+            width: '100%',
+            height: '100%',
+            resizeMode: 'stretch',
+            borderRadius: 20,
+          }}
+        />
+
+        <Image
+          source={HEART}
+          style={{
+            width: 30,
+            height: 30,
+            resizeMode: 'stretch',
+            position: 'absolute',
+            top: 15,
+            left: 15,
+          }}
+        />
+      </View>
+      <View
+        style={{
+          width: '50%',
+          padding: 20,
+          paddingStart: 5,
+          paddingEnd: 15,
+        }}>
+        <Text
+          numberOfLines={2}
+          style={{
+            fontSize: 16,
+            fontFamily: fontFamily.Bold,
+            lineHeight: 18,
+            color: Colors.BLUE_TEXT_HOME,
+          }}>
+          {item.name}
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 11,
+          }}>
+          <Image
+            source={LOCATION}
+            style={{width: 12, height: 12, marginEnd: 2}}
+          />
+          <Text
+            numberOfLines={1}
+            style={{
+              fontSize: 10,
+              fontFamily: fontFamily.Medium,
+            }}>
+            {item.departure_location}
+          </Text>
+        </View>
+        <Text
+          numberOfLines={1}
+          style={{
+            color: Colors.RED,
+            position: 'absolute',
+            bottom: 20,
+            left: 10,
+            fontSize: 17,
+          }}>
+          {item.price.toLocaleString('vi-VN')} VNĐ
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+// Địa điểm nổi bật
+interface Estates {
+  id: number;
+  provinceId: string;
+  description: string;
+  name: string;
+  image: string;
+  status: boolean;
+}
+
+const DATAESTATES: Estates[] = [
+  {
+    id: 1,
+    provinceId: 'Hà Nội',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    name: 'Hồ Hoàn Kiếm',
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    status: true,
+  },
+  {
+    id: 2,
+    provinceId: 'Hà Nội',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    name: 'Hồ Hoàn Kiếm',
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    status: true,
+  },
+  {
+    id: 3,
+    provinceId: 'Hà Nội',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    name: 'Hồ Hoàn Kiếm',
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    status: true,
+  },
+];
+
+const ItemEstates = ({item}: {item: Estates}) => {
+  return (
+    <View
+      style={{
+        width: DimensionsStyle.width * 0.7,
+        height: DimensionsStyle.width * 0.35,
+        flexDirection: 'row',
+        marginEnd: 15,
+        backgroundColor: Colors.SOFT_BLUE,
+        borderRadius: 20,
+        overflow: 'hidden',
+      }}>
+      <View
+        style={{
+          width: '50%',
+          padding: 7,
+        }}>
+        <Image
+          source={{uri: item.image}}
+          style={{
+            width: '100%',
+            height: '100%',
+            resizeMode: 'stretch',
+            borderRadius: 20,
+          }}
+        />
+      </View>
+      <View
+        style={{
+          width: '50%',
+          padding: 20,
+          paddingStart: 5,
+          paddingEnd: 15,
+        }}>
+        <Text
+          numberOfLines={2}
+          style={{
+            fontSize: 16,
+            fontFamily: fontFamily.Bold,
+            lineHeight: 18,
+            color: Colors.BLUE_TEXT_HOME,
+          }}>
+          {item.name}
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 11,
+          }}>
+          <Image
+            source={LOCATION}
+            style={{width: 12, height: 12, marginEnd: 2}}
+          />
+          <Text
+            numberOfLines={1}
+            style={{
+              fontSize: 12,
+              fontFamily: fontFamily.Medium,
+            }}>
+            {item.provinceId}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+
+//Tour nổi bật
+const DATATOUROUTSTANDING: Tour[] = [
+  {
+    id: 1,
+    tourist_destinationId: 1,
+    provide: 'Vietnam Travel',
+    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    available_seats: 10,
+    duration: 1,
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    price: 4450000,
+    departure_date: '2021-10-10',
+    departure_location: 'Hà Nội, Việt Nam',
+    note: 'Không được hủy',
+    schedule: 'Hà Nội',
+    status: true,
+  },
+  {
+    id: 2,
+    tourist_destinationId: 1,
+    provide: 'Vietnam Travel',
+    name: 'Tour Hồ Hoàn Kiếm',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    available_seats: 10,
+    duration: 1,
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    price: 4450000,
+    departure_date: '2021-10-10',
+    departure_location: 'Hà Nội, Việt Nam',
+    note: 'Không được hủy',
+    schedule: 'Hà Nội',
+    status: true,
+  },
+  {
+    id: 3,
+    tourist_destinationId: 1,
+    provide: 'Vietnam Travel',
+    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    available_seats: 10,
+    duration: 1,
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    price: 4450000,
+    departure_date: '2021-10-10',
+    departure_location: 'Hồ Chí Minh, Việt Nam',
+    note: 'Không được hủy',
+    schedule: 'Hà Nội',
+    status: true,
+  },
+  {
+    id: 4,
+    tourist_destinationId: 1,
+    provide: 'Vietnam Travel',
+    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    available_seats: 10,
+    duration: 1,
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    price: 4450000,
+    departure_date: '2021-10-10',
+    departure_location: 'Hồ Chí Minh, Việt Nam',
+    note: 'Không được hủy',
+    schedule: 'Hà Nội',
+    status: true,
+  },
+];
+
+const ItemTourOutstanding = ({item}: {item: Tour}) => {
+  return (
+    <View
+      style={{
+        backgroundColor: Colors.SOFT_BLUE,
+        width: DimensionsStyle.width * 0.44,
+        height: DimensionsStyle.width * 0.7,
+        overflow: 'hidden',
+        borderRadius: 20,
+        padding: 7,
+        marginBottom: 10,
+      }}>
+      <View>
+        <Image
+          source={{uri: item.image}}
+          style={{
+            width: '100%',
+            height: DimensionsStyle.width * 0.5,
+            resizeMode: 'stretch',
+            alignSelf: 'center',
+            borderRadius: 20,
+          }}
+        />
+        <Image
+          source={HEART}
+          style={{
+            width: 30,
+            height: 30,
+            resizeMode: 'stretch',
+            position: 'absolute',
+            top: 10,
+            right: 10,
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            right: 10,
+            bottom: 10,
+            backgroundColor: `rgba(163, 204, 227, 0.85)`,
+            padding: 10,
+            borderRadius: 10,
+          }}>
+          <Text
+            style={{
+              color: Colors.RED,
+              fontFamily: fontFamily.Bold,
+              fontSize: 12,
+            }}>
+            {item.price.toLocaleString('vi-VN')} VNĐ
+          </Text>
+        </View>
+      </View>
+      <View>
+        <Text
+          numberOfLines={2}
+          style={{
+            fontSize: 16,
+            fontFamily: fontFamily.Bold,
+            lineHeight: 18,
+            color: Colors.BLUE_TEXT_HOME,
+            marginTop: 10,
+          }}>
+          {item.name}
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 7,
+          }}>
+          <Image
+            source={LOCATION}
+            style={{width: 12, height: 12, marginEnd: 2}}
+          />
+          <Text
+            numberOfLines={1}
+            style={{
+              fontSize: 10,
+              fontFamily: fontFamily.Medium,
+            }}>
+            {item.departure_location}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+};
 
 const _HomeFull: React.FC<PropsType> = props => {
-  const { navigation } = props;
-  const [check, setCheck] = React.useState(false)
-  
+  const {navigation} = props;
+  const [isFavorite, setIsFavorite] = React.useState(true);
+  const [isCheck, setIsCheck] = React.useState<
+    'card' | 'home' | 'review' | 'homefavorite'
+  >('home');
 
-  const go = () => {
-    setCheck(check);
-  };
-  const [text, setText] = React.useState('')
+  useEffect(() => {
+    isFavorite ? setIsCheck('homefavorite') : setIsCheck('home');
+  }, [isFavorite]);
 
-  // interface Item {
-  //   id: number;
-  //   title: string;
-  //   titlemini: string;
-  //   image: any;
-  //   imageview: any;
-  //   iamgevector: any;
+  const [text, setText] = React.useState('');
 
-  // }
-  // const DATA: Item[] = [
-  //   { id: 1, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-  //   { id: 2, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-  //   { id: 3, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-  //   { id: 4, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-  //   { id: 5, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-  //   { id: 6, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-  //   { id: 7, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-  //   { id: 8, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-  //   { id: 9, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-  //   { id: 10, title: "Ưu đãi vào Tháng Mười!", titlemini: 'Giảm giá đến 20%', image: require("../../../../assets/images/sale.png"), imageview: require("../../../../assets/images/bogoc.png"), iamgevector: require("../../../../assets/images/vector.png") },
-  // ]
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollViewRef = useRef<ScrollView>(null);
+  const ITEM_WIDTH = DimensionsStyle.width * 0.7 + 15;
 
-  // const renderItem = ({ item }: { item: Item }) => (
-  //   <SafeAreaView style={_styles.item}>
-  //     <SafeAreaView style={_styles.card}>
-  //       <SafeAreaView>
-  //         <Image source={item.image} style={_styles.image} />
-  //         <Text style={_styles.text}>{item.title}</Text>
-  //         <Text style={_styles.textmini}>{item.titlemini}</Text>
-  //       </SafeAreaView>
-  //     </SafeAreaView>
-  //     <SafeAreaView style={_styles.gr}>
-  //       <Image source={item.imageview} style={_styles.imageview} />
-  //       <Image source={item.iamgevector} style={_styles.imagevector} />
-  //     </SafeAreaView>
-  //   </SafeAreaView>
-  // );
+  const halfwayIndex = Math.ceil(DATATOUROUTSTANDING.length / 2);
+  const column1Data = DATATOUROUTSTANDING.slice(0, halfwayIndex);
+  const column2Data = DATATOUROUTSTANDING.slice(halfwayIndex);
 
-  interface ItemEstates {
-    id: number;
-    title: string;
-    location: string;
-    money: string;
-    image: any;
-
-
-  }
-  const DATAESTATES: ItemEstates[] = [
-    { id: 1, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
-    { id: 2, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
-    { id: 3, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
-    { id: 4, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
-    { id: 5, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
-    { id: 6, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
-    { id: 7, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
-    { id: 8, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
-    { id: 9, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
-    { id: 10, title: "Hồ Hoàn Kiếm", location: "Hà Nội, Việt Nam", money: "$ 290", image: require("../../../../assets/images/apartment.png")},
-  ]
-
-  const renderItemEstates = ({ item }: { item: ItemEstates }) => (
-    <SafeAreaView style={_styles.itemEstates}>
-      <SafeAreaView style={_styles.cardEstates}>
-        <SafeAreaView style={_styles.gr1}>
-          <Image source={item.image} style={_styles.imageEstates} />
-          <Image source={HEART} style={_styles.iconheart} />
-         
-        </SafeAreaView>
-      </SafeAreaView>
-      <SafeAreaView style={_styles.grEstates}>
-        <Text style={_styles.textEstates}>{item.title}</Text>
-        {/* <SafeAreaView style={_styles.groupreview}>
-          <Image source={START_SMALL} style={_styles.iconreview} />
-          <Text style={_styles.textreview}>{item.review}</Text>
-        </SafeAreaView> */}
-        <SafeAreaView style={_styles.grouplocation}>
-          <Image source={LOCATION} style={_styles.iconlocation} />
-          <Text style={_styles.textlocation}>{item.location}</Text>
-        </SafeAreaView>
-        <SafeAreaView style={_styles.groupmoney}>
-          <Text style={_styles.money}>{item.money}</Text>
-         
-        </SafeAreaView>
-      </SafeAreaView>
-    </SafeAreaView>
+  const renderItemBanner = React.useMemo(
+    () =>
+      ({item}: {item: Banner}) => {
+        return <ItemBanner item={item} key={item.id} />;
+      },
+    [],
   );
 
-  interface ItemNearby {
-    id: number;
-    title: string;
-   
-    location: string;
-    image: any;
-    money: string;
-    date: string;
-
-  }
-
-  const DATANEARBY: ItemNearby[] = [
-    { id: 1, title: "Đền Ngọc Sơn", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/tour" },
-    { id: 2, title: "Cầu Long Biên", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 271", date: "/tour" },
-    { id: 3, title: "Chùa Hương", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 235", date: "/tour" },
-    { id: 4, title: "Chợ Đồng Xuân", location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/tour" },
-    { id: 5, title: "Đền Ngọc Sơn",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/tour" },
-    { id: 6, title: "Cầu Long Biên",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 271", date: "/tour" },
-    { id: 7, title: "Chùa Hương",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 235", date: "/tour" },
-    { id: 8, title: "Chợ Đồng Xuân",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/tour" },
-    { id: 9, title: "Đền Ngọc Sơn",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 290", date: "/tour" },
-    { id: 10, title: "Cầu Long Biên",  location: "Hà Nội, Việt Nam", image: require("../../../../assets/images/tower.png"), money: "$ 271", date: "/tour" },
-    
-  ]
-
-  const renderItemNearby = ({ item }: { item: ItemNearby }) => (
-    <SafeAreaView style={_styles.itemNearby}>
-      <SafeAreaView style={_styles.cardNearby}>
-        <SafeAreaView style={_styles.grNearby1}>
-          <Image source={item.image} style={_styles.imageNearby} />
-          <Image source={HEART} style={_styles.iconheartNearby} />
-          <SafeAreaView style={_styles.boxnameNearby}>
-            <SafeAreaView style={_styles.groupmoneyNearby}>
-              <Text style={_styles.moneyNearby}>{item.money}</Text>
-              <Text style={_styles.dateNearby}>{item.date}</Text>
-            </SafeAreaView>
-          </SafeAreaView>
-        </SafeAreaView>
-      </SafeAreaView>
-      <SafeAreaView style={_styles.grNearby}>
-        <Text style={_styles.textNearby}>{item.title}</Text>
-        <SafeAreaView style={_styles.boxgr}>
-          {/* <SafeAreaView style={_styles.groupreviewNearby}>
-            <Image source={START_SMALL} style={_styles.iconreviewNearby} />
-            <Text style={_styles.textreviewNearby}>{item.review}</Text>
-          </SafeAreaView> */}
-          <SafeAreaView style={_styles.grouplocationNearby}>
-            <Image source={LOCATION} style={_styles.iconlocationNearby} />
-            <Text style={_styles.textlocationNearby}>{item.location}</Text>
-          </SafeAreaView>
-        </SafeAreaView>
-
-      </SafeAreaView>
-    </SafeAreaView>
+  const renderItemTourFavorite = React.useMemo(
+    () =>
+      ({item}: {item: Tour}) => {
+        return <ItemTourFavorite item={item} key={item.id} />;
+      },
+    [],
   );
 
+  const renderItemEstates = React.useMemo(
+    () =>
+      ({item}: {item: Estates}) => {
+        return <ItemEstates item={item} key={item.id} />;
+      },
+    [],
+  );
+
+  const renderItemTourOutstanding = React.useMemo(
+    () =>
+      ({item}: {item: Tour}) => {
+        return <ItemTourOutstanding item={item} key={item.id} />;
+      },
+    [],
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Tăng giá trị của currentIndex lên 1
+      setCurrentIndex(prevIndex => (prevIndex + 1) % DATABANNER.length);
+    }, 1500);
+
+    // Xóa interval khi component bị unmount
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    // Tự động cuộn đến vị trí mới khi currentIndex thay đổi
+    scrollViewRef.current?.scrollTo({
+      x: currentIndex * ITEM_WIDTH,
+      animated: true,
+    });
+  }, [currentIndex]);
 
   return (
     <BackgroundApp source={BACKGROUND_HOME}>
-      <HeaderHome
-         />
-      <ScrollView style={_styles.container}>
-        <TextPlus
-          textBolds={['Thuy Ân!']}
-          text={"Xin chào, Thuy Ân! \nHãy bắt đầu khám phá"}
-          boldStyle={{ fontFamily: fontFamily.Bold, color: Colors.GREY_DARK_1, fontSize: 25, lineHeight: 40, letterSpacing: 0.75, }}
-          textStyle={
-            {
-              color: Colors.GREY_DARK_1, fontSize: 25, lineHeight: 40,
-              letterSpacing: 0.75, marginLeft: '7%', marginTop: '4%', width: '100%'
-            }
-          }
-          numberOfLines={2}
-        />
-        <Input
-          imageIconLeft={FIND}
-          imageIconRight={FIND}
-          iconRightStyle={{ opacity:0}}
-          label='Tìm kiếm địa điểm, tour'
-          value={text}
-          onChangeText={(text) => setText(text)}
-          viewStyle={{ marginTop: '7%', marginBottom: '3%', width: '85%'}}
-        />
-        <TopTab
-          isCheck="home"
-        />
-        {/* <FlatList
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-          horizontal
-          showsHorizontalScrollIndicator={false} /> */}
-        <SafeAreaView style={_styles.boxEstates}>
-          <SafeAreaView style={_styles.boxCard}>
-            <Text style={_styles.title}>Địa Điểm Yêu Thích</Text>
-            <TouchableOpacity style={_styles.btnSeeAll}>
-              <Text style={_styles.seeAll}>xem tất cả</Text>
-            </TouchableOpacity>
-          </SafeAreaView>
-          <FlatList
-            data={DATAESTATES}
-            renderItem={renderItemEstates}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false} />
-        </SafeAreaView>
-        <SafeAreaView style={_styles.boxEstates}>
-          <SafeAreaView style={_styles.boxCard}>
-            <Text style={_styles.title}>Địa Điểm Phổ Biến</Text>
-            <TouchableOpacity style={_styles.btnSeeAll}>
-              <Text style={_styles.seeAll}>xem tất cả</Text>
-            </TouchableOpacity>
-          </SafeAreaView>
-          <FlatList
-            data={DATAESTATES}
-            renderItem={renderItemEstates}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false} />
-        </SafeAreaView>
-        <SafeAreaView style={_styles.boxEstates}>
-          <SafeAreaView style={_styles.boxCard1}>
-            <Text style={_styles.title}>Tour  Nổi Bật</Text>
-           
-          </SafeAreaView>
-          <FlatList
-            data={DATANEARBY}
-            renderItem={renderItemNearby}
-            keyExtractor={(item) => item.id.toString()}
-            numColumns={2}
+      <HeaderHome2
+        avatar={AVT_HOME}
+        checkNotify={true}
+        onPressAvatar={() => {
+          console.log('avatar');
+        }}
+      />
+      <SafeAreaView style={_styles.containerScrollView}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <TextPlus
+            textBolds={['Thuy Ân!']}
+            text={'Xin chào, Thuy Ân! \nHãy bắt đầu khám phá'}
+            boldStyle={{
+              fontFamily: fontFamily.Bold,
+              color: Colors.GREY_DARK_1,
+              fontSize: 25,
+              lineHeight: 40,
+              letterSpacing: 0.75,
+            }}
+            textStyle={{
+              color: Colors.GREY_DARK_1,
+              fontSize: 25,
+              lineHeight: 40,
+              letterSpacing: 0.75,
+              width: '100%',
+            }}
+            numberOfLines={2}
           />
-        </SafeAreaView>
-      </ScrollView>
+          <Input
+            imageIconLeft={FIND}
+            imageIconRight={FIND}
+            iconRightStyle={{display: 'none'}}
+            label="Tìm kiếm địa điểm, tour du lịch"
+            value={text}
+            onChangeText={text => setText(text)}
+            viewStyle={{
+              marginTop: '5%',
+              marginBottom: '3%',
+              marginEnd: 20,
+              marginStart: 0,
+            }}
+            textInputStyle={{width: '90%'}}
+          />
+          <TopTab
+            isCheck={isCheck}
+            listTabContainer={{
+              marginHorizontal: 0,
+              borderTopEndRadius: 0,
+              borderBottomRightRadius: 0,
+            }}
+          />
+
+          <View
+            style={{
+              flex: 1,
+              overflow: 'hidden',
+              marginVertical: 20,
+              borderTopLeftRadius: 20,
+              borderBottomLeftRadius: 20,
+            }}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              ref={scrollViewRef}
+              pagingEnabled
+              onMomentumScrollEnd={event => {
+                const contentOffset = event.nativeEvent.contentOffset.x;
+                const index = Math.round(contentOffset / ITEM_WIDTH);
+                setCurrentIndex(index);
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                {DATABANNER.map((item, index) => renderItemBanner({item}))}
+              </View>
+            </ScrollView>
+          </View>
+
+          {isFavorite ? (
+            <View>
+              <View
+                style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                  alignItems: 'baseline',
+                  justifyContent: 'space-between',
+                }}>
+                <Text
+                  style={{
+                    fontFamily: fontFamily.Bold,
+                    color: Colors.BLUE_TEXT_HOME,
+                    fontSize: 20,
+                  }}>
+                  Tour Yêu thích
+                </Text>
+                <Pressable>
+                  <Text
+                    style={{
+                      fontFamily: fontFamily.Medium,
+                      color: Colors.BLUE_TEXT_HOME,
+                      marginEnd: 20,
+                    }}>
+                    xem tất cả
+                  </Text>
+                </Pressable>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  overflow: 'hidden',
+                  marginVertical: 20,
+                  borderTopLeftRadius: 20,
+                  borderBottomLeftRadius: 20,
+                }}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <View style={{flexDirection: 'row'}}>
+                    {DATATOUR.map((item, index) =>
+                      renderItemTourFavorite({item}),
+                    )}
+                  </View>
+                </ScrollView>
+              </View>
+            </View>
+          ) : null}
+
+          <View>
+            <View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                alignItems: 'baseline',
+                justifyContent: 'space-between',
+              }}>
+              <Text
+                style={{
+                  fontFamily: fontFamily.Bold,
+                  color: Colors.BLUE_TEXT_HOME,
+                  fontSize: 20,
+                }}>
+                Địa điểm nổi bật
+              </Text>
+              <Pressable>
+                <Text
+                  style={{
+                    fontFamily: fontFamily.Medium,
+                    color: Colors.BLUE_TEXT_HOME,
+                    marginEnd: 20,
+                  }}>
+                  xem tất cả
+                </Text>
+              </Pressable>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                overflow: 'hidden',
+                marginVertical: 20,
+                borderTopLeftRadius: 20,
+                borderBottomLeftRadius: 20,
+              }}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={{flexDirection: 'row'}}>
+                  {DATAESTATES.map((item, index) => renderItemEstates({item}))}
+                </View>
+              </ScrollView>
+            </View>
+          </View>
+
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'baseline',
+              justifyContent: 'space-between',
+              marginBottom: 20,
+            }}>
+            <Text
+              style={{
+                fontFamily: fontFamily.Bold,
+                color: Colors.BLUE_TEXT_HOME,
+                fontSize: 20,
+              }}>
+              Tour nổi bật
+            </Text>
+            <Pressable>
+              <Text
+                style={{
+                  fontFamily: fontFamily.Medium,
+                  color: Colors.BLUE_TEXT_HOME,
+                  marginEnd: 20,
+                }}>
+                xem tất cả
+              </Text>
+            </Pressable>
+          </View>
+
+          <View
+            style={{
+              marginEnd: 20,
+            }}>
+            {
+              <View style={_styles.containerFlatlist}>
+                <View>
+                  {column1Data.map((item, index) =>
+                    renderItemTourOutstanding({item: item}),
+                  )}
+                </View>
+                <View>
+                  {column2Data.map((item, index) =>
+                    renderItemTourOutstanding({item: item}),
+                  )}
+                </View>
+              </View>
+            }
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     </BackgroundApp>
-  )
-}
+  );
+};
 
 export const HomeFull = React.memo(_HomeFull);
 
 const _styles = StyleSheet.create({
-
-  container: {
+  containerScrollView: {
     flex: 1,
     flexDirection: 'column',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    overflow: 'hidden',
+    marginTop: 10,
+    marginStart: 20,
+    paddingTop: -25,
   },
-  item: {
 
+  containerFlatlist: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  item: {
     margin: Dimensions.get('screen').width * 0.02,
     width: Dimensions.get('window').width * 0.8,
     height: Dimensions.get('screen').height * 0.3,
     borderRadius: 25,
-
   },
   card: {
     flexDirection: 'row',
@@ -294,21 +866,19 @@ const _styles = StyleSheet.create({
     margin: Dimensions.get('screen').width * 0.01,
     flexShrink: 0,
     opacity: 0.5,
-    marginTop: - Dimensions.get('screen').height * 0.08,
+    marginTop: -Dimensions.get('screen').height * 0.08,
     marginLeft: Dimensions.get('screen').width * 0.05,
     backgroundColor: Colors.BLACK,
-    resizeMode:'stretch'
-
+    resizeMode: 'stretch',
   },
   text: {
     color: Colors.WHITE,
     fontFamily: fontFamily.Bold,
     fontSize: 18,
     letterSpacing: 0.54,
-    marginTop: - Dimensions.get('screen').height * 0.18,
+    marginTop: -Dimensions.get('screen').height * 0.18,
     marginLeft: Dimensions.get('screen').width * 0.1,
     width: 100,
-
   },
   textmini: {
     color: Colors.WHITE,
@@ -316,45 +886,37 @@ const _styles = StyleSheet.create({
     fontSize: 12,
     marginTop: Dimensions.get('screen').height * 0.01,
     marginLeft: Dimensions.get('screen').width * 0.1,
-
-
   },
   gr: {
     justifyContent: 'space-evenly',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: - Dimensions.get('screen').height * 0.11,
-    marginLeft: - Dimensions.get('screen').width * 0.333,
-
-
+    marginTop: -Dimensions.get('screen').height * 0.11,
+    marginLeft: -Dimensions.get('screen').width * 0.333,
   },
   imageview: {
     marginTop: Dimensions.get('screen').height * 0.105,
-    marginLeft: - Dimensions.get('screen').width * 0.3,
-    resizeMode:'stretch'
-
-
+    marginLeft: -Dimensions.get('screen').width * 0.3,
+    resizeMode: 'stretch',
   },
   imagevector: {
     marginTop: Dimensions.get('screen').height * 0.102,
-    marginLeft: Dimensions.get('screen').width * - 0.8,
-    resizeMode:'stretch'
-
-
+    marginLeft: Dimensions.get('screen').width * -0.8,
+    resizeMode: 'stretch',
   },
   boxEstates: {},
   boxCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: - Dimensions.get('screen').height * 0.05,
-    marginVertical: - Dimensions.get('screen').height * 0.02,
+    marginTop: -Dimensions.get('screen').height * 0.05,
+    marginVertical: -Dimensions.get('screen').height * 0.02,
   },
   boxCard1: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: - Dimensions.get('screen').height * 0.08,
-    marginVertical: - Dimensions.get('screen').height * 0.02,
-    marginBottom:  Dimensions.get('screen').height * 0.04,
+    marginTop: -Dimensions.get('screen').height * 0.08,
+    marginVertical: -Dimensions.get('screen').height * 0.02,
+    marginBottom: Dimensions.get('screen').height * 0.04,
   },
   title: {
     fontSize: 18,
@@ -369,7 +931,6 @@ const _styles = StyleSheet.create({
     fontFamily: fontFamily.Medium,
     letterSpacing: 0.3,
     marginRight: Dimensions.get('screen').width * 0.07,
-
   },
   btnSeeAll: {
     justifyContent: 'center',
@@ -399,26 +960,24 @@ const _styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: - Dimensions.get('screen').height * 0.08,
+    marginTop: -Dimensions.get('screen').height * 0.08,
     marginLeft: Dimensions.get('screen').width * 0.37,
   },
   imageEstates: {
     width: Dimensions.get('screen').width * 0.43,
     height: Dimensions.get('screen').height * 0.19,
-    marginTop: - Dimensions.get('screen').height * 0.03,
-    marginLeft: - Dimensions.get('screen').width * 0.35,
+    marginTop: -Dimensions.get('screen').height * 0.03,
+    marginLeft: -Dimensions.get('screen').width * 0.35,
     borderRadius: 25,
     flexShrink: 0,
-    resizeMode:'stretch'
-
+    resizeMode: 'stretch',
   },
   iconheart: {
-    marginTop: - Dimensions.get('screen').height * 0.16,
-    marginLeft: - Dimensions.get('screen').width * 0.5,
+    marginTop: -Dimensions.get('screen').height * 0.16,
+    marginLeft: -Dimensions.get('screen').width * 0.5,
     width: 40,
     height: 40,
     resizeMode: 'stretch',
-    
   },
   boxname: {
     flexDirection: 'row',
@@ -429,24 +988,23 @@ const _styles = StyleSheet.create({
     width: DimensionsStyle.width * 0.22,
     height: DimensionsStyle.width * 0.11,
     marginTop: Dimensions.get('screen').height * 0.09,
-    marginLeft: - Dimensions.get('screen').width * 0.09,
+    marginLeft: -Dimensions.get('screen').width * 0.09,
   },
   name: {
-    marginTop: - Dimensions.get('screen').height * 0.023,
+    marginTop: -Dimensions.get('screen').height * 0.023,
     marginLeft: Dimensions.get('screen').width * 0.02,
-
   },
   grEstates: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: - Dimensions.get('window').height * 0.22,
+    marginTop: -Dimensions.get('window').height * 0.22,
     marginLeft: Dimensions.get('window').height * 0.22,
   },
 
   groupreview: {
     marginTop: Dimensions.get('window').height * 0.06,
-    marginLeft: - Dimensions.get('window').height * 0.05,
+    marginLeft: -Dimensions.get('window').height * 0.05,
     width: '30%',
     flexDirection: 'row',
     borderTopStartRadius: 5,
@@ -456,7 +1014,7 @@ const _styles = StyleSheet.create({
   },
   grouplocation: {
     marginTop: Dimensions.get('window').height * 0.12,
-    marginLeft: - Dimensions.get('window').height * 0.1,
+    marginLeft: -Dimensions.get('window').height * 0.1,
     width: '80%',
     flexDirection: 'row',
     borderTopStartRadius: 5,
@@ -466,7 +1024,7 @@ const _styles = StyleSheet.create({
   },
   groupmoney: {
     marginTop: Dimensions.get('window').height * 0.25,
-    marginLeft: - Dimensions.get('window').height * 0.05,
+    marginLeft: -Dimensions.get('window').height * 0.05,
     width: '30%',
     flexDirection: 'row',
     borderTopStartRadius: 5,
@@ -489,9 +1047,8 @@ const _styles = StyleSheet.create({
     marginLeft: Dimensions.get('window').height * 0.01,
   },
   iconreview: {
-    marginLeft: - Dimensions.get('window').height * 0.26,
-    resizeMode:'stretch'
-
+    marginLeft: -Dimensions.get('window').height * 0.26,
+    resizeMode: 'stretch',
   },
   textlocation: {
     color: Colors.GREY_DARK,
@@ -502,25 +1059,21 @@ const _styles = StyleSheet.create({
   iconlocation: {
     width: Dimensions.get('window').width * 0.05,
     height: Dimensions.get('window').height * 0.02,
-    marginLeft: - Dimensions.get('window').height * 0.2,
-    resizeMode:'stretch'
-
+    marginLeft: -Dimensions.get('window').height * 0.2,
+    resizeMode: 'stretch',
   },
   money: {
     color: Colors.GREY_DARK,
     fontSize: 18,
     letterSpacing: 0.48,
     fontFamily: fontFamily.Bold,
-    marginLeft: - Dimensions.get('window').height * 0.34,
-
-
+    marginLeft: -Dimensions.get('window').height * 0.34,
   },
   date: {
     color: Colors.GREY_DARK,
     fontSize: 8,
     letterSpacing: 0.24,
     fontFamily: fontFamily.Medium,
-
   },
 
   itemNearby: {
@@ -534,9 +1087,8 @@ const _styles = StyleSheet.create({
     height: Dimensions.get('screen').height * 0.35,
     borderRadius: 25,
     backgroundColor: Colors.GREY_SOFT,
-    marginBottom:  Dimensions.get('screen').height * 0.02,
+    marginBottom: Dimensions.get('screen').height * 0.02,
     marginLeft: Dimensions.get('screen').width * 0.03,
-    
   },
   cardNearby: {
     flexDirection: 'row',
@@ -547,22 +1099,21 @@ const _styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: - Dimensions.get('screen').height * 0.08,
-    marginLeft: - Dimensions.get('screen').width * 0.35,
+    marginTop: -Dimensions.get('screen').height * 0.08,
+    marginLeft: -Dimensions.get('screen').width * 0.35,
   },
   imageNearby: {
     width: Dimensions.get('screen').width * 0.43,
     height: Dimensions.get('screen').height * 0.22,
-    marginTop: - Dimensions.get('screen').height * 0.04,
+    marginTop: -Dimensions.get('screen').height * 0.04,
     marginLeft: Dimensions.get('screen').width * 0.325,
     borderRadius: 25,
     flexShrink: 0,
-    resizeMode:'stretch'
-
+    resizeMode: 'stretch',
   },
   iconheartNearby: {
-    marginTop: - Dimensions.get('screen').height * 0.2,
-    marginLeft: - Dimensions.get('screen').width * 0.12,
+    marginTop: -Dimensions.get('screen').height * 0.2,
+    marginLeft: -Dimensions.get('screen').width * 0.12,
     width: 40,
     height: 40,
     resizeMode: 'stretch',
@@ -576,29 +1127,28 @@ const _styles = StyleSheet.create({
     width: DimensionsStyle.width * 0.22,
     height: DimensionsStyle.width * 0.11,
     marginTop: Dimensions.get('screen').height * 0.09,
-    marginLeft: - Dimensions.get('screen').width * 0.22
+    marginLeft: -Dimensions.get('screen').width * 0.22,
   },
   nameNearby: {
-    marginTop: - Dimensions.get('screen').height * 0.023,
+    marginTop: -Dimensions.get('screen').height * 0.023,
     marginLeft: Dimensions.get('screen').width * 0.02,
-
   },
   grNearby: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: - Dimensions.get('window').height * 0.05,
+    marginTop: -Dimensions.get('window').height * 0.05,
     marginLeft: Dimensions.get('window').height * 0.08,
   },
-  boxgr:{
+  boxgr: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
   },
 
   groupreviewNearby: {
-    marginTop: - Dimensions.get('window').height * 0.02,
-    marginLeft: - Dimensions.get('window').height * 0.07,
+    marginTop: -Dimensions.get('window').height * 0.02,
+    marginLeft: -Dimensions.get('window').height * 0.07,
     width: '100%',
     flexDirection: 'row',
     borderTopStartRadius: 5,
@@ -607,8 +1157,8 @@ const _styles = StyleSheet.create({
     alignItems: 'center',
   },
   grouplocationNearby: {
-    marginTop: - Dimensions.get('window').height * 0.02,
-    marginLeft: - Dimensions.get('window').height * 0.05,
+    marginTop: -Dimensions.get('window').height * 0.02,
+    marginLeft: -Dimensions.get('window').height * 0.05,
     width: '100%',
     flexDirection: 'row',
     borderTopStartRadius: 5,
@@ -617,7 +1167,7 @@ const _styles = StyleSheet.create({
     alignItems: 'center',
   },
   groupmoneyNearby: {
-    marginTop: - Dimensions.get('window').height * 0.08,
+    marginTop: -Dimensions.get('window').height * 0.08,
     marginLeft: Dimensions.get('window').height * 0.01,
     width: '80%',
     flexDirection: 'row',
@@ -633,33 +1183,28 @@ const _styles = StyleSheet.create({
     lineHeight: 18,
     letterSpacing: 0.36,
     fontFamily: fontFamily.Bold,
-    marginTop: - Dimensions.get('screen').height * 0.023,
+    marginTop: -Dimensions.get('screen').height * 0.023,
   },
   textreviewNearby: {
     color: Colors.GREY_DARK,
     fontSize: 10,
     fontFamily: fontFamily.Bold,
-
   },
   iconreviewNearby: {
-    marginLeft: - Dimensions.get('window').height * 0.26,
-    resizeMode:'stretch'
-
+    marginLeft: -Dimensions.get('window').height * 0.26,
+    resizeMode: 'stretch',
   },
   textlocationNearby: {
     color: Colors.GREY_DARK,
     fontSize: 10,
     fontFamily: fontFamily.Medium,
     width: 100,
-    
-
   },
   iconlocationNearby: {
     width: Dimensions.get('window').width * 0.05,
     height: Dimensions.get('window').height * 0.02,
-    marginLeft: - Dimensions.get('window').height * 0.2,
-    resizeMode:'stretch'
-
+    marginLeft: -Dimensions.get('window').height * 0.2,
+    resizeMode: 'stretch',
   },
   moneyNearby: {
     fontSize: 18,
@@ -671,9 +1216,4 @@ const _styles = StyleSheet.create({
     letterSpacing: 0.24,
     fontFamily: fontFamily.Medium,
   },
-
-
-
-
-
-})
+});

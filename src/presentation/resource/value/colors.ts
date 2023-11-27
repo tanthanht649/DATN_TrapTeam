@@ -22,4 +22,6 @@ export const Colors = {
   GREY_MEDIUM_1: '#53587A',
   GREY_LIGHT: '#A1A5C1',
   GREEN_1: '#8BC83F',
+  BG_ITEM_BANNER: '#A3CCE3',
+  BLUE_TEXT_HOME: '#252B5C',
 };

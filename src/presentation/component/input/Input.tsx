@@ -30,6 +30,7 @@ type Props = {
   onPressRight?: () => void;
   value: string;
   onChangeText?: (value: string) => void;
+  textInputStyle?: StyleProp<ViewStyle>;
 };
 
 const _Input: React.FC<Props> = props => {
@@ -63,8 +64,9 @@ const _Input: React.FC<Props> = props => {
               fontFamily:
                 value.length == 0 ? fontFamily.Regular : fontFamily.Bold,
               color: value.length == 0 ? Colors.GRAY : Colors.GREY_DARK,
-              fontSize: value.length == 0 ? 12 : 14,
+              fontSize: value.length == 0 ? 14 : 16,
             },
+            props.textInputStyle,
           ]}
           onChangeText={onChangeText}></TextInput>
       </View>
