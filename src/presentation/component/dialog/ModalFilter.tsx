@@ -17,19 +17,13 @@ import { Button } from '../button';
 import { TextPlus } from '../textPlus';
 
 type Props = {
-  titleButton: string;
-  titleStyle?: StyleProp<TextStyle>;
-  visible: boolean;
-  text: string;
-  textBold: string;
-  content?: string
+  ModalStyle?: StyleProp<ViewStyle>;
+  visible?: boolean;
   onPress: () => void;
 };
 
-
 const _Modal: React.FC<Props> = props => {
-  const { titleButton, text, textBold, onPress, visible, content } = props;
-       
+  const {  onPress, visible } = props;
   return (
     <Modal
       animationType="slide"
@@ -46,19 +40,14 @@ const _Modal: React.FC<Props> = props => {
       <View style={_styles.background}>
         <View style={_styles.centeredView}>
           <View style={_styles.modalView}>
-            <Image style={_styles.line} source={LINE}></Image>
-            <Image style={_styles.image} source={ALERT_SUCCESS_TICK}></Image>
-            <TextPlus
-              text={text}
-              textBolds={[textBold]}
-              boldStyle={_styles.textBold}
-              textStyle={_styles.text}
-              viewStyle={_styles.textReady}
-            />
-            <Text style={[_styles.textBold, { fontSize: 14,fontFamily:fontFamily.Medium, marginTop:20 }]}>{content}</Text>
+          <Image style={_styles.line} source={LINE}></Image>
+            <Text style={_styles.textBold}>Bộ lọc</Text>
+            <Text style={_styles.textBold}>Địa điểm</Text>
+          
+
           </View>
           <Button
-            title={titleButton}
+            title='Tìm kiếm'
             imageIconLeft={EMAIL}
             imageIconRight={EMAIL}
             onPress={onPress}
@@ -91,11 +80,10 @@ const _styles = StyleSheet.create({
   },
   modalView: {
     width: Dimensions.get('window').width * 1,
-    height: Dimensions.get('window').height * 0.6,
+    height: Dimensions.get('window').height * 1,
     backgroundColor: 'white',
     borderRadius: 50,
     padding: 30,
-    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -113,10 +101,11 @@ const _styles = StyleSheet.create({
     color: Colors.GREY_DARK,
     lineHeight: 40,
     marginHorizontal: 24,
-    textAlign: 'center',
   },
   textBold: {
-    fontSize: 25,
+    marginTop:20,
+    marginBottom:10,
+    fontSize: 20,
     fontFamily: fontFamily.Bold,
     color: Colors.BLUE,
 
@@ -133,8 +122,9 @@ const _styles = StyleSheet.create({
   },
   line: {
     height: 2,
-    width: 50
+    width: 50,
+    alignSelf:'center'
   }
 });
 
-export const ModalSuccessful = React.memo(_Modal);
+export const ModalFilter = React.memo(_Modal);

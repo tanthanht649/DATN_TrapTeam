@@ -49,9 +49,6 @@ const _LoginOption: React.FC<PropsType> = props => {
       </SafeAreaView>
       <View style={_styles.bottom}>
         <Button title='Tiếp tục với Email'
-          textBoldModal=''
-          textModal=''
-          titleButtonModal=''
           imageIconLeft={EMAIL}
           imageIconRight={EMAIL}
           viewIconLeft={{ display: 'flex' }}
@@ -59,7 +56,7 @@ const _LoginOption: React.FC<PropsType> = props => {
           viewStyle={{ width: 278, marginTop: DimensionsStyle.height * 0.13 }}></Button>
         <View style={_styles.row}>
           <Text style={[_styles.text, { fontSize: 12, marginLeft: 0, marginTop: 0 }]}>Bạn chưa có tài khoản?</Text>
-          <Pressable onPress={() => { navigation.navigate('Register') }}>
+          <Pressable onPress={()=>{navigation.navigate('Register')}}>
             <Text style={[_styles.textBold, { fontSize: 12 }]}> Đăng kí</Text>
           </Pressable>
         </View>
@@ -103,10 +100,10 @@ const _styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: DimensionsStyle.height * 0.12,
   },
-  bottom: {
-    position: 'absolute',
-    top: DimensionsStyle.height * 0.61,
-    alignSelf: 'center'
+  bottom:{
+    position:'absolute',
+    top:DimensionsStyle.height * 0.61,
+    alignSelf:'center'
   }
 
 });

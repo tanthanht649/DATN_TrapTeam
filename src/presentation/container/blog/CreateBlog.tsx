@@ -1,23 +1,29 @@
-import {Image, Pressable, ScrollView, StyleSheet, TextInput, View} from 'react-native';
-import React from 'react';
+import {Image, Pressable, StyleSheet, TextInput, View} from 'react-native';
+import React, { useState } from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {WelcomeTeamStackParamList} from '@navigation';
-import {BackgroundApp, Button, Header, TextPlus} from '@components';
+import {BackgroundApp, Button, Header, ModalFilter, ModalPayment, ModalSuccessful} from '@components';
 import {
     ADD_IMAGE,
   BACKGROUND_WHITE,
   ICON_BACK,
   LINE_BLOG,
-  LOGO_HOME,
-  LOGO_VERSION,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
 
+
 type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'CreateBlog'>;
 const _CreateBlog: React.FC<PropsType> = props => {
   const {navigation} = props;
+
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const handleModal = () =>{
+    setModalVisible(false);
+    navigation.navigate('Blogs') 
+
+  }
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -25,7 +31,7 @@ const _CreateBlog: React.FC<PropsType> = props => {
         <Header
           textCenter={'Tạo bài viết'}
           iconLeft={ICON_BACK}
-          eventLeft={() => console.log('IconLeft')}
+          eventLeft={() => navigation.goBack()}
           styleIconLeft={{marginLeft: -DimensionsStyle.width * 0.06, marginRight:DimensionsStyle.width * 0.06}}
         />
         <Image style={_styles.image} source={ADD_IMAGE}></Image>
@@ -38,19 +44,19 @@ const _CreateBlog: React.FC<PropsType> = props => {
         </View>  
       </SafeAreaView>
       <Button
-          textBoldModal='thành công'
-          textModal='Đăng nhập thành công'
-          titleButtonModal='Hoàn tất'
-          contentModal='cảm ơn bạn'
-          showmodal={false}
           title="Đăng bài"
           viewStyle={{marginTop:10,width:DimensionsStyle.width *0.4}}
           imageIconLeft={ADD_IMAGE}
           imageIconRight={ADD_IMAGE}
           onPress={() => {
-            navigation.navigate('Blogs')         
+                setModalVisible(true)    
           }}
           />
+          {/* <ModalSuccessful visible={modalVisible} onPress={handleModal} text='Đăng bài thành công' textBold='thành công' titleButton='Xem bài biết'></ModalSuccessful> */}
+          {/* <ModalPayment visible={modalVisible} onPress={handleModal}  ></ModalPayment> */}
+          <ModalFilter visible={modalVisible} onPress={handleModal}  ></ModalFilter>
+
+
     </BackgroundApp>
   );
 };

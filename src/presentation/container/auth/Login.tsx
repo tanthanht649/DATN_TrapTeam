@@ -1,9 +1,9 @@
-import { Image, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { WelcomeTeamStackParamList } from '@navigation';
-import { BackgroundApp, Button, Input, ModalSuccessful, TextPlus } from '@components';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {WelcomeTeamStackParamList} from '@navigation';
+import {BackgroundApp, Button, Input, TextPlus} from '@components';
 import {
   BACKGROUND_LOGIN,
   BACKGROUND_WHITE,
@@ -15,11 +15,11 @@ import {
   LOCK,
   fontFamily,
 } from '@assets';
-import { Colors, DimensionsStyle } from '@resources';
+import {Colors, DimensionsStyle} from '@resources';
 
 type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Login'>;
 const _Login: React.FC<PropsType> = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const [email, setEmail] = useState<string>('');
   const handleOnchangeEmail = (value: string) => {
     setEmail(value);
@@ -45,7 +45,7 @@ const _Login: React.FC<PropsType> = props => {
             <Image source={IMAGE_LOGIN_1} style={_styles.imageLogin} />
             <Image source={IMAGE_LOGIN_4} style={_styles.imageLogin} />
           </View>
-          <View style={[_styles.imageOn, { marginTop: 14, marginBottom: 30 }]}>
+          <View style={[_styles.imageOn, {marginTop: 14, marginBottom: 30}]}>
             <Image source={IMAGE_LOGIN_2} style={_styles.imageLogin} />
             <Image source={IMAGE_LOGIN_3} style={_styles.imageLogin} />
           </View>
@@ -60,25 +60,18 @@ const _Login: React.FC<PropsType> = props => {
       </SafeAreaView>
       <View style={_styles.bottom}>
         <Button
-          textBoldModal='thành công'
-          textModal='Đăng nhập thành công'
-          titleButtonModal='Hoàn tất'
-          contentModal='cảm ơn bạn'
-          showmodal={false}
           title="Tiếp tục với email"
           imageIconLeft={EMAIL}
           imageIconRight={EMAIL}
           onPress={() => {
-            navigation.navigate('EditProfile')         
+            navigation.navigate('Login');
           }}
-        
           viewStyle={{
             width: 278,
             marginTop: DimensionsStyle.height * 0.13,
           }}
-          viewIconLeft={{ display: 'flex' }}
+          viewIconLeft={{display: 'flex'}}
         />
-
         {/* <View style={_styles.row}>
           <Text
             style={[_styles.text, {fontSize: 12, marginLeft: 0, marginTop: 0}]}>
@@ -92,8 +85,6 @@ const _Login: React.FC<PropsType> = props => {
           </Pressable>
         </View> */}
       </View>
-      {/* <ModalSuccessful showModal={true} titleButton='Hoàn tất' text='Bài đánh giá của bạn đăng tải thành công' textBold='thành công' onPress={() => { }} ></ModalSuccessful> */}
-
     </BackgroundApp>
   );
 };
