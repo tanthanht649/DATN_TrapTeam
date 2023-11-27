@@ -118,6 +118,10 @@ export const LOGO_PROFILE = require('./logo_profile.png');
 export const CAMERA_PROFILE = require('./camera_profile.png');
 export const AVT_HOME = require('./avt-home.png');
 export const LOGO_HOME = require('./logo-home.png');
+export const LOGO_RULE = require('./logo_rule.png');
+export const LOGO_VERSION = require('./logo_version.png');
+
+
 export const MOMO = require('./momo.png');
 export const ZALO_PAY = require('./zalopay.png');
 export const VIETTEL_PAY = require('./viettelpay.png');

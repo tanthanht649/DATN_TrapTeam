@@ -18,6 +18,8 @@ import {
   RegisterOTP,
   FeaturedListHome,
   FeaturedListDetail,
+  Rule,
+  Version,
 } from '@containers';
 
 type WelcomeTeamProps = {};
@@ -35,6 +37,8 @@ type RegisterProps = {};
 type RegisterOTPProps = {};
 type FeaturedListHomeProps = {};
 type FeaturedListDetailProps = {};
+type RuleProps = {};
+ type VersionProps = {};
 
 export type WelcomeTeamStackParamList = {
   WelcomeTeam: WelcomeTeamProps | undefined;
@@ -52,6 +56,9 @@ export type WelcomeTeamStackParamList = {
   RegisterOTP: RegisterOTPProps | undefined;
   FeaturedListHome: FeaturedListHomeProps | undefined;
   FeaturedListDetail: FeaturedListDetailProps | undefined;
+  Rule: RuleProps | undefined;
+  Version: VersionProps | undefined;
+
 };
 
 const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
@@ -60,7 +67,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="EditProfile"
+        initialRouteName="Rule"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
@@ -82,6 +89,10 @@ const _StackTest = () => {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="RegisterOTP" component={RegisterOTP} />
         <Stack.Screen name="FeaturedListHome" component={FeaturedListHome} />
+        <Stack.Screen name="Rule" component={Rule} />
+        <Stack.Screen name="Version" component={Version} />
+
+
         <Stack.Screen
           name="FeaturedListDetail"
           component={FeaturedListDetail}
