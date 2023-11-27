@@ -8,6 +8,7 @@ import { HomePromotion } from '../container/home/HomePromotion';
 import { Review } from '../container/transactions';
 import { Summary } from '../container/transactions/Summary';
 import { AddReview } from '../container/transactions/AddReview';
+import { HistoryDetail } from '../container/history';
 
 type WelcomeTeamProps = {};
 type TestProps = {};
@@ -16,7 +17,7 @@ type HomePromotionProps = {};
 type ReviewProps = {};
 type SummaryProps = {};
 type AddReviewProps = {};
-
+type HistoryDetailProps = {};
 export type WelcomeTeamStackParamList = {
   WelcomeTeam: WelcomeTeamProps | undefined;
   Test: TestProps | undefined;
@@ -25,6 +26,7 @@ export type WelcomeTeamStackParamList = {
   Review: ReviewProps | undefined;
   Summary: SummaryProps | undefined;
   AddReview: AddReviewProps | undefined;
+  HistoryDetail: HistoryDetailProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
@@ -33,7 +35,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Review"
+        initialRouteName="HistoryDetail"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
@@ -46,6 +48,7 @@ const _StackTest = () => {
         <Stack.Screen name='Review' component={Review}/>
         <Stack.Screen name='Summary' component={Summary}/>
         <Stack.Screen name='AddReview' component={AddReview}/>
+        <Stack.Screen name='HistoryDetail' component={HistoryDetail}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

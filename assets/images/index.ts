@@ -103,5 +103,8 @@ export const LOGO_HOME = require('./logo-home.png');
 export const MOMO = require('./momo.png');
 export const ZALO_PAY = require('./zalopay.png');
 export const VIETTEL_PAY = require('./viettelpay.png');
-
+export const SAPA = require('./sapa.png');
+export const ICON_CALENDAR = require('./icon-calendar.png');
+export const ICON_CLOCK = require('./icon-clock.png');
+export const ICON_PROFILE = require('./icon-profile.png');
 
