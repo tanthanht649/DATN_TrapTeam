@@ -99,7 +99,8 @@ const _Blog: React.FC<PropsType> = props => {
 
 const _styles = StyleSheet.create({
     container: {
-        marginHorizontal: 34,
+        paddingHorizontal: 34,
+        paddingBottom:70
     },
     row: {
         flexDirection: 'row',
