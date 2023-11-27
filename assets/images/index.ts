@@ -104,3 +104,17 @@ export const IMAGE_LOGIN_1 = require('./image_login_1.png');
 export const IMAGE_LOGIN_2 = require('./image_login_2.png');
 export const IMAGE_LOGIN_3 = require('./image_login_3.png');
 export const IMAGE_LOGIN_4 = require('./image_login_4.png');
+export const HEART_PROFILE = require('./heart_profile.png');
+export const HISTORY= require('./history.png');
+export const LOG_OUT= require('./log_out.png');
+export const BLOG_PROFILE= require('./blog_profile.png');
+export const POLICY= require('./policy.png');
+export const VERSION= require('./version.png');
+export const LOGO_PROFILE= require('./logo_profile.png');
+export const CAMERA_PROFILE= require('./camera_profile.png');
+
+
+
+
+
+

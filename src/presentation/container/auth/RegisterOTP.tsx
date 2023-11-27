@@ -88,7 +88,7 @@ const _styles = StyleSheet.create({
   },
   bottom: {
     position: 'absolute',
-    top: DimensionsStyle.height * 0.84,
+    top: DimensionsStyle.height * 0.70,
     alignSelf: 'center'
   },
   time: {
@@ -117,6 +117,7 @@ const _styles = StyleSheet.create({
     height: DimensionsStyle.width * 0.19,
     backgroundColor:Colors.GRAY_SEARCH,
     borderRadius: 10,
+    borderWidth:2
 },
 underlineStyleHighLighted: {
     borderColor:Colors.BLUE,

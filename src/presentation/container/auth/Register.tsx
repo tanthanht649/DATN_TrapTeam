@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { WelcomeTeamStackParamList } from '@navigation';
-import { BackgroundApp, Button, Header, Input,TextPlus } from '@components';
+import { BackgroundApp, Button, Header, Input, TextPlus } from '@components';
 import { BACKGROUND_WHITE, EMAIL, EMAIL_LOGIN, FULL_NAME, ICON_BACK, LOCK, fontFamily } from '@assets';
 import { Colors, DimensionsStyle } from '@resources';
 
@@ -35,20 +35,26 @@ const _Register: React.FC<PropsType> = props => {
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView style={_styles.container}>
-      <Header
+        <Header
           iconLeft={ICON_BACK}
-          styleIconLeft={{marginLeft:-DimensionsStyle.width*0.06}}
-          eventLeft={() => {navigation.goBack()}}
+          styleIconLeft={{ marginLeft: -DimensionsStyle.width * 0.06 }}
+          eventLeft={() => { navigation.goBack() }}
         />
-      <TextPlus text='Tạo tài khoản của bạn'
+        <TextPlus text='Tạo tài khoản của bạn'
           textBolds={['tài khoản']}
           boldStyle={_styles.textBold}
           textStyle={_styles.text} />
+        <View style={_styles.row}>
+          <Text style={[_styles.text, { fontSize: 12, marginLeft: 0, marginTop: 0 }]}>Đăng kí và tạo tài khoản bằng cách nhấn vào nút </Text>
+         
+            <Text style={[_styles.textBold, { fontSize: 12 }]}>"Đăng kí"</Text>
+         
+        </View>
         <Input
           imageIconLeft={FULL_NAME}
           imageIconRight={EMAIL_LOGIN}
           iconLeftStyle={{ height: 20, width: 20 }}
-          label='FullName'
+          label='Họ và tên'
           iconRightStyle={{ opacity: 0 }}
           value={fullName}
           onChangeText={handleOnchangeFullName}
@@ -62,7 +68,7 @@ const _Register: React.FC<PropsType> = props => {
           value={email}
           onChangeText={handleOnchangeEmail}
           viewStyle={{ width: 327, alignSelf: 'center', marginTop: DimensionsStyle.height * 0.025 }} ></Input>
-        <Input
+        {/* <Input
           imageIconLeft={LOCK}
           imageIconRight={EMAIL_LOGIN}
           label='Mật khẩu'
@@ -78,7 +84,7 @@ const _Register: React.FC<PropsType> = props => {
           <Pressable onPress={managePasswordVisibility}>
             <Text style={_styles.textRow}>{show}</Text>
           </Pressable>
-        </View>
+        </View> */}
       </SafeAreaView>
       <View style={_styles.bottom}>
         <Button title='Đăng kí'
@@ -122,6 +128,10 @@ const _styles = StyleSheet.create({
     top: DimensionsStyle.height * 0.61,
     alignSelf: 'center'
   },
+  row:{
+    flexDirection:'row',
+    alignItems:'center'
+  }
 });
 
 export const Register = React.memo(_Register);

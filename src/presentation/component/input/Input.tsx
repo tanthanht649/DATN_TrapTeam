@@ -67,7 +67,7 @@ const _Input: React.FC<Props> = props => {
               fontFamily:
                 value.length == 0 ? fontFamily.Regular : fontFamily.Bold,
               color: value.length == 0 ? Colors.GRAY : Colors.GREY_DARK,
-              fontSize: value.length == 0 ? 16 : 18,
+              fontSize: value.length == 0 ? 12 : 14,
             },
           ]}
           onChangeText={onChangeText}></TextInput>
@@ -93,7 +93,7 @@ const _Input: React.FC<Props> = props => {
               fontFamily:
                 value.length == 0 ? fontFamily.Regular : fontFamily.Bold,
               color: value.length == 0 ? Colors.GRAY : Colors.GREY_DARK,
-              fontSize: value.length == 0 ? 16 : 18,
+              fontSize: value.length == 0 ? 12 : 14,
             },
           ]}
           onChangeText={onChangeText}
@@ -116,7 +116,7 @@ const _styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 10,
-    backgroundColor: Colors.GRAY_SEARCH,
+    backgroundColor: Colors.GREY_SOFT,
     marginHorizontal: 20,
     paddingHorizontal: 20,
   },
