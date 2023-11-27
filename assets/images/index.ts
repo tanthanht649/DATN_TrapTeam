@@ -96,12 +96,29 @@ export const BOGOC = require('./bogoc.png');
 export const VECTOR = require('./vector.png');
 export const APARTMENT = require('./apartment.png');
 export const TOWER = require('./tower.png');
-
-
+export const ONBOARDING_1 = require('./onboarding_1.png');
+export const ONBOARDING_2 = require('./onboarding_2.png');
+export const ONBOARDING_3 = require('./onboarding_3.png');
+export const LINE_ONBOARDING = require('./line_onboarding.png');
+export const IMAGE_FEATURED_LIST = require('./image_featured_list.png');
+export const IMAGE_FEATURED_LIST_2 = require('./image_featured_list_2.png');
+export const IMAGE_FEATURED_LIST_3 = require('./image_featured_list_3.png');
+export const SETTING_BG = require('./setting_bg.png');
+export const IMAGE_LOGIN_1 = require('./image_login_1.png');
+export const IMAGE_LOGIN_2 = require('./image_login_2.png');
+export const IMAGE_LOGIN_3 = require('./image_login_3.png');
+export const IMAGE_LOGIN_4 = require('./image_login_4.png');
+export const HEART_PROFILE = require('./heart_profile.png');
+export const HISTORY = require('./history.png');
+export const LOG_OUT = require('./log_out.png');
+export const BLOG_PROFILE = require('./blog_profile.png');
+export const POLICY = require('./policy.png');
+export const VERSION = require('./version.png');
+export const LOGO_PROFILE = require('./logo_profile.png');
+export const CAMERA_PROFILE = require('./camera_profile.png');
 export const AVT_HOME = require('./avt-home.png');
 export const LOGO_HOME = require('./logo-home.png');
 export const MOMO = require('./momo.png');
 export const ZALO_PAY = require('./zalopay.png');
 export const VIETTEL_PAY = require('./viettelpay.png');
-
-
+export const EMAIL_LOGIN = require('./email_login.png');
