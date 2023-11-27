@@ -20,6 +20,7 @@ import {
   FeaturedListDetail,
   Rule,
   Version,
+  HomeFull,
 } from '@containers';
 
 type WelcomeTeamProps = {};
@@ -38,7 +39,8 @@ type RegisterOTPProps = {};
 type FeaturedListHomeProps = {};
 type FeaturedListDetailProps = {};
 type RuleProps = {};
- type VersionProps = {};
+type VersionProps = {};
+type HomeFullProps = {};
 
 export type WelcomeTeamStackParamList = {
   WelcomeTeam: WelcomeTeamProps | undefined;
@@ -58,7 +60,7 @@ export type WelcomeTeamStackParamList = {
   FeaturedListDetail: FeaturedListDetailProps | undefined;
   Rule: RuleProps | undefined;
   Version: VersionProps | undefined;
-
+  HomeFull: HomeFullProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
@@ -67,7 +69,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Rule"
+        initialRouteName="Version"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
@@ -92,11 +94,11 @@ const _StackTest = () => {
         <Stack.Screen name="Rule" component={Rule} />
         <Stack.Screen name="Version" component={Version} />
 
-
         <Stack.Screen
           name="FeaturedListDetail"
           component={FeaturedListDetail}
         />
+        <Stack.Screen name="HomeFull" component={HomeFull} />
       </Stack.Navigator>
     </NavigationContainer>
   );
