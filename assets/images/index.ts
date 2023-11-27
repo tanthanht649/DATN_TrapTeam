@@ -121,7 +121,9 @@ export const LOGO_HOME = require('./logo-home.png');
 export const LOGO_RULE = require('./logo_rule.png');
 export const LOGO_VERSION = require('./logo_version.png');
 export const LINE= require('./line.png');
-
+export const LINE_BLOG= require('./line_blog.png');
+export const ADD_BLOG= require('./add_blog.png');
+export const ADD_IMAGE= require('./add_image.png');
 
 export const MOMO = require('./momo.png');
 export const ZALO_PAY = require('./zalopay.png');

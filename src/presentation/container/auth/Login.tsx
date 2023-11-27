@@ -64,16 +64,14 @@ const _Login: React.FC<PropsType> = props => {
           textModal='Đăng nhập thành công'
           titleButtonModal='Hoàn tất'
           contentModal='cảm ơn bạn'
-          showmodal={true}
+          showmodal={false}
           title="Tiếp tục với email"
           imageIconLeft={EMAIL}
           imageIconRight={EMAIL}
           onPress={() => {
-            // navigation.navigate('EditProfile')         
+            navigation.navigate('EditProfile')         
           }}
-          onPressModal={() => {
-            navigation.navigate('EditProfile')
-          }}
+        
           viewStyle={{
             width: 278,
             marginTop: DimensionsStyle.height * 0.13,
