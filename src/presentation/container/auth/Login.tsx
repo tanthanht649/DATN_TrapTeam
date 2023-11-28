@@ -72,7 +72,7 @@ const _Login: React.FC<PropsType> = props => {
           }}
           viewIconLeft={{display: 'flex'}}
         />
-        <View style={_styles.row}>
+        {/* <View style={_styles.row}>
           <Text
             style={[_styles.text, {fontSize: 12, marginLeft: 0, marginTop: 0}]}>
             Bạn chưa có tài khoản?
@@ -83,7 +83,7 @@ const _Login: React.FC<PropsType> = props => {
             }}>
             <Text style={[_styles.textBold, {fontSize: 12}]}> Đăng kí</Text>
           </Pressable>
-        </View>
+        </View> */}
       </View>
     </BackgroundApp>
   );
