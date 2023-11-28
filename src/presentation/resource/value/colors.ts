@@ -24,4 +24,7 @@ export const Colors = {
   GREEN_1: '#8BC83F',
   BG_ITEM_BANNER: '#A3CCE3',
   BLUE_TEXT_HOME: '#252B5C',
+  BLUE_DARK: '#1F4C6B',
+  GREEN_SOFT: 'rgba(163, 204, 227, 0.69)',
+  BLUE_SOFT: '#14C6BB0',
 };
