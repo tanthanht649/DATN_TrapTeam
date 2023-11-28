@@ -1,4 +1,4 @@
-import { ARROW_DOWN, EMAIL, LINE, fontFamily } from '@assets';
+import { ARROW_DOWN, CALENDAR_FILTER, EMAIL, LINE, fontFamily } from '@assets';
 import { Colors, DimensionsStyle } from '@resources';
 import React, { useState } from 'react';
 import {
@@ -15,9 +15,11 @@ import {
   ViewStyle,
   TouchableOpacity,
   FlatList,
-  TextInput
+  TextInput,
+  Platform
 } from 'react-native';
 import { Button } from '../button';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 type Props = {
   ModalStyle?: StyleProp<ViewStyle>;
@@ -142,13 +144,13 @@ const _Modal: React.FC<Props> = props => {
     item: ItemData;
     onPress: () => void;
     backgroundColor: string;
-    color:string
+    color: string
 
   };
 
   const Item = ({ item, onPress, backgroundColor, color }: ItemProps) => (
     <TouchableOpacity onPress={onPress} style={[_styles.category, { backgroundColor }]}>
-      <Text style={[_styles.text, { color,fontSize:11 }]} >{item.title}</Text>
+      <Text style={[_styles.text, { color, fontSize: 11 }]} >{item.title}</Text>
     </TouchableOpacity>
   );
 
@@ -157,7 +159,7 @@ const _Modal: React.FC<Props> = props => {
 
   const renderItem = ({ item }: { item: ItemData }) => {
     const backgroundColor = item.title === selectedCategory ? Colors.BLUE : Colors.GRAY_SEARCH;
-    const color = item.title === selectedCategory ?  Colors.WHITE :  Colors.BLUE;
+    const color = item.title === selectedCategory ? Colors.WHITE : Colors.BLUE;
 
     return (
       <Item
@@ -168,7 +170,7 @@ const _Modal: React.FC<Props> = props => {
       />
     );
   };
-  console.log(selectedCategory)
+  console.log('====>category:'+selectedCategory)
 
 
   const [price, setPrice] = useState<string>('');
@@ -181,6 +183,22 @@ const _Modal: React.FC<Props> = props => {
     setHight(value);
     console.log(value)
   }
+
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  const handleDateChange = (event: any, date?: Date) => {
+    if (date) {
+      setSelectedDate(date);
+    }
+    setShowPicker(Platform.OS === 'ios');
+  };
+
+  const showDatePicker = () => {
+    setShowPicker(true);
+  };
+  const formattedDate = selectedDate.toLocaleDateString();
   return (
     <Modal
       animationType="slide"
@@ -246,7 +264,7 @@ const _Modal: React.FC<Props> = props => {
                     onRequestClose={() => {
                       setModalVisibleLocation(!modalVisibleCountry);
                     }}>
-                    <View style={[_styles.centeredViewLocation, { alignItems: 'flex-end', marginEnd: 34 }]}>
+                    <View style={_styles.centeredViewLocation}>
                       <View style={_styles.modalViewLocation}>
                         <ScrollView
                           showsVerticalScrollIndicator={false}>
@@ -260,62 +278,49 @@ const _Modal: React.FC<Props> = props => {
                 </View>
               </View>
               <Text style={_styles.textBold}>Loại</Text>
-                <FlatList
+              <FlatList
                 showsHorizontalScrollIndicator={false}
-                  horizontal
-                  data={DATA}
-                  renderItem={renderItem}
-                  keyExtractor={item => item.id}
-                  extraData={selectedCategory}
-                />
+                horizontal
+                data={DATA}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+                extraData={selectedCategory}
+              />
               <Text style={_styles.textBold}>Giá thấp nhất</Text>
               <View
-                  style={_styles.input}>                 
-                  <TextInput  value={price} onChangeText={handleOnchangePrice} style={[_styles.text,{marginVertical:5,fontSize:15,textAlign:'left',width:'85%'}]} placeholder='Giá thấp nhất' ></TextInput>                 
-                  <Pressable onPress={() => {}}>
-                  <Text style={[_styles.text,{fontSize:13,}]}>VND</Text>
-                  </Pressable>
-                </View>
+                style={_styles.input}>
+                <TextInput value={price} onChangeText={handleOnchangePrice} style={[_styles.text, { marginVertical: 5, fontSize: 15, textAlign: 'left', width: '85%' }]} placeholder='Giá thấp nhất' ></TextInput>
+                <Pressable onPress={() => { }}>
+                  <Text style={[_styles.text, { fontSize: 13, }]}>VND</Text>
+                </Pressable>
+              </View>
               <Text style={_styles.textBold}>Giá cao nhất</Text>
               <View
-                  style={_styles.input}>                 
-                  <TextInput  value={hight} onChangeText={handleOnchangeHight} style={[_styles.text,{marginVertical:5,fontSize:15,textAlign:'left',width:'85%'}]} placeholder='Giá cao nhất' ></TextInput>                 
-                  <Pressable onPress={() => {}}>
-                  <Text style={[_styles.text,{fontSize:13,}]}>VND</Text>
-                  </Pressable>
-                </View>
+                style={_styles.input}>
+                <TextInput value={hight} onChangeText={handleOnchangeHight} style={[_styles.text, { marginVertical: 5, fontSize: 15, textAlign: 'left', width: '85%' }]} placeholder='Giá cao nhất' ></TextInput>
+                <Pressable onPress={() => { }}>
+                  <Text style={[_styles.text, { fontSize: 13, }]}>VND</Text>
+                </Pressable>
+              </View>
               <Text style={_styles.textBold}>Ngày khởi hành</Text>
 
-              
-              <View
-                  style={_styles.container}>
-                  <Pressable onPress={() => setModalVisibleLocation(true)}>
-                    <Image
-                      source={ARROW_DOWN}
-                      style={_styles.iconLeft}
-                    />
-                  </Pressable>
-                  <Text >{location}</Text>
-                  <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisibleLocation}
-                    onRequestClose={() => {
-                      setModalVisibleLocation(!modalVisibleLocation);
-                    }}>
-                    <View style={_styles.centeredViewLocation}>
-                      <View style={_styles.modalViewLocation}>
-                        <ScrollView
-                          showsVerticalScrollIndicator={false}>
-                          {dataLocation.map((item: ItemLocation) => (
-                            <ItemDay item={item} key={item.id} onPress={() => handleSelectLocation(item)} />
-                          ))}
-                        </ScrollView>
-                      </View>
-                    </View>
-                  </Modal>
-                </View>
-
+              <View style={_styles.input}>
+                <Text style={[_styles.text, { marginVertical: 5, fontSize: 15, textAlign: 'left', width: '85%' }]}  >{formattedDate}</Text>
+                {showPicker && (
+                  <DateTimePicker
+                    value={selectedDate}
+                    mode="date"
+                    display="default"
+                    onChange={handleDateChange}
+                  />
+                )}
+                <Pressable onPress={showDatePicker}>
+                  <Image
+                    source={CALENDAR_FILTER}
+                    style={_styles.iconLeft}
+                  />
+                </Pressable>
+              </View>
 
             </ScrollView>
           </View>
@@ -350,7 +355,7 @@ const _styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     marginTop: 22,
-   
+
   },
   modalView: {
     width: Dimensions.get('window').width * 1,
@@ -366,23 +371,25 @@ const _styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    
+
   },
   centeredViewLocation: {
     flex: 1,
-    justifyContent: 'flex-end',
-    marginStart: 34,
-    marginBottom: 20
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop:100
   },
-  scroll:{
-    marginBottom:110
+  scroll: {
+    marginBottom: 110
   },
   modalViewLocation: {
     width: Dimensions.get('window').width * 0.38,
     height: Dimensions.get('window').height * 0.25,
+    borderColor:Colors.GREEN,
+    borderWidth:1,
     backgroundColor: Colors.GRAY_SEARCH,
     borderRadius: 10,
-    paddingVertical: 10
+    padding: 10
     // alignItems:'center',
     // justifyContent:'center'
     // padding: 30,
@@ -405,11 +412,11 @@ const _styles = StyleSheet.create({
 
   },
   text: {
-    textAlign:'center',
+    textAlign: 'center',
     fontSize: 15,
     fontFamily: fontFamily.Bold,
     color: Colors.BLUE,
-    marginVertical:10,
+    marginVertical: 10,
 
   },
   line: {
@@ -419,7 +426,7 @@ const _styles = StyleSheet.create({
   }
   ,
   container: {
-    marginTop:15,
+    marginTop: 15,
 
     height: 70,
     width: Dimensions.get('window').width * 0.4,
@@ -430,27 +437,27 @@ const _styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   input: {
-    marginTop:15,
+    marginTop: 15,
     height: 70,
     width: Dimensions.get('window').width * 0.84,
     flexDirection: 'row',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 20,
     backgroundColor: Colors.GRAY_SEARCH,
     paddingHorizontal: 20,
   },
   category: {
-    marginTop:15,
+    marginTop: 15,
     height: 47,
     width: Dimensions.get('window').width * 0.23,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
     borderRadius: 20,
     backgroundColor: Colors.GRAY_SEARCH,
     paddingHorizontal: 20,
-    marginRight:30
+    marginRight: 30
   },
   row: {
     flexDirection: 'row',
