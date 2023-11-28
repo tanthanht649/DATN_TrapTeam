@@ -16,10 +16,12 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
+import {AppContext} from '@shared-state';
 
 type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Login'>;
 const _Login: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const {isLoggedIn, setLoggedIn} = React.useContext(AppContext);
   const [email, setEmail] = useState<string>('');
   const handleOnchangeEmail = (value: string) => {
     setEmail(value);
@@ -64,7 +66,7 @@ const _Login: React.FC<PropsType> = props => {
           imageIconLeft={EMAIL}
           imageIconRight={EMAIL}
           onPress={() => {
-            navigation.navigate('Login');
+            setLoggedIn(true);
           }}
           viewStyle={{
             width: 278,
