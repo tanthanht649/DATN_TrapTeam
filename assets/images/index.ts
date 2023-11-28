@@ -129,3 +129,7 @@ export const ICON_CALENDAR = require('./icon_calendar.png');
 export const ICON_CLOCK = require('./icon_clock.png');
 export const ICON_USER = require('./icon_user.png');
 export const ICON_LOCATION_HISTORY = require('./icon_location_history.png');
+export const ADD_BLOG = require('./add_blog.png');
+export const LINE_BLOG = require('./line_blog.png');
+export const ADD_IMAGE = require('./add_image.png');
+export const LINE = require('./line.png');

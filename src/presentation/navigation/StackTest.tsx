@@ -22,6 +22,8 @@ import {
   Version,
   HomeFull,
   HistoryDetail,
+  Blogs,
+  CreateBlog,
 } from '@containers';
 
 type WelcomeTeamProps = {};
@@ -43,6 +45,8 @@ type RuleProps = {};
 type VersionProps = {};
 type HomeFullProps = {};
 type HistoryDetailProps = {};
+type BlogsProps = {};
+type CreateBlogProps = {};
 
 export type WelcomeTeamStackParamList = {
   WelcomeTeam: WelcomeTeamProps | undefined;
@@ -64,6 +68,8 @@ export type WelcomeTeamStackParamList = {
   Version: VersionProps | undefined;
   HomeFull: HomeFullProps | undefined;
   HistoryDetail: HistoryDetailProps | undefined;
+  Blogs: BlogsProps | undefined;
+  CreateBlog: CreateBlogProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
@@ -72,7 +78,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="HistoryDetail"
+        initialRouteName="CreateBlog"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
@@ -102,6 +108,8 @@ const _StackTest = () => {
         />
         <Stack.Screen name="HomeFull" component={HomeFull} />
         <Stack.Screen name="HistoryDetail" component={HistoryDetail} />
+        <Stack.Screen name="Blogs" component={Blogs} />
+        <Stack.Screen name="CreateBlog" component={CreateBlog} />
       </Stack.Navigator>
     </NavigationContainer>
   );
