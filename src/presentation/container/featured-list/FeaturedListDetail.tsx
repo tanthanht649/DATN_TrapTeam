@@ -51,6 +51,7 @@ const _FeaturedListDetail = () => {
           eventRight={() => console.log('EventRight')}
           isCheck={true}
           styleView={_styles.viewHeder}
+          styleIconRight={{display: 'none'}}
         />
         <View style={_styles.containetTextCenter}>
           <Text style={_styles.textCenterTop}>Bali</Text>
@@ -58,22 +59,7 @@ const _FeaturedListDetail = () => {
             Our recommended real estates in Jakarta
           </Text>
         </View>
-        <View>
-          <Input
-            imageIconLeft={FIND}
-            imageIconRight={FIND}
-            iconLeftStyle={{display: 'none'}}
-            label="Modern House"
-            iconRightStyle={{height: 25, width: 25, opacity: 1}}
-            value={searchName}
-            onChangeText={text => setSearchName(text)}
-            viewStyle={{
-              borderRadius: 20,
-              backgroundColor: Colors.GRAY,
-            }}
-            hidePassword={false}
-          />
-        </View>
+
         <View>
           <ViewSwitcher quantityEstates={22} onTabChange={setListViewType} />
         </View>

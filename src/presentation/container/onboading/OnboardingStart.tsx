@@ -37,7 +37,7 @@ const _OnboardingStart: React.FC<PropsType> = props => {
           <Text
             style={[
               _styles.textCenter,
-              {fontSize: 12, fontFamily: fontFamily.Thin},
+              {fontSize: 12, fontFamily: fontFamily.Medium},
             ]}>
             Phiên bản
           </Text>
