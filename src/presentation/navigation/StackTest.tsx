@@ -21,6 +21,7 @@ import {
   Rule,
   Version,
   HomeFull,
+  HistoryDetail,
 } from '@containers';
 
 type WelcomeTeamProps = {};
@@ -41,6 +42,7 @@ type FeaturedListDetailProps = {};
 type RuleProps = {};
 type VersionProps = {};
 type HomeFullProps = {};
+type HistoryDetailProps = {};
 
 export type WelcomeTeamStackParamList = {
   WelcomeTeam: WelcomeTeamProps | undefined;
@@ -61,6 +63,7 @@ export type WelcomeTeamStackParamList = {
   Rule: RuleProps | undefined;
   Version: VersionProps | undefined;
   HomeFull: HomeFullProps | undefined;
+  HistoryDetail: HistoryDetailProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
@@ -69,7 +72,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="HomeFull"
+        initialRouteName="HistoryDetail"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
@@ -98,6 +101,7 @@ const _StackTest = () => {
           component={FeaturedListDetail}
         />
         <Stack.Screen name="HomeFull" component={HomeFull} />
+        <Stack.Screen name="HistoryDetail" component={HistoryDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

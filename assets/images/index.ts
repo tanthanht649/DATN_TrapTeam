@@ -121,8 +121,11 @@ export const LOGO_HOME = require('./logo-home.png');
 export const LOGO_RULE = require('./logo_rule.png');
 export const LOGO_VERSION = require('./logo_version.png');
 
-
 export const MOMO = require('./momo.png');
 export const ZALO_PAY = require('./zalopay.png');
 export const VIETTEL_PAY = require('./viettelpay.png');
 export const EMAIL_LOGIN = require('./email_login.png');
+export const ICON_CALENDAR = require('./icon_calendar.png');
+export const ICON_CLOCK = require('./icon_clock.png');
+export const ICON_USER = require('./icon_user.png');
+export const ICON_LOCATION_HISTORY = require('./icon_location_history.png');
