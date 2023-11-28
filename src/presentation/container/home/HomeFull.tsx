@@ -40,9 +40,14 @@ import {
 } from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {
+  HomeStackParamList,
+  OnboardingLoginStackParamList,
+  WelcomeTeamStackParamList,
+} from '@navigation';
 
-type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'HomeFull'>;
+type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'HomeFull'> &
+  NativeStackScreenProps<HomeStackParamList, 'HomeFull'>;
 
 //Banner
 interface Banner {
@@ -543,6 +548,10 @@ const _HomeFull: React.FC<PropsType> = props => {
   const [isCheck, setIsCheck] = React.useState<
     'card' | 'home' | 'review' | 'homefavorite'
   >('home');
+
+  const a = () => {
+    navigation.navigate('Rule');
+  };
 
   useEffect(() => {
     isFavorite ? setIsCheck('homefavorite') : setIsCheck('home');

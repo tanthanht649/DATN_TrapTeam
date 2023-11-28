@@ -5,9 +5,13 @@ import {LOGO_APP, SPLASH_SCREEN, fontFamily} from '@assets';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Colors, DimensionsStyle} from '@resources';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
-type PropsType = NativeStackScreenProps<
+import {
+  OnboardingLoginStackParamList,
   WelcomeTeamStackParamList,
+} from '@navigation';
+
+type PropsType = NativeStackScreenProps<
+  OnboardingLoginStackParamList,
   'OnboardingStart'
 >;
 

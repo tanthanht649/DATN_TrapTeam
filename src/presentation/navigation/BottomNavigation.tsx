@@ -4,6 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 import {StackTest} from './StackTest';
+import {HomeStack} from './HomeStack';
 import {
   BOTTOM_BLOGS_ACTIVE,
   BOTTOM_BLOGS_INACTIVE,
@@ -116,7 +117,7 @@ const _BottomNavigation = () => {
       />
       <Tab.Screen
         name="Profiles"
-        component={StackTest}
+        component={HomeStack}
         options={{
           tabBarLabel: '.',
         }}
