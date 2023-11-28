@@ -157,3 +157,4 @@ export const CALENDAR_FILTER = require('../../assets/images/calendar_filter.png'
 export const SHAPE_1 = require('./Shade.jpg');
 export const SHAPE_2 = require('./Shade_2.jpg');
 export const SHAPE_3 = require('./Shade_3.jpg');
+export const D_B = require('./d_b.png');

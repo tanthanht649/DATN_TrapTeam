@@ -25,6 +25,7 @@ import {
   Blogs,
   CreateBlog,
   FavoriteEmpty,
+  ListTourBanner,
 } from '@containers';
 
 type WelcomeTeamProps = {};
@@ -49,6 +50,7 @@ type HistoryDetailProps = {};
 type BlogsProps = {};
 type CreateBlogProps = {};
 type FavoriteEmptyProps = {};
+type ListTourBannerProps = {};
 
 export type WelcomeTeamStackParamList = {
   WelcomeTeam: WelcomeTeamProps | undefined;
@@ -73,6 +75,7 @@ export type WelcomeTeamStackParamList = {
   Blogs: BlogsProps | undefined;
   CreateBlog: CreateBlogProps | undefined;
   FavoriteEmpty: FavoriteEmptyProps | undefined;
+  ListTourBanner: ListTourBannerProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
@@ -80,7 +83,7 @@ const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
 const _StackTest = () => {
   return (
     <Stack.Navigator
-      initialRouteName="FavoriteEmpty"
+      initialRouteName="ListTourBanner"
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',
@@ -110,6 +113,7 @@ const _StackTest = () => {
       <Stack.Screen name="Blogs" component={Blogs} />
       <Stack.Screen name="CreateBlog" component={CreateBlog} />
       <Stack.Screen name="FavoriteEmpty" component={FavoriteEmpty} />
+      <Stack.Screen name="ListTourBanner" component={ListTourBanner} />
     </Stack.Navigator>
   );
 };
