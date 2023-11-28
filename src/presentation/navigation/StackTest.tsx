@@ -77,7 +77,7 @@ const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
 const _StackTest = () => {
   return (
     <Stack.Navigator
-      initialRouteName="FeaturedListDetail"
+      initialRouteName="Version"
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',

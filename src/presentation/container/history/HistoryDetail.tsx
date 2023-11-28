@@ -344,6 +344,7 @@ const ItemHistory = ({item}: {item: Item}) => {
               width: '100%',
               height: 40,
             }}
+            textStyle={{fontSize: 12}}
           />
         </View>
       </View>
