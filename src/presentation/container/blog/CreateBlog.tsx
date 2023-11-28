@@ -69,8 +69,8 @@ const _CreateBlog: React.FC<PropsType> = props => {
         text="Đăng bài thành công"
         textBold="thành công"
         titleButton="Xem bài biết"></ModalSuccessful> */}
-      {/* <ModalPayment visible={modalVisible} onPress={handleModal}></ModalPayment> */}
-      <ModalFilter visible={modalVisible} onPress={handleModal}  ></ModalFilter>
+      {/* <ModalPayment visible={modalVisible} onPress={handleModal} Cancel={()=>{setModalVisible(false)}}></ModalPayment> */}
+      <ModalFilter visible={modalVisible} onPress={handleModal} Cancel={()=>{setModalVisible(false)}} ></ModalFilter>
     </BackgroundApp>
   );
 };

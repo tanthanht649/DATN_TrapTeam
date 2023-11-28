@@ -18,10 +18,12 @@ import { Button } from '../button';
 type Props = {
   visible?: boolean;
   onPress: () => void;
+  Cancel: () => void;
+
 };
 
 const _Modal: React.FC<Props> = props => {
-  const { onPress, visible } = props;
+  const { onPress, visible ,Cancel} = props;
   type ItemData = {
     id: string;
     image: ImageSourcePropType,
@@ -65,6 +67,7 @@ const _Modal: React.FC<Props> = props => {
   const [selected, setSelectedId] = useState<string>();
 
 
+
   const renderItem = ({ item }: { item: ItemData }) => {
     const borderColor = item.title === selected? Colors.GREEN : Colors.WHITE;
     const borderWith = item.title=== selected? 4 : 1;
@@ -106,17 +109,31 @@ const _Modal: React.FC<Props> = props => {
               extraData={selected}
             />
           </View>
+          <View style={_styles.row}>
           <Button
             title="Thay đổi"
             imageIconLeft={EMAIL}
             imageIconRight={EMAIL}
             onPress={onPress}
             viewStyle={{
-              width: 278,
-              position: 'absolute',
-              bottom: 70
+              width: '40%',
+              
+             
             }}
           />
+          <Button
+            title="Hủy"
+            imageIconLeft={EMAIL}
+            imageIconRight={EMAIL}
+            onPress={Cancel}
+            viewStyle={{
+              width: '40%',
+              
+              // bottom: 70
+            }}
+          />
+          </View>
+          
         </View>
       </View>
 
@@ -173,6 +190,14 @@ const _styles = StyleSheet.create({
     height: 2,
     width: 50,
     alignSelf: 'center'
+  },
+  row:{
+    flexDirection:'row',
+    justifyContent:'space-around',
+     bottom: 70,
+     width: '100%',
+     position: 'absolute',
+
   }
 });
 
