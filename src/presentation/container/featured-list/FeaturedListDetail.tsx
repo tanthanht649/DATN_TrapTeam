@@ -1,5 +1,5 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {Animated, Image, StyleSheet, Text, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BackgroundApp, Header, Input, ViewSwitcher} from '@components';
 import {
@@ -8,12 +8,14 @@ import {
   EMAIL_LOGIN,
   FIND,
   FTL_1,
+  HEART,
   HEART_ACTIVE,
   HEART_INACTIVE,
   ICON_BACK,
   IMAGE_FEATURED_LIST,
   IMAGE_FEATURED_LIST_2,
   IMAGE_FEATURED_LIST_3,
+  LOCATION,
   ONBOARDING_1,
   SETTING,
   SETTING_BG,
@@ -24,11 +26,135 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
+import {Tour} from '../home';
+import {ItemTourOutstanding} from '../home';
+import {DATATOUROUTSTANDING, DATATOUR} from '../home';
 
 const _FeaturedListDetail = () => {
   const [hideElement, setHideElement] = useState(false);
   const [searchName, setSearchName] = useState('');
-  const [listViewType, setListViewType] = useState<'list' | 'grid'>('list');
+  const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
+
+  const [isLayout, setIsLayout] = useState(false);
+  const [column, setColumn] = useState(2);
+
+  useEffect(() => {
+    listViewType === 'grid' ? setIsLayout(true) : setIsLayout(false);
+    listViewType === 'grid' ? setColumn(2) : setColumn(1);
+  }, [listViewType]);
+
+  const ItemTourFavorite = ({item}: {item: Tour}) => {
+    return (
+      <View
+        style={{
+          width: '100%',
+          height: DimensionsStyle.width * 0.35,
+          flexDirection: 'row',
+          marginEnd: 15,
+          backgroundColor: Colors.SOFT_BLUE,
+          borderRadius: 20,
+          overflow: 'hidden',
+          marginBottom: 10,
+        }}>
+        <View
+          style={{
+            width: '50%',
+            padding: 7,
+          }}>
+          <Image
+            source={{uri: item.image}}
+            style={{
+              width: '100%',
+              height: '100%',
+              resizeMode: 'stretch',
+              borderRadius: 20,
+            }}
+          />
+
+          <Image
+            source={HEART}
+            style={{
+              width: 30,
+              height: 30,
+              resizeMode: 'stretch',
+              position: 'absolute',
+              top: 15,
+              left: 15,
+            }}
+          />
+        </View>
+        <View
+          style={{
+            width: '50%',
+            padding: 20,
+            paddingStart: 5,
+            paddingEnd: 15,
+          }}>
+          <Text
+            numberOfLines={2}
+            style={{
+              fontSize: 16,
+              fontFamily: fontFamily.Bold,
+              lineHeight: 18,
+              color: Colors.BLUE_TEXT_HOME,
+            }}>
+            {item.name}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: 11,
+            }}>
+            <Image
+              source={LOCATION}
+              style={{width: 12, height: 12, marginEnd: 2}}
+            />
+            <Text
+              numberOfLines={1}
+              style={{
+                fontSize: 10,
+                fontFamily: fontFamily.Medium,
+              }}>
+              {item.departure_location}
+            </Text>
+          </View>
+          <Text
+            numberOfLines={1}
+            style={{
+              color: Colors.RED,
+              position: 'absolute',
+              bottom: 20,
+              left: 10,
+              fontSize: 17,
+            }}>
+            {item.price.toLocaleString('vi-VN')} VNĐ
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderItemTourOutstanding = React.useMemo(
+    () =>
+      ({item}: {item: Tour}) => {
+        return <ItemTourOutstanding item={item} key={item.id} />;
+      },
+    [],
+  );
+
+  const renderItemTourFavorite = React.useMemo(
+    () =>
+      ({item}: {item: Tour}) => {
+        return <ItemTourFavorite item={item} key={item.id} />;
+      },
+    [],
+  );
+
+  const handleScroll = (event: any) => {
+    const offsetY = event.nativeEvent.contentOffset.y + 10;
+    setHideElement(offsetY > 20);
+  };
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -130,16 +256,19 @@ const _FeaturedListDetail = () => {
             </View>
           </View>
         )}
-        <Header
-          iconLeft={ICON_BACK}
-          iconRight={SETTING_BG}
-          iconHeart={HEART_INACTIVE}
-          eventLeft={() => console.log('IconLeft')}
-          eventRight={() => console.log('EventRight')}
-          isCheck={true}
-          styleView={_styles.viewHeder}
-          styleIconRight={{display: 'none'}}
-        />
+        {hideElement ? null : (
+          <Header
+            iconLeft={ICON_BACK}
+            iconRight={SETTING_BG}
+            iconHeart={HEART_INACTIVE}
+            eventLeft={() => console.log('IconLeft')}
+            eventRight={() => console.log('EventRight')}
+            isCheck={true}
+            styleView={_styles.viewHeder}
+            styleIconRight={{display: 'none'}}
+          />
+        )}
+
         <View style={_styles.containetTextCenter}>
           <Text style={_styles.textCenterTop}>Bali</Text>
           <Text style={_styles.textCenterBottom}>
@@ -150,6 +279,21 @@ const _FeaturedListDetail = () => {
         <View>
           <ViewSwitcher quantityEstates={22} onTabChange={setListViewType} />
         </View>
+
+        <View style={_styles.containerListFeatured}>
+          <Animated.FlatList
+            data={DATATOUROUTSTANDING}
+            renderItem={
+              isLayout ? renderItemTourOutstanding : renderItemTourFavorite
+            }
+            keyExtractor={item => item.id.toString()}
+            numColumns={column}
+            key={column}
+            style={{height: DimensionsStyle.height * 0.6}}
+            showsVerticalScrollIndicator={false}
+            onScroll={handleScroll}
+          />
+        </View>
       </SafeAreaView>
     </BackgroundApp>
   );
@@ -158,7 +302,12 @@ const _FeaturedListDetail = () => {
 const _styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: DimensionsStyle.width * 0.69,
+    paddingBottom: DimensionsStyle.width * 0.4,
+  },
+
+  containerListFeatured: {
+    marginHorizontal: 20,
+    alignSelf: 'center',
   },
 
   viewHeder: {

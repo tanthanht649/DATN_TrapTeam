@@ -151,3 +151,6 @@ export const DL = require('./dl.jpeg');
 export const VHL_FL_1 = require('./vhl_fl_1.png');
 export const VHL_FL_2 = require('./vhl_fl_2.png');
 export const VHL_FL_3 = require('./vhl_fl_3.png');
+
+export const ARROW_DOWN = require('../../assets/images/arrow_down.png');
+export const CALENDAR_FILTER = require('../../assets/images/calendar_filter.png');
