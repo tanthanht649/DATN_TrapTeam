@@ -21,6 +21,7 @@ type Props = {
 };
 
 const _Modal: React.FC<Props> = props => {
+  const { onPress, visible } = props;
   type ItemData = {
     id: string;
     image: ImageSourcePropType,
@@ -60,7 +61,7 @@ const _Modal: React.FC<Props> = props => {
       <Image source={item.image}></Image>
     </TouchableOpacity>
   );
-  const { onPress, visible } = props;
+  
   const [selected, setSelectedId] = useState<string>();
 
 
