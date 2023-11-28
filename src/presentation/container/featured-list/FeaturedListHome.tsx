@@ -25,151 +25,139 @@ import {
   IMAGE_FEATURED_LIST,
   IMAGE_FEATURED_LIST_2,
   IMAGE_FEATURED_LIST_3,
+  IMG_FL_1,
+  IMG_FL_2,
+  IMG_FL_3,
   LOCATION,
   SETTING,
   START_SMALL,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-
-interface Estates {
-  id: string;
-  name: string;
-  address: string;
-  price: number;
-  images: ImageSourcePropType[];
-  description: string;
-  isFavorite: boolean;
-  star?: number;
-}
-
-const DATA_ESTATES: Estates[] = [
-  {
-    id: '1',
-    name: 'Sky Dandelions Apartment',
-    address: 'Address 1',
-    price: 250,
-    images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
-    description: 'Description 1',
-    isFavorite: false,
-    star: 4.9,
-  },
-  {
-    id: '2',
-    name: 'The laurels Villa',
-    address: 'Address 2',
-    price: 300,
-    images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
-    description: 'Description 2',
-    isFavorite: true,
-    star: 4.9,
-  },
-  {
-    id: '3',
-    name: 'The laurels Villa',
-    address: 'Address 3',
-    price: 400,
-    images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
-    description: 'Description 3',
-    isFavorite: false,
-    star: 4.9,
-  },
-  {
-    id: '4',
-    name: 'The laurels Villa',
-    address: 'Address 2',
-    price: 300,
-    images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
-    description: 'Description 2',
-    isFavorite: true,
-    star: 4.9,
-  },
-  {
-    id: '5',
-    name: 'The laurels Villa',
-    address: 'Address 3',
-    price: 400,
-    images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
-    description: 'Description 3',
-    isFavorite: false,
-    star: 4.9,
-  },
-  {
-    id: '6',
-    name: 'The laurels Villa',
-    address: 'Address 3',
-    price: 400,
-    images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
-    description: 'Description 3',
-    isFavorite: false,
-    star: 4.9,
-  },
-  {
-    id: '7',
-    name: 'The laurels Villa',
-    address: 'Address 3',
-    price: 400,
-    images: [IMAGE_FEATURED_LIST, IMAGE_FEATURED_LIST_2, IMAGE_FEATURED_LIST_3],
-    description: 'Description 3',
-    isFavorite: false,
-    star: 4.9,
-  },
-];
-
-type ItemProps = {
-  item: Estates;
-  onPress: () => void;
-};
-
-const ItemEstates = ({item, onPress}: ItemProps) => (
-  <View style={_styles.containerItem}>
-    <Image style={_styles.imageEstates} source={item.images[0]} />
-    <Text style={[_styles.nameEstates, {marginVertical: 7, marginStart: 7}]}>
-      {item.name}
-    </Text>
-    <View style={[_styles.containerStarLocation, {marginStart: 7}]}>
-      <View
-        style={[
-          _styles.containerStarLocation,
-          {width: DimensionsStyle.width * 0.1},
-        ]}>
-        <Image source={START_SMALL} style={_styles.imageStar} />
-        <Text style={_styles.textStart}>{item.star}</Text>
-      </View>
-      <View style={_styles.containerStarLocation}>
-        <Image source={LOCATION} style={_styles.imageStar} />
-        <Text style={[_styles.textStart, {fontFamily: fontFamily.Regular}]}>
-          {item.address}
-        </Text>
-      </View>
-    </View>
-    <Image
-      source={item.isFavorite ? HEART : FAVORITE}
-      style={_styles.imageHeart}
-    />
-  </View>
-);
+import {Tour} from '../home';
+import {ItemTourOutstanding} from '../home';
+import {DATATOUROUTSTANDING, DATATOUR} from '../home';
 
 const {height: screenHeight} = Dimensions.get('window');
 
 const _FeaturedListHome = () => {
   const [searchName, setSearchName] = useState('');
-  const [listViewType, setListViewType] = useState<'list' | 'grid'>('list');
+  const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
+
+  const [isLayout, setIsLayout] = useState(false);
+  const [column, setColumn] = useState(2);
+
+  useEffect(() => {
+    listViewType === 'grid' ? setIsLayout(true) : setIsLayout(false);
+    listViewType === 'grid' ? setColumn(2) : setColumn(1);
+  }, [listViewType]);
 
   const [hideElement, setHideElement] = useState(false);
 
-  const renderItem = useMemo(
-    () =>
-      ({item}: {item: Estates}) => {
-        return (
-          <ItemEstates
-            item={item}
-            onPress={() => {
-              console.log(item.name);
+  const ItemTourFavorite = ({item}: {item: Tour}) => {
+    return (
+      <View
+        style={{
+          width: '100%',
+          height: DimensionsStyle.width * 0.35,
+          flexDirection: 'row',
+          marginEnd: 15,
+          backgroundColor: Colors.SOFT_BLUE,
+          borderRadius: 20,
+          overflow: 'hidden',
+          marginBottom: 10,
+        }}>
+        <View
+          style={{
+            width: '50%',
+            padding: 7,
+          }}>
+          <Image
+            source={{uri: item.image}}
+            style={{
+              width: '100%',
+              height: '100%',
+              resizeMode: 'stretch',
+              borderRadius: 20,
             }}
-            key={item.id}
           />
-        );
+
+          <Image
+            source={HEART}
+            style={{
+              width: 30,
+              height: 30,
+              resizeMode: 'stretch',
+              position: 'absolute',
+              top: 15,
+              left: 15,
+            }}
+          />
+        </View>
+        <View
+          style={{
+            width: '50%',
+            padding: 20,
+            paddingStart: 5,
+            paddingEnd: 15,
+          }}>
+          <Text
+            numberOfLines={2}
+            style={{
+              fontSize: 16,
+              fontFamily: fontFamily.Bold,
+              lineHeight: 18,
+              color: Colors.BLUE_TEXT_HOME,
+            }}>
+            {item.name}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: 11,
+            }}>
+            <Image
+              source={LOCATION}
+              style={{width: 12, height: 12, marginEnd: 2}}
+            />
+            <Text
+              numberOfLines={1}
+              style={{
+                fontSize: 10,
+                fontFamily: fontFamily.Medium,
+              }}>
+              {item.departure_location}
+            </Text>
+          </View>
+          <Text
+            numberOfLines={1}
+            style={{
+              color: Colors.RED,
+              position: 'absolute',
+              bottom: 20,
+              left: 10,
+              fontSize: 17,
+            }}>
+            {item.price.toLocaleString('vi-VN')} VNĐ
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderItemTourOutstanding = React.useMemo(
+    () =>
+      ({item}: {item: Tour}) => {
+        return <ItemTourOutstanding item={item} key={item.id} />;
+      },
+    [],
+  );
+
+  const renderItemTourFavorite = React.useMemo(
+    () =>
+      ({item}: {item: Tour}) => {
+        return <ItemTourFavorite item={item} key={item.id} />;
       },
     [],
   );
@@ -185,7 +173,7 @@ const _FeaturedListHome = () => {
         <Header
           iconLeft={ICON_BACK}
           iconRight={SETTING}
-          styleIconRight={{width: 20, height: 20}}
+          styleIconRight={{width: 20, height: 20, display: 'none'}}
           iconHeart={HEART_INACTIVE}
           eventLeft={() => console.log('IconLeft')}
           eventRight={() => console.log('EventRight')}
@@ -194,51 +182,39 @@ const _FeaturedListHome = () => {
         {hideElement ? null : (
           <View style={[_styles.containerImageTop]}>
             <View style={_styles.containerImageTopLeft}>
-              <Image style={_styles.image} source={IMAGE_FEATURED_LIST} />
+              <Image style={_styles.image} source={IMG_FL_1} />
             </View>
             <View style={_styles.containerImageTopCenter}></View>
             <View style={_styles.containerImageTopRight}>
               <View style={_styles.containerImageTopRightTop}>
-                <Image style={_styles.image} source={IMAGE_FEATURED_LIST_2} />
+                <Image style={_styles.image} source={IMG_FL_2} />
               </View>
               <View style={_styles.containerImageTopRightBottom}>
-                <Image style={_styles.image} source={IMAGE_FEATURED_LIST_3} />
+                <Image style={_styles.image} source={IMG_FL_3} />
               </View>
             </View>
           </View>
         )}
 
         <View style={_styles.containetTextCenter}>
-          <Text style={_styles.textCenterTop}>Featured Estates</Text>
+          <Text style={_styles.textCenterTop}>Tour nổi bật</Text>
           <Text style={_styles.textCenterBottom}>
-            Our recommended real estates exclusive for you.
+            Các tour du lịch chúng tôi đề xuất riêng cho bạn
           </Text>
         </View>
         <View>
-          <Input
-            imageIconLeft={FIND}
-            imageIconRight={EMAIL_LOGIN}
-            iconLeftStyle={{height: 25, width: 25}}
-            label="Search in villa’s category"
-            iconRightStyle={{opacity: 0}}
-            value={searchName}
-            onChangeText={text => setSearchName(text)}
-            viewStyle={{
-              borderRadius: 20,
-              backgroundColor: Colors.GRAY,
-            }}
-          />
-        </View>
-        <View>
-          <ViewSwitcher quantityEstates={22} onTabChange={setListViewType} />
+          <ViewSwitcher quantityEstates={10} onTabChange={setListViewType} />
         </View>
 
         <View style={_styles.containerListFeatured}>
           <Animated.FlatList
-            data={DATA_ESTATES}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-            numColumns={2}
+            data={DATATOUROUTSTANDING}
+            renderItem={
+              isLayout ? renderItemTourOutstanding : renderItemTourFavorite
+            }
+            keyExtractor={item => item.id.toString()}
+            numColumns={column}
+            key={column}
             style={{height: DimensionsStyle.height * 0.6}}
             showsVerticalScrollIndicator={false}
             onScroll={handleScroll}
@@ -253,7 +229,7 @@ const _styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.WHITE,
-    paddingBottom: DimensionsStyle.width * 0.69,
+    paddingBottom: DimensionsStyle.width * 0.5,
   },
 
   containerImageTop: {

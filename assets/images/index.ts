@@ -141,3 +141,6 @@ export const BOTTOM_HOUSE_ACTIVE = require('./bottom_house_active.png');
 export const BOTTOM_ZOOM_ACTIVE = require('./bottom_zoom_active.png');
 export const BOTTOM_BLOGS_ACTIVE = require('./bottom_blogs_active.png');
 export const BOTTOM_PROFILE_ACTIVE = require('./bottom_profile_active.png');
+export const IMG_FL_1 = require('./IMG_FL_1.png');
+export const IMG_FL_2 = require('./IMG_FL_2.png');
+export const IMG_FL_3 = require('./IMG_FL_3.png');

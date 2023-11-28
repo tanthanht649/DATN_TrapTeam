@@ -116,7 +116,7 @@ const ItemBanner = ({item}: {item: Banner}) => {
 };
 
 //Tour yêu thích
-interface Tour {
+export interface Tour {
   id: number;
   tourist_destinationId: number;
   provide: string;
@@ -133,7 +133,7 @@ interface Tour {
   status: boolean;
 }
 
-const DATATOUR: Tour[] = [
+export const DATATOUR: Tour[] = [
   {
     id: 1,
     tourist_destinationId: 1,
@@ -381,7 +381,7 @@ const ItemEstates = ({item}: {item: Estates}) => {
 };
 
 //Tour nổi bật
-const DATATOUROUTSTANDING: Tour[] = [
+export const DATATOUROUTSTANDING: Tour[] = [
   {
     id: 1,
     tourist_destinationId: 1,
@@ -448,7 +448,7 @@ const DATATOUROUTSTANDING: Tour[] = [
   },
 ];
 
-const ItemTourOutstanding = ({item}: {item: Tour}) => {
+export const ItemTourOutstanding = ({item}: {item: Tour}) => {
   return (
     <View
       style={{
