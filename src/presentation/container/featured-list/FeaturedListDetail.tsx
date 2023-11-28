@@ -4,8 +4,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {BackgroundApp, Header, Input, ViewSwitcher} from '@components';
 import {
   BACKGROUND_WHITE,
+  DL,
   EMAIL_LOGIN,
   FIND,
+  FTL_1,
   HEART_ACTIVE,
   HEART_INACTIVE,
   ICON_BACK,
@@ -15,6 +17,10 @@ import {
   ONBOARDING_1,
   SETTING,
   SETTING_BG,
+  VHL,
+  VHL_FL_1,
+  VHL_FL_2,
+  VHL_FL_3,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
@@ -28,17 +34,98 @@ const _FeaturedListDetail = () => {
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView style={_styles.container}>
         {hideElement ? null : (
-          <View style={[_styles.containerImageTop]}>
-            <View style={_styles.containerImageTopLeft}>
-              <Image style={_styles.image} source={IMAGE_FEATURED_LIST} />
-            </View>
-            <View style={_styles.containerImageTopCenter}></View>
-            <View style={_styles.containerImageTopRight}>
-              <View style={_styles.containerImageTopRightTop}>
-                <Image style={_styles.image} source={IMAGE_FEATURED_LIST_2} />
+          <View>
+            <View style={[_styles.containerImageTop]}>
+              <View style={_styles.containerImageTopLeft}>
+                <Image
+                  style={[
+                    _styles.image,
+                    {
+                      opacity: 0.4,
+                    },
+                  ]}
+                  source={VHL_FL_1}
+                />
+
+                <Image
+                  style={[
+                    _styles.image,
+                    {
+                      width: '93%',
+                      height: '93%',
+                      position: 'absolute',
+                      resizeMode: 'stretch',
+                      alignSelf: 'center',
+                      top: 12,
+                      borderBottomLeftRadius: 30,
+                      borderBottomRightRadius: 12,
+                      borderTopRightRadius: 12,
+                      borderTopLeftRadius: 30,
+                    },
+                  ]}
+                  source={VHL_FL_1}
+                />
               </View>
-              <View style={_styles.containerImageTopRightBottom}>
-                <Image style={_styles.image} source={IMAGE_FEATURED_LIST_3} />
+              <View style={_styles.containerImageTopCenter}></View>
+              <View style={[_styles.containerImageTopRight]}>
+                <View style={_styles.containerImageTopRightBottom}>
+                  <Image
+                    style={[
+                      _styles.image,
+                      {
+                        opacity: 0.6,
+                      },
+                    ]}
+                    source={VHL_FL_3}
+                  />
+                  <Image
+                    style={[
+                      _styles.image,
+                      {
+                        width: '85%',
+                        height: '78%',
+                        position: 'absolute',
+                        resizeMode: 'stretch',
+                        alignSelf: 'center',
+                        top: 13,
+                        borderBottomLeftRadius: 12,
+                        borderBottomRightRadius: 30,
+                        borderTopRightRadius: 12,
+                        borderTopLeftRadius: 12,
+                      },
+                    ]}
+                    source={VHL_FL_3}
+                  />
+                </View>
+                <View style={[_styles.containerImageTopRightTop]}>
+                  <Image
+                    style={[
+                      _styles.image,
+                      {
+                        opacity: 0.75,
+                      },
+                    ]}
+                    source={VHL_FL_2}
+                  />
+                  <Image
+                    style={[
+                      _styles.image,
+                      {
+                        width: '85%',
+                        height: '90%',
+                        position: 'absolute',
+                        resizeMode: 'stretch',
+                        alignSelf: 'center',
+                        top: 12,
+                        borderBottomLeftRadius: 12,
+                        borderBottomRightRadius: 12,
+                        borderTopRightRadius: 30,
+                        borderTopLeftRadius: 12,
+                      },
+                    ]}
+                    source={VHL_FL_2}
+                  />
+                </View>
               </View>
             </View>
           </View>
@@ -89,7 +176,7 @@ const _styles = StyleSheet.create({
   },
 
   containerImageTopLeft: {
-    width: '70%',
+    width: '72%',
     borderRadius: 30,
     borderTopRightRadius: 12,
     borderBottomRightRadius: 12,
@@ -100,26 +187,30 @@ const _styles = StyleSheet.create({
     width: '2%',
   },
   containerImageTopRight: {
-    width: '28%',
+    width: '30.5%',
     height: '100%',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-between',
+    position: 'absolute',
+    right: 0,
   },
 
   containerImageTopRightTop: {
     width: '100%',
-    height: '69%',
+    height: '70%',
     borderTopRightRadius: 30,
     borderRadius: 12,
     overflow: 'hidden',
   },
   containerImageTopRightBottom: {
     width: '100%',
-    height: '29%',
+    height: '34%',
     borderRadius: 12,
     borderBottomRightRadius: 30,
     overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
   },
 
   image: {

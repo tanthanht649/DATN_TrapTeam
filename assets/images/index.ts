@@ -144,3 +144,10 @@ export const BOTTOM_PROFILE_ACTIVE = require('./bottom_profile_active.png');
 export const IMG_FL_1 = require('./IMG_FL_1.png');
 export const IMG_FL_2 = require('./IMG_FL_2.png');
 export const IMG_FL_3 = require('./IMG_FL_3.png');
+export const FTL_1 = require('./flt_2.jpeg');
+export const VHL = require('./vhl.jpeg');
+export const DL = require('./dl.jpeg');
+
+export const VHL_FL_1 = require('./vhl_fl_1.png');
+export const VHL_FL_2 = require('./vhl_fl_2.png');
+export const VHL_FL_3 = require('./vhl_fl_3.png');
