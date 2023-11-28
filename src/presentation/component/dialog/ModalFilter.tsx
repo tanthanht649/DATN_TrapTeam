@@ -1,6 +1,6 @@
-import { ARROW_DOWN, CALENDAR_FILTER, EMAIL, LINE, fontFamily } from '@assets';
-import { Colors, DimensionsStyle } from '@resources';
-import React, { useState } from 'react';
+import {ARROW_DOWN, CALENDAR_FILTER, EMAIL, LINE, fontFamily} from '@assets';
+import {Colors, DimensionsStyle} from '@resources';
+import React, {useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -16,9 +16,9 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  Platform
+  Platform,
 } from 'react-native';
-import { Button } from '../button';
+import {Button} from '../button';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
 
@@ -27,11 +27,10 @@ type Props = {
   visible?: boolean;
   onPress: () => void;
   Cancel: () => void;
-
 };
 type ItemLocation = {
   id: string;
-  title: string
+  title: string;
 };
 
 // type ItemLocationProps = {
@@ -41,7 +40,7 @@ type ItemLocation = {
 
 type ItemCountry = {
   id: string;
-  title: string
+  title: string;
 };
 
 // type ItemCountryProps = {
@@ -50,7 +49,7 @@ type ItemCountry = {
 // };
 
 const _Modal: React.FC<Props> = props => {
-  const { onPress,Cancel, visible } = props;
+  const {onPress, Cancel, visible} = props;
   // const [location, setLocation] = useState<string>('Hà nội');
   // const [modalVisibleLocation, setModalVisibleLocation] = useState(false);
   // const [selectedId, setSelectedId] = useState<string>();
@@ -65,30 +64,28 @@ const _Modal: React.FC<Props> = props => {
   //   console.log(item.title)
   //   setModalVisibleLocation(false)
   // }
-  const [dataLocation, setDataLocation] = React.useState<ItemLocation[]>(
-    [{
+  const [dataLocation, setDataLocation] = React.useState<ItemLocation[]>([
+    {
       id: '1',
-      title: 'Hà Nội'
+      title: 'Hà Nội',
     },
     {
       id: '2',
-      title: 'Hồ Chí Minh'
+      title: 'Hồ Chí Minh',
     },
     {
       id: '3',
-      title: 'Đà nẵng'
+      title: 'Đà nẵng',
     },
     {
       id: '4',
-      title: 'Sóc trăng'
+      title: 'Sóc trăng',
     },
     {
       id: '5',
-      title: 'Đắk Lắk'
+      title: 'Đắk Lắk',
     },
-    ]
-
-  );
+  ]);
   // const [country, setCountry] = useState<string>('Việt Nam');
   // const [modalVisibleCountry, setModalVisibleCountry] = useState(false);
   // const [selected, setSelected] = useState<string>();
@@ -104,47 +101,46 @@ const _Modal: React.FC<Props> = props => {
   //   setModalVisibleCountry(false)
   // }
 
-  const [dataCountry, setDataCountry] = React.useState<ItemCountry[]>(
-    [{
+  const [dataCountry, setDataCountry] = React.useState<ItemCountry[]>([
+    {
       id: '1',
-      title: 'Việt Nam'
+      title: 'Việt Nam',
     },
     {
       id: '2',
-      title: 'Lào'
+      title: 'Lào',
     },
     {
       id: '3',
-      title: 'Thái Lan'
+      title: 'Thái Lan',
     },
-    ]
-  );
+  ]);
   const renderDropdownIcon = () => {
-    return <Image
-      source={ARROW_DOWN}
-    // style={_styles.iconLeft}
-    />
+    return (
+      <Image
+        source={ARROW_DOWN}
+        // style={_styles.iconLeft}
+      />
+    );
   };
 
   type ItemData = {
     id: string;
-    title: string
+    title: string;
   };
 
   const DATA: ItemData[] = [
     {
       id: '1',
-      title: 'Yêu thích'
+      title: 'Yêu thích',
     },
     {
       id: '2',
-      title: 'Phổ biến'
-
+      title: 'Phổ biến',
     },
     {
       id: '3',
-      title: 'Nổi bật'
-
+      title: 'Nổi bật',
     },
   ];
 
@@ -152,21 +148,22 @@ const _Modal: React.FC<Props> = props => {
     item: ItemData;
     onPress: () => void;
     backgroundColor: string;
-    color: string
-
+    color: string;
   };
 
-  const Item = ({ item, onPress, backgroundColor, color }: ItemProps) => (
-    <TouchableOpacity onPress={onPress} style={[_styles.category, { backgroundColor }]}>
-      <Text style={[_styles.text, { color, fontSize: 11 }]} >{item.title}</Text>
+  const Item = ({item, onPress, backgroundColor, color}: ItemProps) => (
+    <TouchableOpacity
+      onPress={onPress}
+      style={[_styles.category, {backgroundColor}]}>
+      <Text style={[_styles.text, {color, fontSize: 11}]}>{item.title}</Text>
     </TouchableOpacity>
   );
 
   const [selectedCategory, setSelectedCategory] = useState<string>();
-  
 
-  const renderItem = ({ item }: { item: ItemData }) => {
-    const backgroundColor = item.title === selectedCategory ? Colors.BLUE : Colors.GRAY_SEARCH;
+  const renderItem = ({item}: {item: ItemData}) => {
+    const backgroundColor =
+      item.title === selectedCategory ? Colors.BLUE : Colors.GRAY_SEARCH;
     const color = item.title === selectedCategory ? Colors.WHITE : Colors.BLUE;
     return (
       <Item
@@ -180,18 +177,16 @@ const _Modal: React.FC<Props> = props => {
 
   // console.log('====>category:' + selectedCategory)
 
-
   const [price, setPrice] = useState<string>('');
   const handleOnchangePrice = (value: string) => {
     setPrice(value);
-    console.log(value)
-  }
+    console.log(value);
+  };
   const [hight, setHight] = useState<string>('');
   const handleOnchangeHight = (value: string) => {
     setHight(value);
-    console.log(value)
-  }
-
+    console.log(value);
+  };
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
@@ -199,23 +194,24 @@ const _Modal: React.FC<Props> = props => {
   const handleDateChange = (event: any, date?: Date) => {
     if (date) {
       setSelectedDate(date);
-      
     }
     setShowPicker(Platform.OS === 'ios');
-    console.log(formattedDate)
+    console.log(formattedDate);
   };
 
   const showDatePicker = () => {
     setShowPicker(true);
   };
-  
+
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={visible}
       onRequestClose={() => {
-        { !visible }
+        {
+          !visible;
+        }
       }}>
       <StatusBar
         barStyle="dark-content"
@@ -225,7 +221,9 @@ const _Modal: React.FC<Props> = props => {
       <View style={_styles.background}>
         <View style={_styles.centeredView}>
           <View style={_styles.modalView}>
-            <ScrollView style={_styles.scroll} showsVerticalScrollIndicator={false}>
+            <ScrollView
+              style={_styles.scroll}
+              showsVerticalScrollIndicator={false}>
               <Image style={_styles.line} source={LINE}></Image>
               <Text style={_styles.textBold}>Bộ lọc</Text>
               <Text style={_styles.textBold}>Địa điểm</Text>
@@ -233,13 +231,19 @@ const _Modal: React.FC<Props> = props => {
                 <SelectDropdown
                   showsVerticalScrollIndicator={false}
                   renderDropdownIcon={renderDropdownIcon}
-                  dropdownIconPosition='left'
-                  defaultButtonText='Hà Nội'
+                  dropdownIconPosition="left"
+                  defaultButtonText="Hà Nội"
                   buttonStyle={_styles.container}
-                  buttonTextStyle={[_styles.text, { fontSize: 13, color: Colors.BLUE_TEXT, marginVertical: 0 }]}
+                  buttonTextStyle={[
+                    _styles.text,
+                    {fontSize: 13, color: Colors.BLUE_TEXT, marginVertical: 0},
+                  ]}
                   dropdownStyle={_styles.modalViewLocation}
-                  selectedRowStyle={[_styles.item, { backgroundColor: Colors.GREEN }]}
-                  selectedRowTextStyle={[_styles.text, { color: Colors.WHITE }]}
+                  selectedRowStyle={[
+                    _styles.item,
+                    {backgroundColor: Colors.GREEN},
+                  ]}
+                  selectedRowTextStyle={[_styles.text, {color: Colors.WHITE}]}
                   rowStyle={_styles.item}
                   rowTextStyle={_styles.text}
                   data={dataLocation}
@@ -258,13 +262,19 @@ const _Modal: React.FC<Props> = props => {
                 <SelectDropdown
                   showsVerticalScrollIndicator={false}
                   renderDropdownIcon={renderDropdownIcon}
-                  dropdownIconPosition='left'
-                  defaultButtonText='Việt Nam'
+                  dropdownIconPosition="left"
+                  defaultButtonText="Việt Nam"
                   buttonStyle={_styles.container}
-                  buttonTextStyle={[_styles.text, { fontSize: 13, color: Colors.BLUE_TEXT, marginVertical: 0 }]}
+                  buttonTextStyle={[
+                    _styles.text,
+                    {fontSize: 13, color: Colors.BLUE_TEXT, marginVertical: 0},
+                  ]}
                   dropdownStyle={_styles.modalViewLocation}
-                  selectedRowStyle={[_styles.item, { backgroundColor: Colors.GREEN }]}
-                  selectedRowTextStyle={[_styles.text, { color: Colors.WHITE }]}
+                  selectedRowStyle={[
+                    _styles.item,
+                    {backgroundColor: Colors.GREEN},
+                  ]}
+                  selectedRowTextStyle={[_styles.text, {color: Colors.WHITE}]}
                   rowStyle={_styles.item}
                   rowTextStyle={_styles.text}
                   data={dataCountry}
@@ -347,25 +357,58 @@ const _Modal: React.FC<Props> = props => {
                 extraData={selectedCategory}
               />
               <Text style={_styles.textBold}>Giá thấp nhất</Text>
-              <View
-                style={_styles.input}>
-                <TextInput value={price} onChangeText={handleOnchangePrice} style={[_styles.text, { marginVertical: 5, fontSize: 15, textAlign: 'left', width: '85%' }]} placeholder='Giá thấp nhất' ></TextInput>
-                <Pressable onPress={() => { }}>
-                  <Text style={[_styles.text, { fontSize: 13, }]}>VND</Text>
+              <View style={_styles.input}>
+                <TextInput
+                  value={price}
+                  onChangeText={handleOnchangePrice}
+                  style={[
+                    _styles.text,
+                    {
+                      marginVertical: 5,
+                      fontSize: 15,
+                      textAlign: 'left',
+                      width: '85%',
+                    },
+                  ]}
+                  placeholder="Giá thấp nhất"></TextInput>
+                <Pressable onPress={() => {}}>
+                  <Text style={[_styles.text, {fontSize: 13}]}>VND</Text>
                 </Pressable>
               </View>
               <Text style={_styles.textBold}>Giá cao nhất</Text>
-              <View
-                style={_styles.input}>
-                <TextInput value={hight} onChangeText={handleOnchangeHight} style={[_styles.text, { marginVertical: 5, fontSize: 15, textAlign: 'left', width: '85%' }]} placeholder='Giá cao nhất' ></TextInput>
-                <Pressable onPress={() => { }}>
-                  <Text style={[_styles.text, { fontSize: 13, }]}>VND</Text>
+              <View style={_styles.input}>
+                <TextInput
+                  value={hight}
+                  onChangeText={handleOnchangeHight}
+                  style={[
+                    _styles.text,
+                    {
+                      marginVertical: 5,
+                      fontSize: 15,
+                      textAlign: 'left',
+                      width: '85%',
+                    },
+                  ]}
+                  placeholder="Giá cao nhất"></TextInput>
+                <Pressable onPress={() => {}}>
+                  <Text style={[_styles.text, {fontSize: 13}]}>VND</Text>
                 </Pressable>
               </View>
               <Text style={_styles.textBold}>Ngày khởi hành</Text>
 
               <View style={_styles.input}>
-                <Text style={[_styles.text, { marginVertical: 5, fontSize: 15, textAlign: 'left', width: '85%' }]}  >{formattedDate}</Text>
+                <Text
+                  style={[
+                    _styles.text,
+                    {
+                      marginVertical: 5,
+                      fontSize: 15,
+                      textAlign: 'left',
+                      width: '85%',
+                    },
+                  ]}>
+                  {formattedDate}
+                </Text>
                 {showPicker && (
                   <DateTimePicker
                     value={selectedDate}
@@ -375,13 +418,9 @@ const _Modal: React.FC<Props> = props => {
                   />
                 )}
                 <Pressable onPress={showDatePicker}>
-                  <Image
-                    source={CALENDAR_FILTER}
-                    style={_styles.iconLeft}
-                  />
+                  <Image source={CALENDAR_FILTER} style={_styles.iconLeft} />
                 </Pressable>
               </View>
-
             </ScrollView>
           </View>
         </View>
@@ -393,8 +432,7 @@ const _Modal: React.FC<Props> = props => {
             onPress={onPress}
             viewStyle={{
               width: '40%',
-              
-             
+              height: 50,
             }}
           />
           <Button
@@ -404,14 +442,13 @@ const _Modal: React.FC<Props> = props => {
             onPress={Cancel}
             viewStyle={{
               width: '40%',
-              
+              height: 50,
               // bottom: 70
             }}
           />
-          </View>
+        </View>
       </View>
-
-    </Modal >
+    </Modal>
   );
 };
 
@@ -421,20 +458,21 @@ const _styles = StyleSheet.create({
     backgroundColor: 'rgba(31, 76, 107, 0.9)',
     width: Dimensions.get('window').width * 1,
     height: Dimensions.get('window').height * 1,
-    position: 'absolute'
+    position: 'absolute',
   },
   centeredView: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
     marginTop: 22,
-
   },
   modalView: {
     width: Dimensions.get('window').width * 1,
     height: Dimensions.get('window').height * 0.8,
     backgroundColor: Colors.WHITE,
     borderRadius: 50,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
     padding: 30,
     shadowColor: '#000',
     shadowOffset: {
@@ -444,15 +482,13 @@ const _styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-
   },
-  rowbutton:{
-    flexDirection:'row',
-    justifyContent:'space-around',
-     bottom: 70,
-     width: '100%',
-     position: 'absolute',
-
+  rowbutton: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    bottom: 40,
+    width: '100%',
+    position: 'absolute',
   },
   // centeredViewLocation: {
   //   flex: 1,
@@ -461,17 +497,17 @@ const _styles = StyleSheet.create({
   //   // marginTop: 100
   // },
   scroll: {
-    marginBottom: 110
+    marginBottom: 80,
   },
   modalViewLocation: {
-    width: Dimensions.get('window').width * 0.40,
+    width: Dimensions.get('window').width * 0.4,
     height: Dimensions.get('window').height * 0.28,
     borderColor: Colors.GREEN,
     borderWidth: 1,
     backgroundColor: Colors.GRAY_SEARCH,
     borderRadius: 10,
     padding: 10,
-    marginTop: 10
+    marginTop: 10,
     // alignItems:'center',
     // justifyContent:'center'
     // padding: 30,
@@ -491,7 +527,6 @@ const _styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: fontFamily.Bold,
     color: Colors.BLUE,
-
   },
   text: {
     textAlign: 'center',
@@ -499,14 +534,12 @@ const _styles = StyleSheet.create({
     fontFamily: fontFamily.Bold,
     color: Colors.BLUE,
     marginVertical: 10,
-
   },
   line: {
     height: 2,
     width: 50,
-    alignSelf: 'center'
-  }
-  ,
+    alignSelf: 'center',
+  },
   container: {
     marginTop: 15,
     height: 70,
@@ -538,7 +571,7 @@ const _styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: Colors.GRAY_SEARCH,
     paddingHorizontal: 20,
-    marginRight: 30
+    marginRight: 30,
   },
   row: {
     flexDirection: 'row',
@@ -557,8 +590,8 @@ const _styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomColor: Colors.WHITE,
     borderTopColor: Colors.WHITE,
-    borderRadius: 10
-  }
+    borderRadius: 10,
+  },
 });
 
 export const ModalFilter = React.memo(_Modal);
