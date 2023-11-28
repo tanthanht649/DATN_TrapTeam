@@ -60,7 +60,7 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="NotificationsList"
+        initialRouteName="FavoriteEmpty"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',

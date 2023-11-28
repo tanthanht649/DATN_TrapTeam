@@ -23,6 +23,6 @@ export const Colors = {
   GREEN_1: '#8BC83F',
   BLUE_DARK:'#1F4C6B',
   BLUE_SOFT:'#1F4C6BB0',
-  GREEN_SOFT:'#234F68B0',
+  GREEN_SOFT:'rgba(163, 204, 227, 0.69)',
   GREY_BARELY_MEDIUM:'#A1A5C1',
 };

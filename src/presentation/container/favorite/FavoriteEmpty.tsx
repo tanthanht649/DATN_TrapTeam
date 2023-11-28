@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { WelcomeTeamStackParamList } from '@navigation';
 import { Header, TextPlus, ViewSwitcher } from '@components';
-import { ALERT_SUCCESS_PLUS, HEART_ACTIVE, ICON_DELETE, LOCATION, SHAPE_1, SHAPE_2, SHAPE_3, START_3, TRASH_2, fontFamily } from '@assets';
+import { ALERT_SUCCESS_PLUS, HEART_INACTIVE, ICON_BACK, ICON_DELETE, LOCATION, SHAPE_1, SHAPE_2, SHAPE_3, TRASH_2, fontFamily } from '@assets';
 import { Colors } from '@resources';
 import StaggeredList from '@mindinventory/react-native-stagger-view';
 import { SwipeListView } from 'react-native-swipe-list-view';
@@ -18,25 +18,17 @@ export interface Item {
     id: number;
     image: ImageSourcePropType;
     price: string;
-    monthday: string;
     name: string;
-    star: string;
     location: string;
-    type: string;
 }
 
 const _FavoriteEmpty: React.FC<PropsType> = props => {
     const { navigation } = props;
     const [listViewType, setListViewType] = useState<'grid' | 'list'>('list');
     const [data, setData] = useState<Item[]>([
-        { id: 1, image: SHAPE_1, type: "Villa", price: "3.200.000", monthday: "/tháng", name: "The Laurels Villa", star: "4.9", location: "Quận 1, Hồ Chí Minh" },
-        { id: 2, image: SHAPE_2, type: "Căn hộ", price: "2.200.000", monthday: "/tháng", name: "Wayside Modern House", star: "4.4", location: "Bình Thạnh, Hồ Chí Minh" },
-        { id: 3, image: SHAPE_3, type: "Căn nhà", price: "2.200.000", monthday: "/tháng", name: "Wings Tower", star: "4.9", location: "Nhà Bè, Hồ Chí Minh" },
-        { id: 4, image: SHAPE_1, type: "Villa", price: "3.200.000", monthday: "/ngày", name: "The Laurels Villa", star: "4.9", location: "Quận 3, Hồ Chí Minh" },
-        { id: 5, image: SHAPE_2, type: "Căn hộ", price: "2.200.000", monthday: "/tháng", name: "Wayside Modern House", star: "4.4", location: "Bình Chánh, Hồ Chí Minh" },
-        { id: 6, image: SHAPE_3, type: "Căn nhà", price: "2.200.000", monthday: "/ngày", name: "Wings Tower", star: "4.9", location: "Quận 12, Hồ Chí Minh" },
-        { id: 7, image: SHAPE_1, type: "Villa", price: "3.200.000", monthday: "/tháng", name: "The Laurels Villa", star: "4.9", location: "Quận 4, Hồ Chí Minh" },
-        { id: 8, image: SHAPE_2, type: "Villa", price: "2.200.000", monthday: "/đêm", name: "Wayside Modern House", star: "4.4", location: "Thủ Đức, Hồ Chí Minh" },
+        { id: 1, image: SHAPE_1, price: "5.504.000 VND", name: "Tour Tết 2024: Quy Nhơn – Phú Yên, 2 ngày 1 đêm", location: "Bình Định - Phú Yên, Việt Nam" },
+        { id: 2, image: SHAPE_3, price: "4.250.000 VND", name: "Tour Đồng bằng sông Cửu Long Cửu Long, 2 ngày 1 đêm", location: "Miền Tây, Việt Nam" },
+        { id: 3, image: SHAPE_2, price: "2.090.000 VND", name: "Tour Teambuilding 2 ngày 1 đêm Hồ Tràm vui chơi cực đỉnh quên lối về", location: "Vũng Tàu, Việt Nam" },
     ]);
     const onDelete = (itemId: number) => {
         console.log("Id: " + itemId);
@@ -53,22 +45,19 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
                     resizeMode='cover'
                 />
                 <Pressable onPress={() => onDelete(item.id)} style={_styles.styleHeartView}>
-                    <Image source={HEART_ACTIVE} style={_styles.styleHeart} />
+                    <Image source={HEART_INACTIVE} style={_styles.styleHeart} />
                 </Pressable>
                 <View style={_styles.stylePriceView}>
-                    <Text style={_styles.stylePrice}>{item.price}</Text>
-                    <Text style={_styles.styleMonth}>{item.monthday}</Text>
+                    <Text style={_styles.stylePrice}>
+                        {item.price}
+                    </Text>
                 </View>
                 <View style={_styles.styleView}>
-                    <Text style={_styles.styleName}>{item.name}</Text>
+                    <Text numberOfLines={2} ellipsizeMode="tail" style={_styles.styleName}>{item.name}</Text>
                     <View style={_styles.styleLine}>
                         <View style={_styles.styleStarView}>
-                            <Image source={START_3} style={_styles.styleStar} />
-                            <Text style={_styles.styleStarText}>{item.star}</Text>
-                        </View>
-                        <View style={_styles.styleStarView}>
                             <Image source={LOCATION} style={_styles.styleStar} />
-                            <Text numberOfLines={2} style={_styles.styleLocationText}>{item.location}</Text>
+                            <Text numberOfLines={1} style={_styles.styleLocationText}>{item.location}</Text>
                         </View>
                     </View>
                 </View>
@@ -80,26 +69,18 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
             <View style={_styles.itemContainer}>
                 <Image source={item.image} style={_styles.itemImage} resizeMode='cover' />
                 <TouchableOpacity onPress={() => onDelete(item.id)} style={_styles.heartButton}>
-                    <Image source={HEART_ACTIVE} style={_styles.styleHeart} />
+                    <Image source={HEART_INACTIVE} style={_styles.styleHeart} />
                 </TouchableOpacity>
-                <View style={_styles.typeContainer}>
-                    <Text style={_styles.type}>{item.type}</Text>
-                </View>
                 <View style={_styles.viewContainer}>
                     <View style={_styles.detailsContainer}>
-                        <Text style={_styles.styleName}>{item.name}</Text>
-                        <View style={[_styles.styleStarView, { marginVertical: 8 }]}>
-                            <Image source={START_3} style={_styles.styleStar} />
-                            <Text style={_styles.styleStarText}>{item.star}</Text>
-                        </View>
+                        <Text numberOfLines={2} ellipsizeMode="tail" style={_styles.styleName}>{item.name}</Text>
                         <View style={_styles.locationContainer}>
                             <Image source={LOCATION} style={_styles.styleStar} />
-                            <Text style={[_styles.styleLocationText, { paddingRight: 35 }]}>{item.location}</Text>
+                            <Text numberOfLines={1} ellipsizeMode="tail" style={[_styles.styleLocationText, { paddingRight: 35 }]}>{item.location}</Text>
                         </View>
                     </View>
                     <View style={_styles.priceContainer}>
                         <Text style={_styles.price}>{item.price}</Text>
-                        <Text style={_styles.monthday}>{item.monthday}</Text>
                     </View>
                 </View>
             </View>
@@ -176,6 +157,8 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
     return (
         <SafeAreaView style={_styles.container}>
             <Header
+                iconLeft={ICON_BACK}
+                eventLeft={() => navigation.goBack()}
                 textCenter={'Yêu thích'}
                 iconRight={ICON_DELETE}
                 eventRight={() => console.log('EventRight')}
@@ -279,7 +262,7 @@ const _styles = StyleSheet.create({
     },
     stylePrice: {
         fontSize: 12,
-        color: Colors.GREY_SOFT,
+        color: Colors.RED,
         fontFamily: fontFamily.Black,
         letterSpacing: 0.36,
     },
@@ -336,10 +319,10 @@ const _styles = StyleSheet.create({
         color: Colors.GREY_MEDIUM,
         fontFamily: fontFamily.Semibold,
         lineHeight: 15,
-        paddingRight: 65,
     },
 
     itemContainer: {
+        height: 160,
         flexDirection: 'row',
         justifyContent: 'center',
         marginHorizontal: 20,
@@ -367,12 +350,6 @@ const _styles = StyleSheet.create({
         borderRadius: 8,
         padding: 7,
     },
-    type: {
-        fontSize: 10,
-        color: Colors.GREY_SOFT,
-        fontFamily: fontFamily.Bold,
-        letterSpacing: 0.24,
-    },
     viewContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
@@ -381,14 +358,15 @@ const _styles = StyleSheet.create({
     detailsContainer: {
         flex: 1,
         flexDirection: 'column',
-        marginHorizontal: 16,
+        marginHorizontal: 12,
         paddingTop: 8,
     },
     locationContainer: {
         flexDirection: 'row',
         alignItems: 'flex-start',
         display: 'flex',
-        gap: 2,
+        gap: 5,
+        marginTop: 8,
     },
     priceContainer: {
         flexDirection: 'row',
@@ -398,18 +376,10 @@ const _styles = StyleSheet.create({
         paddingBottom: 8,
     },
     price: {
-        fontSize: 16,
-        color: Colors.GREY_DARK,
-        fontFamily: fontFamily.Semibold,
+        fontSize: 18,
+        color: Colors.RED,
+        fontFamily: fontFamily.Bold,
         letterSpacing: 0.48,
-    },
-    monthday: {
-        fontSize: 10,
-        lineHeight: 16,
-        marginTop: 4,
-        color: Colors.GREY_DARK,
-        fontFamily: fontFamily.Medium,
-        letterSpacing: 0.24,
     },
     hiddenItem: {
         flex: 1,
