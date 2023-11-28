@@ -141,3 +141,5 @@ export const BOTTOM_HOUSE_ACTIVE = require('./bottom_house_active.png');
 export const BOTTOM_ZOOM_ACTIVE = require('./bottom_zoom_active.png');
 export const BOTTOM_BLOGS_ACTIVE = require('./bottom_blogs_active.png');
 export const BOTTOM_PROFILE_ACTIVE = require('./bottom_profile_active.png');
+export const ARROW_DOWN = require('../../assets/images/arrow_down.png');
+export const CALENDAR_FILTER = require('../../assets/images/calendar_filter.png');
