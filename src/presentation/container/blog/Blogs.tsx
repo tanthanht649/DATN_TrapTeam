@@ -22,6 +22,7 @@ import {
   ICON_BACK,
   IMAGE_FEATURED_LIST,
   LINE_BLOG,
+  LOGO_APP,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
@@ -83,10 +84,15 @@ const _Blog: React.FC<PropsType> = props => {
       <SafeAreaView style={_styles.container}>
         <Header
           textCenter={'Bài viết'}
-          iconLeft={ICON_BACK}
+          iconLeft={LOGO_APP}
           iconRight={ADD_BLOG}
           eventLeft={() => console.log('IconLeft')}
-          styleIconLeft={{marginLeft: -DimensionsStyle.width * 0.06}}
+          styleIconLeft={{
+            marginLeft: -DimensionsStyle.width * 0.06,
+            width: 40,
+            height: 45,
+            resizeMode: 'stretch',
+          }}
           styleIconRight={{marginRight: -DimensionsStyle.width * 0.06}}
           eventRight={() => console.log(navigation.navigate('CreateBlog'))}
         />
