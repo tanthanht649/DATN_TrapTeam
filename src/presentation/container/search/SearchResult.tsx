@@ -79,9 +79,19 @@ const _SearchResult: React.FC<PropsType> = props => {
   const [isLayout, setIsLayout] = useState(false);
   const [column, setColumn] = useState(2);
 
-  const DATAFIND: string[] = ['Phổ biến', 'Hà Nội', '200.000 - 500.000'];
+  // 'Phổ biến', 'Hà Nội', '200.000 - 500.000'
 
-  //   const DATAFIND: string[] = [];
+  const DATAFIND: string[] = [];
+
+  const [marginBottom, setMarginBottom] = useState(0);
+  useEffect(() => {
+    if (DATAFIND.length > 0) {
+      setMarginBottom(130);
+    } else if ((DATAFIND.length = 0)) {
+      console.log('DATAFIND.length', DATAFIND.length);
+      setMarginBottom(40);
+    }
+  }, [DATAFIND]);
 
   const renderItemFind = React.useMemo(
     () =>
@@ -257,7 +267,7 @@ const _SearchResult: React.FC<PropsType> = props => {
                 key={column}
                 style={{
                   height: DimensionsStyle.height * 1,
-                  marginBottom: 40,
+                  marginBottom: marginBottom,
                 }}
                 showsVerticalScrollIndicator={false}
               />
