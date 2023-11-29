@@ -95,6 +95,7 @@ const _Blog: React.FC<PropsType> = props => {
           }}
           styleIconRight={{marginRight: -DimensionsStyle.width * 0.06}}
           eventRight={() => console.log(navigation.navigate('CreateBlog'))}
+          styleView={{marginTop: 10}}
         />
         <FlatList
           showsVerticalScrollIndicator={false}
@@ -118,7 +119,7 @@ const _Blog: React.FC<PropsType> = props => {
 
 const _styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 34,
+    paddingHorizontal: 25,
     paddingBottom: 70,
   },
   row: {
