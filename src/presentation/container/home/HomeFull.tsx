@@ -46,8 +46,7 @@ import {
   WelcomeTeamStackParamList,
 } from '@navigation';
 
-type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'HomeFull'> &
-  NativeStackScreenProps<HomeStackParamList, 'HomeFull'>;
+type PropsType = NativeStackScreenProps<HomeStackParamList, 'HomeFull'>;
 
 //Banner
 interface Banner {
@@ -687,6 +686,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                 marginStart: 0,
               }}
               textInputStyle={{width: '90%'}}
+              onPressLeft={() => navigation.navigate('SearchResult')}
             />
           </View>
         )}

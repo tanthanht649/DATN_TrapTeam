@@ -48,7 +48,7 @@ const _CreateBlog: React.FC<PropsType> = props => {
           }}
         />
         <Image style={_styles.image} source={ADD_IMAGE}></Image>
-        <TextInput style={_styles.title} placeholder="Tiêu đề"></TextInput>
+        {/* <TextInput style={_styles.title} placeholder="Tiêu đề"></TextInput> */}
         <Pressable onPress={() => {}}>
           <Image style={_styles.line} source={LINE_BLOG}></Image>
         </Pressable>
@@ -78,7 +78,8 @@ const _CreateBlog: React.FC<PropsType> = props => {
         onPress={handleModal}
         Cancel={() => {
           setModalVisible(false);
-        }}></ModalFilter>
+        }}
+      />
     </BackgroundApp>
   );
 };
@@ -94,6 +95,7 @@ const _styles = StyleSheet.create({
     overflow: 'hidden',
     alignSelf: 'center',
     marginTop: 30,
+    marginBottom: 30,
   },
   title: {
     fontSize: 24,

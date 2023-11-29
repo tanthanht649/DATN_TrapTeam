@@ -38,9 +38,13 @@ import {Tour} from '../home';
 import {ItemTourOutstanding} from '../home';
 import {DATATOUROUTSTANDING, DATATOUR} from '../home';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {HomeStackParamList} from '@navigation';
+import {HomeStackParamList, SearchStackParamList} from '@navigation';
 
-type PropsType = NativeStackScreenProps<HomeStackParamList, 'FeaturedListHome'>;
+type PropsType = NativeStackScreenProps<
+  HomeStackParamList,
+  'FeaturedListHome'
+> &
+  NativeStackScreenProps<SearchStackParamList, 'FeaturedListHome'>;
 
 const {height: screenHeight} = Dimensions.get('window');
 

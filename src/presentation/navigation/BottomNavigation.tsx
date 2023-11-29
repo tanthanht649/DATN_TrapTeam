@@ -19,6 +19,7 @@ import {
 import {Colors} from '../resource/value';
 import {BlogStack} from './BlogStack';
 import {ProfileStack} from './ProfileStack';
+import {SearchStack} from './SearchStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -55,7 +56,7 @@ const _BottomNavigation = () => {
                 source={focused ? BOTTOM_HOUSE_ACTIVE : BOTTOM_HOUSE_INACTIVE}
               />
             );
-          } else if (route.name === 'Search') {
+          } else if (route.name === 'Searchs') {
             return (
               <Image
                 style={{
@@ -104,8 +105,8 @@ const _BottomNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Search"
-        component={StackTest}
+        name="Searchs"
+        component={SearchStack}
         options={{
           tabBarLabel: '.',
         }}
