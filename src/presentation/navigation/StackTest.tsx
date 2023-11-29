@@ -16,8 +16,14 @@ import {
   Profile,
   Register,
   RegisterOTP,
-  FavoriteEmpty,
-  NotificationsList,
+  FeaturedListHome,
+  FeaturedListDetail,
+  Rule,
+  Version,
+  HomeFull,
+  HistoryDetail,
+  Blogs,
+  CreateBlog,
 } from '@containers';
 
 type WelcomeTeamProps = {};
@@ -33,8 +39,14 @@ type LoginOptionProps = {};
 type ProfileProps = {};
 type RegisterProps = {};
 type RegisterOTPProps = {};
-type FavoriteEmptyProps = {};
-type NotificationsListProps = {};
+type FeaturedListHomeProps = {};
+type FeaturedListDetailProps = {};
+type RuleProps = {};
+type VersionProps = {};
+type HomeFullProps = {};
+type HistoryDetailProps = {};
+type BlogsProps = {};
+type CreateBlogProps = {};
 
 export type WelcomeTeamStackParamList = {
   WelcomeTeam: WelcomeTeamProps | undefined;
@@ -50,38 +62,51 @@ export type WelcomeTeamStackParamList = {
   Profile: ProfileProps | undefined;
   Register: RegisterProps | undefined;
   RegisterOTP: RegisterOTPProps | undefined;
-  FavoriteEmpty: FavoriteEmptyProps | undefined;
-  NotificationsList: NotificationsListProps | undefined;
+  FeaturedListHome: FeaturedListHomeProps | undefined;
+  FeaturedListDetail: FeaturedListDetailProps | undefined;
+  Rule: RuleProps | undefined;
+  Version: VersionProps | undefined;
+  HomeFull: HomeFullProps | undefined;
+  HistoryDetail: HistoryDetailProps | undefined;
+  Blogs: BlogsProps | undefined;
+  CreateBlog: CreateBlogProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
 
 const _StackTest = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="FavoriteEmpty"
-        screenOptions={{
-          headerShown: false,
-          animation: 'slide_from_right',
-        }}>
-        <Stack.Screen name="WelcomeTeam" component={WelcomeTeam} />
-        <Stack.Screen name="Test" component={Test} />
-        <Stack.Screen name="OnboardingNextOne" component={OnboardingNextOne} />
-        <Stack.Screen name="OnboardingNextTwo" component={OnboardingNextTwo} />
-        <Stack.Screen name="OnboardingStart" component={OnboardingStart} />
-        <Stack.Screen name="OnboardingNextThree" component={OnboardingNextThree}/>
-        <Stack.Screen name="AllReviews" component={AllReviews} />
-        <Stack.Screen name="EditProfile" component={EditProfile} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="LoginOption" component={LoginOption} />
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="RegisterOTP" component={RegisterOTP} />
-        <Stack.Screen name="FavoriteEmpty" component={FavoriteEmpty} />
-        <Stack.Screen name="NotificationsList" component={NotificationsList} />
-      </Stack.Navigator> 
-    </NavigationContainer>
+    <Stack.Navigator
+      initialRouteName="HomeFull"
+      screenOptions={{
+        headerShown: false,
+        animation: 'slide_from_right',
+      }}>
+      <Stack.Screen name="WelcomeTeam" component={WelcomeTeam} />
+      <Stack.Screen name="Test" component={Test} />
+      <Stack.Screen name="OnboardingNextOne" component={OnboardingNextOne} />
+      <Stack.Screen name="OnboardingNextTwo" component={OnboardingNextTwo} />
+      <Stack.Screen name="OnboardingStart" component={OnboardingStart} />
+      <Stack.Screen
+        name="OnboardingNextThree"
+        component={OnboardingNextThree}
+      />
+      <Stack.Screen name="AllReviews" component={AllReviews} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="LoginOption" component={LoginOption} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="RegisterOTP" component={RegisterOTP} />
+      <Stack.Screen name="FeaturedListHome" component={FeaturedListHome} />
+      <Stack.Screen name="Rule" component={Rule} />
+      <Stack.Screen name="Version" component={Version} />
+      <Stack.Screen name="FeaturedListDetail" component={FeaturedListDetail} />
+      <Stack.Screen name="HomeFull" component={HomeFull} />
+      <Stack.Screen name="HistoryDetail" component={HistoryDetail} />
+      <Stack.Screen name="Blogs" component={Blogs} />
+      <Stack.Screen name="CreateBlog" component={CreateBlog} />
+    </Stack.Navigator>
   );
 };
 

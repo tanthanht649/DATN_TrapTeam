@@ -69,7 +69,6 @@ const _ViewSwitcherProfile: React.FC<Props> = props => {
 
 const _styles = StyleSheet.create({
   container: {
-    marginVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     width: '75%',

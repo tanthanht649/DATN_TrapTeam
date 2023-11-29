@@ -51,7 +51,7 @@ const _Button: React.FC<Props> = props => {
 const _styles = StyleSheet.create({
   button: {
     width: Dimensions.get('window').width * 1,
-    height: 52,
+    height: 63,
     backgroundColor: Colors.GREEN,
     flexDirection: 'row',
     justifyContent: 'center',

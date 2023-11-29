@@ -3,13 +3,14 @@ import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { WelcomeTeamStackParamList } from '@navigation';
-import { BackgroundApp, Button, ButtonArrow, Input, ItemLocation, ViewSwitcher } from '@components';
-import { ARROW_LEFT_LINE, ARROW_LEFT_LINE_2, ARROW_LEFT_LINE_BIG, BACKGROUND_WHITE, EMAIL, LOCATION_2, MESSAGING, SEARCH_BOTTOM_TAB } from '@assets';
+import { BackgroundApp, Button, ButtonArrow, Header, Input, ItemLocation, TextPlus, ViewSwitcher } from '@components';
+import { ARROW_LEFT_LINE, ARROW_LEFT_LINE_2, ARROW_LEFT_LINE_BIG, BACKGROUND_WHITE, EMAIL, HOUSE, ICON_BACK, LOCATION_2, MESSAGING, SEARCH_BOTTOM_TAB, fontFamily } from '@assets';
+import { Colors, DimensionsStyle } from '@resources';
 
-type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Test'>;
+type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'AddDetail'>;
 const _AddDetail: React.FC<PropsType> = props => {
   const { navigation } = props;
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>('Khách sạn');
   const handleOnchangeText = (value: string) => {
     setSearch(value);
     console.log(value)
@@ -18,22 +19,24 @@ const _AddDetail: React.FC<PropsType> = props => {
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView style={_styles.container}>
-        <Pressable onPress={() => navigation.goBack()}>
-          <Text>Go Back</Text>
-        </Pressable>
-
-        <ItemLocation
-          imageLocation={LOCATION_2}
-          text="2.5 km from Srengseng, Kembangan, West Jakarta City, Jakarta 11630"
-          textBolds={['2.5 km']}
-          statusOnPress={true}
+      <Header
+          textCenter={'Thêm bài đăng'}
+          iconLeft={ICON_BACK}
+          eventLeft={() => console.log('IconLeft')}
+          styleIconLeft={{marginLeft:-DimensionsStyle.width*0.06}}
         />
-        <Button title='Next' onPress={() => { }} viewStyle={{ width: 278 }} imageIconLeft={EMAIL} imageIconRight={MESSAGING}></Button>
-        <ButtonArrow imageIcon={ARROW_LEFT_LINE} onPress={() => { }} shadow={true}></ButtonArrow>
-        <Input label='search' value={search} onChangeText={handleOnchangeText} imageIconLeft={SEARCH_BOTTOM_TAB} imageIconRight={ARROW_LEFT_LINE_2} iconRightStyle={{ opacity: 0 }} ></Input>
-        <ViewSwitcher
-          quantityEstates={22}
-          onTabChange={setListViewType} />
+        <TextPlus text='Chào Join, hãy điền vào thông tin chuyến đi của bạn '
+          textBolds={['chuyến đi của bạn']}
+          boldStyle={_styles.textBold}
+          textStyle={_styles.text} />
+          <Input
+          value={search}
+          onChangeText={handleOnchangeText}
+          imageIconLeft={HOUSE}
+          imageIconRight={HOUSE}
+          label='Tìm kiếm '
+          iconRightStyle={{ opacity: 0 }}
+          viewStyle={{ width: 327, alignSelf: 'center',marginTop:DimensionsStyle.height*0.025 }} ></Input>
       </SafeAreaView>
     </BackgroundApp>
   );
@@ -41,11 +44,20 @@ const _AddDetail: React.FC<PropsType> = props => {
 
 const _styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: 40,
-    // flexDirection: 'column',
-    // alignItems: 'center',
-    // justifyContent: 'center',
+   flex: 1,
+   marginHorizontal:24
+  },
+  text: {
+    fontSize: 25,
+    fontFamily: fontFamily.Regular,
+    color: Colors.GREY_DARK,
+    marginTop: DimensionsStyle.height * 0.04,
+    lineHeight: 40
+  },
+  textBold: {
+    fontSize: 25,
+    fontFamily: fontFamily.Bold,
+    color: Colors.BLUE,
   },
 });
 

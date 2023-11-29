@@ -30,6 +30,7 @@ interface HeaderProps {
   styleTextRight?: StyleProp<TextProps>;
   isCheck?: boolean;
   isCheckHeart?: boolean;
+  styleView?: StyleProp<ViewStyle>;
 }
 
 const _Header: React.FC<HeaderProps> = ({
@@ -46,6 +47,7 @@ const _Header: React.FC<HeaderProps> = ({
   styleIconRight,
   styleTextRight,
   isCheck,
+  styleView,
   isCheckHeart,
 }) => {
   const [heartIcon, setHeartIcon] = React.useState(iconHeart);
@@ -131,7 +133,7 @@ const _Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <View style={_styles.container}>
+    <View style={[_styles.container, styleView]}>
       {renderIconLeft()}
       {renderTextCenter()}
       {renderIconRight()}

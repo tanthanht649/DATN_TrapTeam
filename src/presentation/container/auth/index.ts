@@ -5,6 +5,5 @@ export * from './RegisterOTP';
 export * from './Profile';
 export * from './EditProfile';
 export * from './AllReviews';
-
-
-
+export * from './Rules';
+export * from './Version';

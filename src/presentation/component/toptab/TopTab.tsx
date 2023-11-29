@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   ScrollView,
@@ -11,7 +11,7 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
-import { Colors } from '@resources';
+import {Colors} from '@resources';
 import {
   MASTERCARD,
   MASTERCARD_SELECT,
@@ -33,12 +33,13 @@ interface ItemTab {
 
 type TopTabProps = {
   containerStyle?: StyleProp<ViewStyle>;
-  isCheck?: 'card' | 'home' | 'review';
+  isCheck?: 'card' | 'home' | 'review' | 'homefavorite';
   children?: React.ReactNode;
+  listTabContainer?: StyleProp<ViewStyle>;
 };
 
 const _TopTab: React.FC<TopTabProps> = props => {
-  const { containerStyle, isCheck, children } = props;
+  const {containerStyle, isCheck, children} = props;
 
   let data: ItemTab[] = [];
 
@@ -48,6 +49,9 @@ const _TopTab: React.FC<TopTabProps> = props => {
       break;
     case 'home':
       data = DATAHOME;
+      break;
+    case 'homefavorite':
+      data = DATAHOMEFAVORITE;
       break;
     case 'review':
       data = DATAREVIEW;
@@ -72,6 +76,9 @@ const _TopTab: React.FC<TopTabProps> = props => {
         case 'home':
           data = DATAHOME;
           break;
+        case 'homefavorite':
+          data = DATAHOMEFAVORITE;
+          break;
         case 'review':
           data = DATAREVIEW;
           break;
@@ -84,7 +91,7 @@ const _TopTab: React.FC<TopTabProps> = props => {
       scrollToX = Math.min(scrollToX, maxScrollX);
       const offsetX = Math.max(0, scrollToX - (screenWidth - itemWidth) / 2);
 
-      scrollViewRef.current.scrollTo({ x: offsetX, animated: true });
+      scrollViewRef.current.scrollTo({x: offsetX, animated: true});
     }
   }, [selectedIndex]);
 
@@ -96,7 +103,7 @@ const _TopTab: React.FC<TopTabProps> = props => {
     item: ItemTab;
   }
 
-  const ItemTab: React.FC<ItemCardProps> = ({ item }) => {
+  const ItemTab: React.FC<ItemCardProps> = ({item}) => {
     return (
       <TouchableOpacity
         style={[_styles.btnTab, status === item.title && _styles.btnTabActive]}
@@ -124,7 +131,7 @@ const _TopTab: React.FC<TopTabProps> = props => {
   return (
     <View style={containerStyle}>
       <View style={_styles.container}>
-        <View style={_styles.listTab}>
+        <View style={[_styles.listTab, props.listTabContainer]}>
           <ScrollView
             ref={scrollViewRef}
             horizontal
@@ -148,7 +155,7 @@ const _styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 15,
     marginHorizontal: 20,
-    borderRadius: 30,
+    borderRadius: 25,
     overflow: 'hidden',
   },
   btnTab: {
@@ -158,7 +165,7 @@ const _styles = StyleSheet.create({
     backgroundColor: Colors.SOFT_BLUE,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 100,
+    borderRadius: 25,
     marginRight: 10,
     paddingHorizontal: 25,
     paddingVertical: 15,
@@ -207,23 +214,38 @@ const DATACARD: ItemTab[] = [
 const DATAHOME: ItemTab[] = [
   {
     id: 0,
-    title: 'All',
-    onPress: () => { },
+    title: 'Tất cả',
+    onPress: () => {},
   },
   {
     id: 1,
-    title: 'House',
+    title: 'Phổ biến',
   },
   {
     id: 2,
-    title: 'Apartment',
-  },
-  {
-    id: 3,
-    title: 'Villa',
+    title: 'Nổi bật',
   },
 ];
 
+const DATAHOMEFAVORITE: ItemTab[] = [
+  {
+    id: 0,
+    title: 'Tất cả',
+    onPress: () => {},
+  },
+  {
+    id: 1,
+    title: 'Yêu thích',
+  },
+  {
+    id: 2,
+    title: 'Phổ biến',
+  },
+  {
+    id: 3,
+    title: 'Nổi bật',
+  },
+];
 const DATAREVIEW: ItemTab[] = [
   {
     id: 0,

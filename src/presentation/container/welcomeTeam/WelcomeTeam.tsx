@@ -23,6 +23,8 @@ import {
   TopTab,
   Header,
   HeaderMessager,
+  Button
+ 
 } from '@components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -75,6 +77,8 @@ const _WelcomeTeam: React.FC<PropsType> = props => {
           eventLeft={() => console.log('IconLeft')}
           />
         <TopTab isCheck="review" />
+        
+       
         {/* <Text style={_styles.textTitle}>Welcome Team</Text>
         <Text style={[_styles.textName, {fontFamily: fontFamily.Italic}]}>
           Trương Tấn Thành
@@ -94,6 +98,7 @@ const _WelcomeTeam: React.FC<PropsType> = props => {
         <Text style={[_styles.textName, {fontFamily: fontFamily.Semibold}]}>
           Lữ Văn Trọng
         </Text> */}
+        
         <Pressable
           style={_styles.pressable}
           onPress={() => navigation.navigate('Test')}>
