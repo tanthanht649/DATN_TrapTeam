@@ -180,7 +180,7 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
           iconRight={SETTING}
           styleIconRight={{width: 20, height: 20, display: 'none'}}
           iconHeart={HEART_INACTIVE}
-          eventLeft={() => console.log('IconLeft')}
+          eventLeft={() => navigation.goBack()}
           eventRight={() => console.log('EventRight')}
           isCheck={true}
         />

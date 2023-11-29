@@ -153,7 +153,7 @@ const _ListTourBanner: React.FC<PropsType> = props => {
       <SafeAreaView style={_styles.container}>
         <Header
           iconLeft={ICON_BACK}
-          eventLeft={() => console.log('EventLeft')}
+          eventLeft={() => navigation.goBack()}
           eventRight={() => console.log('EventRight')}
           isCheck={false}
         />

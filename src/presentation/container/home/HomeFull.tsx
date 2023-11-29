@@ -791,7 +791,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                 }}>
                 Địa điểm nổi bật
               </Text>
-              <Pressable onPress={handleToFeaturedListHome}>
+              <Pressable onPress={handleToFeaturedListDetail}>
                 <Text
                   style={{
                     fontFamily: fontFamily.Medium,
@@ -834,7 +834,7 @@ const _HomeFull: React.FC<PropsType> = props => {
               }}>
               Tour nổi bật
             </Text>
-            <Pressable onPress={handleToFeaturedListDetail}>
+            <Pressable onPress={handleToFeaturedListHome}>
               <Text
                 style={{
                   fontFamily: fontFamily.Medium,

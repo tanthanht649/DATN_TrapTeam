@@ -269,7 +269,7 @@ const _FeaturedListDetail: React.FC<PropsType> = props => {
             iconLeft={ICON_BACK}
             iconRight={SETTING_BG}
             iconHeart={HEART_INACTIVE}
-            eventLeft={() => console.log('IconLeft')}
+            eventLeft={() => navigation.goBack()}
             eventRight={() => console.log('EventRight')}
             isCheck={true}
             styleView={_styles.viewHeder}
