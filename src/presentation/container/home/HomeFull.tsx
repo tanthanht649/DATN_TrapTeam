@@ -800,7 +800,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                       renderItemTourFavorite({
                         item,
                         onPress: () => {
-                          navigation.navigate('DetailFull', {item: item});
+                          navigation.navigate('DetailTour', {item: item});
                         },
                       }),
                     )}
