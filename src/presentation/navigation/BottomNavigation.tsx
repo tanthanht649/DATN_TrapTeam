@@ -17,6 +17,7 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors} from '../resource/value';
+import {BlogStack} from './BlogStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -110,7 +111,7 @@ const _BottomNavigation = () => {
       />
       <Tab.Screen
         name="Blogss"
-        component={StackTest}
+        component={BlogStack}
         options={{
           tabBarLabel: '.',
         }}

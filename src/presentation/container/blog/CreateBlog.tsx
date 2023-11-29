@@ -2,7 +2,7 @@ import {Image, Pressable, StyleSheet, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {BlogStackParamList, WelcomeTeamStackParamList} from '@navigation';
 import {
   BackgroundApp,
   Button,
@@ -21,7 +21,7 @@ import {
 import {Colors, DimensionsStyle} from '@resources';
 
 type PropsType = NativeStackScreenProps<
-  WelcomeTeamStackParamList,
+  BlogStackParamList,
   'CreateBlog'
 >;
 const _CreateBlog: React.FC<PropsType> = props => {

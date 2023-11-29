@@ -1,14 +1,14 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
-import {HomeFull, Rule} from '@containers';
+import {Blogs, CreateBlog} from '@containers';
 
-type HomeFullProps = {};
-type RuleProps = {};
+type BlogsProps = {};
+type CreateBlogProps = {};
 
 export type BlogStackParamList = {
-  HomeFull: HomeFullProps | undefined;
-  Rule: RuleProps | undefined;
+  Blogs: BlogsProps | undefined;
+  CreateBlog: CreateBlogProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<BlogStackParamList>();
@@ -16,13 +16,13 @@ const Stack = createNativeStackNavigator<BlogStackParamList>();
 const _BlogStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Rule"
+      initialRouteName="Blogs"
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',
       }}>
-      <Stack.Screen name="HomeFull" component={HomeFull} />
-      <Stack.Screen name="Rule" component={Rule} />
+      <Stack.Screen name="Blogs" component={Blogs} />
+      <Stack.Screen name="CreateBlog" component={CreateBlog} />
     </Stack.Navigator>
   );
 };

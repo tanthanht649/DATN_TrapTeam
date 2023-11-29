@@ -10,7 +10,11 @@ import {
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {
+  WelcomeTeamStackParamList,
+  BlogStack,
+  BlogStackParamList,
+} from '@navigation';
 import {BackgroundApp, Header} from '@components';
 import {
   ADD_BLOG,
@@ -71,7 +75,7 @@ const Item = ({id, title, avatar, image, name, time}: ItemProps) => (
     <Image style={_styles.line} source={LINE_BLOG}></Image>
   </View>
 );
-type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Blogs'>;
+type PropsType = NativeStackScreenProps<BlogStackParamList, 'Blogs'>;
 const _Blog: React.FC<PropsType> = props => {
   const {navigation} = props;
   return (
