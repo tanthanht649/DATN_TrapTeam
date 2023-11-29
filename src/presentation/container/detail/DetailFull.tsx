@@ -77,13 +77,13 @@ const _DetailFull: React.FC<PropsType> = props => {
                     <TextPlus
                         textBolds={['Mô tả']}
                         text=' Mô tả'
-                        textStyle={{ fontSize: 18, color: '#252B5C' }}
+                        textStyle={{ fontSize: 16, color: '#252B5C' }}
                         boldStyle={{ color: '#252B5C', fontSize: 18 }}
                         numberOfLines={1} />
-                    <Text style={{ fontSize: 12, padding: 3 }}>
+                    <Text style={{ fontSize: 12, padding: 3, margin: 2 }}>
                         Người lớn: {`${price}`} VND
                     </Text>
-                    <Text style={{ fontSize: 12, padding: 3 }}>
+                    <Text style={{ fontSize: 12, padding: 3, margin: 2 }}>
                         Trẻ em: {`${priceChill}`} VND
                     </Text>
                 </View>
@@ -95,7 +95,7 @@ const _DetailFull: React.FC<PropsType> = props => {
                         boldStyle={{ color: '#252B5C', fontSize: 18 }}
                         numberOfLines={1} />
                     {schedule.map((item, index) => (
-                        <Text key={index} style={{ fontSize: 12, padding: 3 }}>
+                        <Text key={index} style={{ fontSize: 12, padding: 3, margin: 2 }}>
                             {item}
                         </Text>
                     ))}
@@ -112,7 +112,6 @@ const _DetailFull: React.FC<PropsType> = props => {
                 <ItemLocation
                     imageLocation={LOCATION_2}
                     text="Bà Nà Hills, Đà Nẵng - Hội An, Quảng Nam, Việt Nam"
-                    textBolds={['2.5 km']}
                     statusOnPress={true}
                 />
                 <View
@@ -191,7 +190,6 @@ const _DetailFull: React.FC<PropsType> = props => {
                     </Text>
                 </TouchableOpacity>
                 <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, marginTop: 70 }}>
-                    <Button viewStyle={{ width: '60%' }} title="Đặt Tour" onPress={() => console.log('Nút được nhấn')} />
                 </View>
             </BackgroundApp >
         </ScrollView >
