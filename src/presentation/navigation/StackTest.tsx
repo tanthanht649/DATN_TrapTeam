@@ -1,7 +1,8 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NavigationContainer} from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+
 import {
   WelcomeTeam,
   Test,
@@ -16,6 +17,8 @@ import {
   Profile,
   Register,
   RegisterOTP,
+  EmptyExplore,
+  DetailFull
 } from '@containers';
 
 type WelcomeTeamProps = {};
@@ -31,8 +34,11 @@ type LoginOptionProps = {};
 type ProfileProps = {};
 type RegisterProps = {};
 type RegisterOTPProps = {};
+type EmptyExploreProps = {};
+type DetailFullProps = {};
 
 export type WelcomeTeamStackParamList = {
+  EmptyExplore: EmptyExploreProps | undefined;
   WelcomeTeam: WelcomeTeamProps | undefined;
   Test: TestProps | undefined;
   OnboardingNextOne: OnboardingNextOneProps | undefined;
@@ -46,6 +52,7 @@ export type WelcomeTeamStackParamList = {
   Profile: ProfileProps | undefined;
   Register: RegisterProps | undefined;
   RegisterOTP: RegisterOTPProps | undefined;
+  DetailFull: DetailFullProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
@@ -54,11 +61,13 @@ const _StackTest = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="OnboardingNextOne"
+        initialRouteName="DetailFull"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
         }}>
+        <Stack.Screen name="DetailFull" component={DetailFull} />
+        <Stack.Screen name="EmptyExplore" component={EmptyExplore} />
         <Stack.Screen name="WelcomeTeam" component={WelcomeTeam} />
         <Stack.Screen name="Test" component={Test} />
         <Stack.Screen name="OnboardingNextOne" component={OnboardingNextOne} />
