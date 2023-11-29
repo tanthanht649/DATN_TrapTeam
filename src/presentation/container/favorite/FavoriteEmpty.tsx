@@ -12,7 +12,11 @@ import {
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {HomeStackParamList, WelcomeTeamStackParamList} from '@navigation';
+import {
+  HomeStackParamList,
+  ProfileStackParamList,
+  WelcomeTeamStackParamList,
+} from '@navigation';
 import {Header, TextPlus, ViewSwitcher} from '@components';
 import {
   ALERT_SUCCESS_PLUS,
@@ -31,7 +35,7 @@ import StaggeredList from '@mindinventory/react-native-stagger-view';
 import {SwipeListView} from 'react-native-swipe-list-view';
 
 type PropsType = NativeStackScreenProps<
-  WelcomeTeamStackParamList,
+  ProfileStackParamList,
   'FavoriteEmpty'
 > &
   NativeStackScreenProps<HomeStackParamList, 'FavoriteEmpty'>;

@@ -9,18 +9,18 @@ import {
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {HomeStackParamList, WelcomeTeamStackParamList} from '@navigation';
+import {
+  HomeStackParamList,
+  ProfileStackParamList,
+  WelcomeTeamStackParamList,
+} from '@navigation';
 import {BackgroundApp, Header, TextPlus} from '@components';
 import {BACKGROUND_WHITE, ICON_BACK, LOGO_RULE, fontFamily} from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
 
-type PropsType = NativeStackScreenProps<HomeStackParamList, 'Rule'>;
+type PropsType = NativeStackScreenProps<ProfileStackParamList, 'Rule'>;
 const _Rule: React.FC<PropsType> = props => {
   const {navigation} = props;
-
-  const a = () => {
-    navigation.navigate('HomeFull');
-  };
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -28,13 +28,10 @@ const _Rule: React.FC<PropsType> = props => {
         <Header
           textCenter={'Điều khoản và chính sách'}
           iconLeft={ICON_BACK}
-          eventLeft={() => console.log('IconLeft')}
+          eventLeft={() => navigation.goBack()}
           styleIconLeft={{marginLeft: -DimensionsStyle.width * 0.06}}
         />
-
-        <Pressable onPress={a}>
-          <Image source={LOGO_RULE} style={_styles.image}></Image>
-        </Pressable>
+        <Image source={LOGO_RULE} style={_styles.image}></Image>
         <ScrollView showsVerticalScrollIndicator={false}>
           <TextPlus
             text="Dưới đây là một mô tả tổng quan về điều khoản và chính sách cho ứng dụng đặt tour du lịch của chúng tôi. Lưu ý rằng đây chỉ là một ví dụ và nên được sửa đổi và tuỳ chỉnh phù hợp với ứng dụng của bạn. Để đảm bảo tính pháp lý của nội dung, khuyến nghị bạn tham khảo ý kiến ​​của luật sư chuyên về lĩnh vực này.

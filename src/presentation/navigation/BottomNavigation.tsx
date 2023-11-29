@@ -18,6 +18,7 @@ import {
 } from '@assets';
 import {Colors} from '../resource/value';
 import {BlogStack} from './BlogStack';
+import {ProfileStack} from './ProfileStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -118,7 +119,7 @@ const _BottomNavigation = () => {
       />
       <Tab.Screen
         name="Profiles"
-        component={HomeStack}
+        component={ProfileStack}
         options={{
           tabBarLabel: '.',
         }}

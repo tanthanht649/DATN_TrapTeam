@@ -2,7 +2,11 @@ import {Image, Pressable, StyleSheet, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {BlogStackParamList, WelcomeTeamStackParamList} from '@navigation';
+import {
+  BlogStackParamList,
+  ProfileStackParamList,
+  WelcomeTeamStackParamList,
+} from '@navigation';
 import {
   BackgroundApp,
   Button,
@@ -20,10 +24,8 @@ import {
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
 
-type PropsType = NativeStackScreenProps<
-  BlogStackParamList,
-  'CreateBlog'
->;
+type PropsType = NativeStackScreenProps<BlogStackParamList, 'CreateBlog'> &
+  NativeStackScreenProps<ProfileStackParamList>;
 const _CreateBlog: React.FC<PropsType> = props => {
   const {navigation} = props;
 
@@ -60,7 +62,8 @@ const _CreateBlog: React.FC<PropsType> = props => {
         imageIconLeft={ADD_IMAGE}
         imageIconRight={ADD_IMAGE}
         onPress={() => {
-          setModalVisible(true);
+          // setModalVisible(true);
+          navigation.navigate('Blogs');
         }}
       />
       {/* <ModalSuccessful
@@ -70,7 +73,12 @@ const _CreateBlog: React.FC<PropsType> = props => {
         textBold="thành công"
         titleButton="Xem bài biết"></ModalSuccessful> */}
       {/* <ModalPayment visible={modalVisible} onPress={handleModal} Cancel={()=>{setModalVisible(false)}}></ModalPayment> */}
-      <ModalFilter visible={modalVisible} onPress={handleModal} Cancel={()=>{setModalVisible(false)}} ></ModalFilter>
+      <ModalFilter
+        visible={modalVisible}
+        onPress={handleModal}
+        Cancel={() => {
+          setModalVisible(false);
+        }}></ModalFilter>
     </BackgroundApp>
   );
 };

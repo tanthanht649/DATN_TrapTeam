@@ -43,12 +43,9 @@ import {
 } from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {ProfileStackParamList, WelcomeTeamStackParamList} from '@navigation';
 
-type PropsType = NativeStackScreenProps<
-  WelcomeTeamStackParamList,
-  'HistoryDetail'
->;
+type PropsType = NativeStackScreenProps<ProfileStackParamList, 'HistoryDetail'>;
 
 interface Item {
   id: number;
@@ -361,7 +358,11 @@ const _HistoryDetail: React.FC<PropsType> = props => {
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
-      <Header iconLeft={ICON_BACK} textCenter="Chi tiết lịch sử tour" />
+      <Header
+        iconLeft={ICON_BACK}
+        textCenter="Chi tiết lịch sử tour"
+        eventLeft={() => navigation.goBack()}
+      />
       <FlatList
         data={DATA}
         renderItem={renderItemHistory}

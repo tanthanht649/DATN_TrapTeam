@@ -11,7 +11,11 @@ import {
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {
+  BlogStackParamList,
+  ProfileStackParamList,
+  WelcomeTeamStackParamList,
+} from '@navigation';
 import {BackgroundApp, Header, Input, ViewSwitcherProfile} from '@components';
 import {
   BACKGROUND_WHITE,
@@ -31,6 +35,7 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
+import {AppContext} from '@shared-state';
 type Item = {
   id: string;
   image: ImageSourcePropType;
@@ -42,8 +47,10 @@ type Item = {
   location: string;
   type: string;
 };
-type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Profile'>;
+type PropsType = NativeStackScreenProps<ProfileStackParamList, 'Profile'>;
 const _Profile: React.FC<PropsType> = props => {
+  const {navigation} = props;
+  const {isLoggedIn, setLoggedIn} = React.useContext(AppContext);
   const [selectTab, setSelectTab] = useState(0);
 
   const [data, setData] = React.useState<Item[]>([
@@ -307,7 +314,11 @@ const _Profile: React.FC<PropsType> = props => {
             {/* <Text style={_styles.email}>mathew@email.com</Text> */}
           </View>
           <View style={_styles.row}>
-            <Pressable onPress={() => {}} style={_styles.border}>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('FavoriteEmpty');
+              }}
+              style={_styles.border}>
               <Image
                 style={[
                   _styles.image,
@@ -322,7 +333,11 @@ const _Profile: React.FC<PropsType> = props => {
                 Yêu thích
               </Text>
             </Pressable>
-            <Pressable onPress={() => {}} style={_styles.border}>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('HistoryDetail');
+              }}
+              style={_styles.border}>
               <Image
                 style={[
                   _styles.image,
@@ -337,7 +352,11 @@ const _Profile: React.FC<PropsType> = props => {
                 Lịch sử
               </Text>
             </Pressable>
-            <Pressable onPress={() => {}} style={_styles.border}>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('CreateBlog');
+              }}
+              style={_styles.border}>
               <Image
                 style={[
                   _styles.image,
@@ -359,7 +378,11 @@ const _Profile: React.FC<PropsType> = props => {
               </Text>
             </Pressable>
           </View>
-          <Pressable onPress={() => {}} style={_styles.card}>
+          <Pressable
+            onPress={() => {
+              navigation.navigate('Rule');
+            }}
+            style={_styles.card}>
             <Image
               style={[
                 _styles.image,
@@ -378,7 +401,11 @@ const _Profile: React.FC<PropsType> = props => {
               Điều khoản và chính sách
             </Text>
           </Pressable>
-          <Pressable onPress={() => {}} style={_styles.card}>
+          <Pressable
+            onPress={() => {
+              navigation.navigate('Version');
+            }}
+            style={_styles.card}>
             <Image
               style={[
                 _styles.image,
@@ -394,10 +421,14 @@ const _Profile: React.FC<PropsType> = props => {
                   fontSize: 16,
                 },
               ]}>
-              Điều khoản và chính sách
+              Phiên bản hiện tại
             </Text>
           </Pressable>
-          <Pressable onPress={() => {}} style={_styles.card}>
+          <Pressable
+            onPress={() => {
+              setLoggedIn(false);
+            }}
+            style={_styles.card}>
             <Image
               style={[
                 _styles.image,
