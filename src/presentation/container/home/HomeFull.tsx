@@ -549,6 +549,13 @@ const _HomeFull: React.FC<PropsType> = props => {
     'card' | 'home' | 'review' | 'homefavorite'
   >('home');
 
+  const [hideElement, setHideElement] = useState(false);
+
+  const handleScroll = (event: any) => {
+    const offsetY = event.nativeEvent.contentOffset.y + 10;
+    setHideElement(offsetY > 20);
+  };
+
   const a = () => {
     navigation.navigate('Rule');
   };
@@ -627,55 +634,62 @@ const _HomeFull: React.FC<PropsType> = props => {
         }}
       />
       <SafeAreaView style={_styles.containerScrollView}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <TextPlus
-            textBolds={['Thuy Ân!']}
-            text={'Xin chào, Thuy Ân! \nHãy bắt đầu khám phá'}
-            boldStyle={{
-              fontFamily: fontFamily.Bold,
-              color: Colors.GREY_DARK_1,
-              fontSize: 25,
-              lineHeight: 40,
-              letterSpacing: 0.75,
-            }}
-            textStyle={{
-              color: Colors.GREY_DARK_1,
-              fontSize: 25,
-              lineHeight: 40,
-              letterSpacing: 0.75,
-              width: '100%',
-            }}
-            numberOfLines={2}
-          />
-          <Input
-            imageIconLeft={FIND}
-            imageIconRight={FIND}
-            iconRightStyle={{display: 'none'}}
-            label="Tìm kiếm địa điểm, tour du lịch"
-            value={text}
-            onChangeText={text => setText(text)}
-            viewStyle={{
-              marginTop: '5%',
-              marginBottom: '3%',
-              marginEnd: 20,
-              marginStart: 0,
-            }}
-            textInputStyle={{width: '90%'}}
-          />
-          <TopTab
-            isCheck={isCheck}
-            listTabContainer={{
-              marginHorizontal: 0,
-              borderTopEndRadius: 0,
-              borderBottomRightRadius: 0,
-            }}
-          />
+        {hideElement ? null : (
+          <View>
+            <TextPlus
+              textBolds={['Thuy Ân!']}
+              text={'Xin chào, Thuy Ân! \nHãy bắt đầu khám phá'}
+              boldStyle={{
+                fontFamily: fontFamily.Bold,
+                color: Colors.GREY_DARK_1,
+                fontSize: 25,
+                lineHeight: 40,
+                letterSpacing: 0.75,
+              }}
+              textStyle={{
+                color: Colors.GREY_DARK_1,
+                fontSize: 25,
+                lineHeight: 40,
+                letterSpacing: 0.75,
+                width: '100%',
+              }}
+              numberOfLines={2}
+            />
+            <Input
+              imageIconLeft={FIND}
+              imageIconRight={FIND}
+              iconRightStyle={{display: 'none'}}
+              label="Tìm kiếm địa điểm, tour du lịch"
+              value={text}
+              onChangeText={text => setText(text)}
+              viewStyle={{
+                marginTop: '5%',
+                marginBottom: '3%',
+                marginEnd: 20,
+                marginStart: 0,
+              }}
+              textInputStyle={{width: '90%'}}
+            />
+          </View>
+        )}
 
+        <TopTab
+          isCheck={isCheck}
+          listTabContainer={{
+            marginHorizontal: 0,
+            borderTopEndRadius: 0,
+            borderBottomRightRadius: 0,
+            marginBottom: 20,
+          }}
+        />
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          onScroll={handleScroll}>
           <View
             style={{
               flex: 1,
               overflow: 'hidden',
-              marginVertical: 20,
               borderTopLeftRadius: 20,
               borderBottomLeftRadius: 20,
             }}>

@@ -83,7 +83,7 @@ const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
 const _StackTest = () => {
   return (
     <Stack.Navigator
-      initialRouteName="CreateBlog"
+      initialRouteName="HomeFull"
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',
