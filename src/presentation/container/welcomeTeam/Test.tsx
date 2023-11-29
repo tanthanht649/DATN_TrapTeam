@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { WelcomeTeamStackParamList } from '@navigation';
-import { BackgroundApp, Button, ButtonArrow, Input, ItemLocation, ViewSwitcher, ViewSwitcherProfile } from '@components';
+import { BackgroundApp, Button, ButtonArrow, Input, ItemLocation, ViewSwitcher, ViewSwitcherProfile, HeaderHome2 } from '@components';
 import { ARROW_LEFT_LINE, ARROW_LEFT_LINE_2, ARROW_LEFT_LINE_BIG, BACKGROUND_WHITE, EMAIL, LOCATION_2, MESSAGING, SEARCH_BOTTOM_TAB } from '@assets';
 
 type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Test'>;
 const _Test: React.FC<PropsType> = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [search, setSearch] = useState<string>('');
   const handleOnchangeText = (value: string) => {
     setSearch(value);
@@ -50,6 +50,14 @@ const _Test: React.FC<PropsType> = props => {
           textProfile='transactions'
           showAddCard={false}
         />
+        <HeaderHome2
+          avatar={BACKGROUND_WHITE}
+          statusNotification={true}
+          onPressNotification={() => { }}
+          onPressAvatar={() => { }}
+          onPressSetting={() => { }}
+        />
+
       </SafeAreaView>
     </BackgroundApp>
   );
