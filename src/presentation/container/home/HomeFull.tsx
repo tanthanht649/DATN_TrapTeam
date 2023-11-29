@@ -185,9 +185,15 @@ export const DATATOUR: Tour[] = [
   },
 ];
 
-const ItemTourFavorite = ({item}: {item: Tour}) => {
+const ItemTourFavorite = ({
+  item,
+  onPress,
+}: {
+  item: Tour;
+  onPress: () => void;
+}) => {
   return (
-    <View
+    <Pressable
       style={{
         width: DimensionsStyle.width * 0.7,
         height: DimensionsStyle.width * 0.35,
@@ -196,7 +202,8 @@ const ItemTourFavorite = ({item}: {item: Tour}) => {
         backgroundColor: Colors.SOFT_BLUE,
         borderRadius: 20,
         overflow: 'hidden',
-      }}>
+      }}
+      onPress={onPress}>
       <View
         style={{
           width: '50%',
@@ -272,7 +279,7 @@ const ItemTourFavorite = ({item}: {item: Tour}) => {
           {item.price.toLocaleString('vi-VN')} VNĐ
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -612,8 +619,8 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
-        return <ItemTourFavorite item={item} key={item.id} />;
+      ({item, onPress}: {item: Tour; onPress: () => void}) => {
+        return <ItemTourFavorite item={item} key={item.id} onPress={onPress} />;
       },
     [],
   );
@@ -790,7 +797,12 @@ const _HomeFull: React.FC<PropsType> = props => {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <View style={{flexDirection: 'row'}}>
                     {DATATOUR.map((item, index) =>
-                      renderItemTourFavorite({item}),
+                      renderItemTourFavorite({
+                        item,
+                        onPress: () => {
+                          navigation.navigate('DetailFull', {item: item});
+                        },
+                      }),
                     )}
                   </View>
                 </ScrollView>

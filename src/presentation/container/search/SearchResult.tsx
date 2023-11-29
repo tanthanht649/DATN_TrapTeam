@@ -81,7 +81,7 @@ const _SearchResult: React.FC<PropsType> = props => {
 
   // 'Phổ biến', 'Hà Nội', '200.000 - 500.000'
 
-  const DATAFIND: string[] = [];
+  const DATAFIND: string[] = ['Phổ biến', 'Hà Nội', '200.000 - 500.000'];
 
   const [marginBottom, setMarginBottom] = useState(0);
   useEffect(() => {

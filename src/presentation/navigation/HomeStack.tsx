@@ -7,6 +7,7 @@ import {
   FeaturedListDetail,
   FavoriteEmpty,
   SearchResult,
+  DetailFull,
 } from '@containers';
 
 type HomeFullProps = {};
@@ -15,6 +16,7 @@ type FeaturedListHomeProps = {};
 type FeaturedListDetailProps = {};
 type FavoriteEmptyProps = {};
 type SearchResultProps = {};
+type DetailFullProps = {};
 
 export type HomeStackParamList = {
   HomeFull: HomeFullProps | undefined;
@@ -23,6 +25,7 @@ export type HomeStackParamList = {
   FeaturedListDetail: FeaturedListDetailProps | undefined;
   FavoriteEmpty: FavoriteEmptyProps | undefined;
   SearchResult: SearchResultProps | undefined;
+  DetailFull: DetailFullProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -41,6 +44,7 @@ const _HomeStack = () => {
       <Stack.Screen name="FeaturedListDetail" component={FeaturedListDetail} />
       <Stack.Screen name="FavoriteEmpty" component={FavoriteEmpty} />
       <Stack.Screen name="SearchResult" component={SearchResult} />
+      <Stack.Screen name="DetailFull" component={DetailFull} />
     </Stack.Navigator>
   );
 };
