@@ -29,8 +29,16 @@ import {Colors, DimensionsStyle} from '@resources';
 import {Tour} from '../home';
 import {ItemTourOutstanding} from '../home';
 import {DATATOUROUTSTANDING, DATATOUR} from '../home';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {HomeStackParamList} from '@navigation';
 
-const _FeaturedListDetail = () => {
+type PropsType = NativeStackScreenProps<
+  HomeStackParamList,
+  'FeaturedListDetail'
+>;
+
+const _FeaturedListDetail: React.FC<PropsType> = props => {
+  const {navigation} = props;
   const [hideElement, setHideElement] = useState(false);
   const [searchName, setSearchName] = useState('');
   const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');

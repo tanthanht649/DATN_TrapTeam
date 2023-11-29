@@ -82,12 +82,9 @@ const DATABANNER: Banner[] = [
   },
 ];
 
-const ItemBanner = ({item}: {item: Banner}) => {
+const ItemBanner = ({item, onPress}: {item: Banner; onPress: () => void}) => {
   return (
-    <Pressable
-      onPress={() => {
-        console.log(item.id);
-      }}>
+    <Pressable onPress={onPress}>
       <Image
         source={{uri: item.image}}
         style={{
@@ -556,10 +553,6 @@ const _HomeFull: React.FC<PropsType> = props => {
     setHideElement(offsetY > 20);
   };
 
-  const a = () => {
-    navigation.navigate('Rule');
-  };
-
   useEffect(() => {
     isFavorite ? setIsCheck('homefavorite') : setIsCheck('home');
   }, [isFavorite]);
@@ -574,10 +567,23 @@ const _HomeFull: React.FC<PropsType> = props => {
   const column1Data = DATATOUROUTSTANDING.slice(0, halfwayIndex);
   const column2Data = DATATOUROUTSTANDING.slice(halfwayIndex);
 
+  const handleToListTourBanner = () => {
+    navigation.navigate('ListTourBanner');
+  };
+
   const renderItemBanner = React.useMemo(
     () =>
       ({item}: {item: Banner}) => {
-        return <ItemBanner item={item} key={item.id} />;
+        return (
+          <ItemBanner
+            onPress={() => {
+              console.log(item);
+              handleToListTourBanner();
+            }}
+            item={item}
+            key={item.id}
+          />
+        );
       },
     [],
   );
@@ -623,6 +629,18 @@ const _HomeFull: React.FC<PropsType> = props => {
       animated: true,
     });
   }, [currentIndex]);
+
+  const handleToListTourFavorite = () => {
+    navigation.navigate('FavoriteEmpty');
+  };
+
+  const handleToFeaturedListHome = () => {
+    navigation.navigate('FeaturedListHome');
+  };
+
+  const handleToFeaturedListDetail = () => {
+    navigation.navigate('FeaturedListDetail');
+  };
 
   return (
     <BackgroundApp source={BACKGROUND_HOME}>
@@ -717,6 +735,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                   flexDirection: 'row',
                   alignItems: 'baseline',
                   justifyContent: 'space-between',
+                  marginTop: 15,
                 }}>
                 <Text
                   style={{
@@ -726,7 +745,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                   }}>
                   Tour Yêu thích
                 </Text>
-                <Pressable>
+                <Pressable onPress={handleToListTourFavorite}>
                   <Text
                     style={{
                       fontFamily: fontFamily.Medium,
@@ -772,7 +791,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                 }}>
                 Địa điểm nổi bật
               </Text>
-              <Pressable>
+              <Pressable onPress={handleToFeaturedListHome}>
                 <Text
                   style={{
                     fontFamily: fontFamily.Medium,
@@ -815,7 +834,7 @@ const _HomeFull: React.FC<PropsType> = props => {
               }}>
               Tour nổi bật
             </Text>
-            <Pressable>
+            <Pressable onPress={handleToFeaturedListDetail}>
               <Text
                 style={{
                   fontFamily: fontFamily.Medium,

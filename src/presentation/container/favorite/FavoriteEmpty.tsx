@@ -12,7 +12,7 @@ import {
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {HomeStackParamList, WelcomeTeamStackParamList} from '@navigation';
 import {Header, TextPlus, ViewSwitcher} from '@components';
 import {
   ALERT_SUCCESS_PLUS,
@@ -33,7 +33,8 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 type PropsType = NativeStackScreenProps<
   WelcomeTeamStackParamList,
   'FavoriteEmpty'
->;
+> &
+  NativeStackScreenProps<HomeStackParamList, 'FavoriteEmpty'>;
 
 export interface Item {
   id: number;

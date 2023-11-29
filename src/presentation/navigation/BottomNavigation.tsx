@@ -96,7 +96,7 @@ const _BottomNavigation = () => {
       })}>
       <Tab.Screen
         name="Home"
-        component={StackTest}
+        component={HomeStack}
         options={{
           tabBarLabel: '.',
         }}

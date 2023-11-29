@@ -37,10 +37,15 @@ import {Colors, DimensionsStyle} from '@resources';
 import {Tour} from '../home';
 import {ItemTourOutstanding} from '../home';
 import {DATATOUROUTSTANDING, DATATOUR} from '../home';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {HomeStackParamList} from '@navigation';
+
+type PropsType = NativeStackScreenProps<HomeStackParamList, 'FeaturedListHome'>;
 
 const {height: screenHeight} = Dimensions.get('window');
 
-const _FeaturedListHome = () => {
+const _FeaturedListHome: React.FC<PropsType> = props => {
+  const {navigation} = props;
   const [searchName, setSearchName] = useState('');
   const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
 
