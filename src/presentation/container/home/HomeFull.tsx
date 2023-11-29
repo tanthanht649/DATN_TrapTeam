@@ -447,9 +447,31 @@ export const DATATOUROUTSTANDING: Tour[] = [
     schedule: 'Hà Nội',
     status: true,
   },
+  {
+    id: 5,
+    tourist_destinationId: 1,
+    provide: 'Vietnam Travel',
+    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    available_seats: 10,
+    duration: 1,
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    price: 4450000,
+    departure_date: '2021-10-10',
+    departure_location: 'Hồ Chí Minh, Việt Nam',
+    note: 'Không được hủy',
+    schedule: 'Hà Nội',
+    status: true,
+  },
 ];
 
-export const ItemTourOutstanding = ({item}: {item: Tour}) => {
+export const ItemTourOutstanding = ({
+  item,
+  index,
+}: {
+  item: Tour;
+  index: number;
+}) => {
   return (
     <View
       style={{
@@ -460,6 +482,7 @@ export const ItemTourOutstanding = ({item}: {item: Tour}) => {
         borderRadius: 20,
         padding: 7,
         marginBottom: 10,
+        marginRight: index % 2 === 0 ? 10 : 0,
       }}>
       <View>
         <Image
@@ -605,8 +628,8 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
-        return <ItemTourOutstanding item={item} key={item.id} />;
+      ({item, index}: {item: Tour; index: number}) => {
+        return <ItemTourOutstanding item={item} key={item.id} index={index} />;
       },
     [],
   );
@@ -854,12 +877,12 @@ const _HomeFull: React.FC<PropsType> = props => {
               <View style={_styles.containerFlatlist}>
                 <View>
                   {column1Data.map((item, index) =>
-                    renderItemTourOutstanding({item: item}),
+                    renderItemTourOutstanding({item: item, index: index}),
                   )}
                 </View>
                 <View>
                   {column2Data.map((item, index) =>
-                    renderItemTourOutstanding({item: item}),
+                    renderItemTourOutstanding({item: item, index: index}),
                   )}
                 </View>
               </View>

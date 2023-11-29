@@ -1,6 +1,6 @@
-import { ALERT_SUCCESS_TICK, EMAIL, LINE, fontFamily } from '@assets';
-import { Colors, DimensionsStyle } from '@resources';
-import React, { useState } from 'react';
+import {ALERT_SUCCESS_TICK, EMAIL, LINE, fontFamily} from '@assets';
+import {Colors, DimensionsStyle} from '@resources';
+import React, {useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -13,8 +13,8 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { Button } from '../button';
-import { TextPlus } from '../textPlus';
+import {Button} from '../button';
+import {TextPlus} from '../textPlus';
 
 type Props = {
   titleButton: string;
@@ -22,21 +22,22 @@ type Props = {
   visible: boolean;
   text: string;
   textBold: string;
-  content?: string
+  content?: string;
   onPress: () => void;
 };
 
-
 const _Modal: React.FC<Props> = props => {
-  const { titleButton, text, textBold, onPress, visible, content } = props;
-       
+  const {titleButton, text, textBold, onPress, visible, content} = props;
+
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={visible}
       onRequestClose={() => {
-        { !visible }
+        {
+          !visible;
+        }
       }}>
       <StatusBar
         barStyle="dark-content"
@@ -55,7 +56,13 @@ const _Modal: React.FC<Props> = props => {
               textStyle={_styles.text}
               viewStyle={_styles.textReady}
             />
-            <Text style={[_styles.textBold, { fontSize: 14,fontFamily:fontFamily.Medium, marginTop:20 }]}>{content}</Text>
+            <Text
+              style={[
+                _styles.textBold,
+                {fontSize: 14, fontFamily: fontFamily.Medium, marginTop: 20},
+              ]}>
+              {content}
+            </Text>
           </View>
           <Button
             title={titleButton}
@@ -65,12 +72,11 @@ const _Modal: React.FC<Props> = props => {
             viewStyle={{
               width: 278,
               position: 'absolute',
-              bottom: 70
+              bottom: 70,
             }}
           />
         </View>
       </View>
-
     </Modal>
   );
 };
@@ -81,7 +87,7 @@ const _styles = StyleSheet.create({
     backgroundColor: 'rgba(31, 76, 107, 0.9)',
     width: Dimensions.get('window').width * 1,
     height: Dimensions.get('window').height * 1,
-    position: 'absolute'
+    position: 'absolute',
   },
   centeredView: {
     flex: 1,
@@ -94,6 +100,8 @@ const _styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.6,
     backgroundColor: 'white',
     borderRadius: 50,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
     padding: 30,
     alignItems: 'center',
     shadowColor: '#000',
@@ -105,7 +113,6 @@ const _styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-
 
   text: {
     fontSize: 25,
@@ -119,22 +126,21 @@ const _styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: fontFamily.Bold,
     color: Colors.BLUE,
-
   },
   textReady: {
-    marginTop:20,
+    marginTop: 20,
     alignContent: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
   },
   image: {
     height: 142,
-    width: 142
+    width: 142,
   },
   line: {
     height: 2,
-    width: 50
-  }
+    width: 50,
+  },
 });
 
 export const ModalSuccessful = React.memo(_Modal);

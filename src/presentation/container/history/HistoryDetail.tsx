@@ -160,7 +160,7 @@ const DATA: Item[] = [
   },
 ];
 
-const ItemHistory = ({item}: {item: Item}) => {
+const ItemHistory = ({item, onPress}: {item: Item; onPress: () => void}) => {
   return (
     <View
       style={{
@@ -336,7 +336,7 @@ const ItemHistory = ({item}: {item: Item}) => {
             title="Đánh giá"
             imageIconLeft={FULL_NAME}
             imageIconRight={FULL_NAME}
-            onPress={() => {}}
+            onPress={onPress}
             viewStyle={{
               width: '100%',
               height: 40,
@@ -352,8 +352,12 @@ const ItemHistory = ({item}: {item: Item}) => {
 const _HistoryDetail: React.FC<PropsType> = props => {
   const {navigation} = props;
 
+  const handleToAddReview = () => {
+    navigation.navigate('AddReview');
+  };
+
   const renderItemHistory = ({item}: {item: Item}) => {
-    return <ItemHistory item={item} />;
+    return <ItemHistory item={item} onPress={handleToAddReview} />;
   };
 
   return (

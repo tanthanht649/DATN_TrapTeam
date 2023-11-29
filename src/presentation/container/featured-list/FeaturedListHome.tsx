@@ -157,8 +157,8 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
-        return <ItemTourOutstanding item={item} key={item.id} />;
+      ({item, index}: {item: Tour; index: number}) => {
+        return <ItemTourOutstanding item={item} key={item.id} index={index} />;
       },
     [],
   );

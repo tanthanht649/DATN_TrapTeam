@@ -13,6 +13,7 @@ import {TextPlus} from '../textPlus';
 type Props = {
   quantityEstates?: number;
   onTabChange: (tab: 'list' | 'grid') => void;
+  displayTab?: boolean;
 };
 
 const TabButton: React.FC<{
