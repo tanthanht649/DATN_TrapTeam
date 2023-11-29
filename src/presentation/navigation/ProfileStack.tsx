@@ -8,6 +8,7 @@ import {
   CreateBlog,
   Blogs,
   Version,
+  EditProfile,
 } from '@containers';
 
 type ProfileProps = {};
@@ -17,6 +18,7 @@ type RuleProps = {};
 type CreateBlogProps = {};
 type BlogsProps = {};
 type VersionProps = {};
+type EditProfileProps = {};
 
 export type ProfileStackParamList = {
   Profile: ProfileProps | undefined;
@@ -26,6 +28,7 @@ export type ProfileStackParamList = {
   CreateBlog: CreateBlogProps | undefined;
   Blogs: BlogsProps | undefined;
   Version: VersionProps | undefined;
+  EditProfile: EditProfileProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
@@ -45,6 +48,7 @@ const _ProfileStack = () => {
       <Stack.Screen name="CreateBlog" component={CreateBlog} />
       <Stack.Screen name="Blogs" component={Blogs} />
       <Stack.Screen name="Version" component={Version} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
   );
 };

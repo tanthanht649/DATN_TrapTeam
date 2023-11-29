@@ -305,7 +305,10 @@ const _Profile: React.FC<PropsType> = props => {
             styleIconRight={{height: 50, width: 50, opacity: 0}}></Header>
           <View style={_styles.avatar}>
             <Image style={_styles.image} source={IMAGE_TEST}></Image>
-            <Pressable>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('EditProfile');
+              }}>
               <Image style={_styles.edit} source={EDIT}></Image>
             </Pressable>
           </View>
