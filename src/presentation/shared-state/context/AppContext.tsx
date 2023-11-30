@@ -3,6 +3,8 @@ import React, {createContext, useState} from 'react';
 interface AppContextProps {
   isLoggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  pay: string;
+  setPay: React.Dispatch<React.SetStateAction<string>>;
 }
 
 type AppContextProviderProps = {
@@ -12,16 +14,21 @@ type AppContextProviderProps = {
 const defaultContextValue: AppContextProps = {
   isLoggedIn: false,
   setLoggedIn: () => {},
+  pay: 'Momo',
+  setPay: () => {},
 };
 
 export const AppContext = createContext<AppContextProps>(defaultContextValue);
 
 export const AppContextProvider = ({children}: AppContextProviderProps) => {
   const [isLoggedIn, setLoggedIn] = useState(true);
+  const [pay, setPay] = useState<string>('Momo');
 
   const appContextValue: AppContextProps = {
     isLoggedIn,
     setLoggedIn,
+    pay,
+    setPay,
   };
 
   return (

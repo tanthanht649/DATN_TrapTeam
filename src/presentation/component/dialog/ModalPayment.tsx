@@ -1,103 +1,96 @@
-import { EMAIL, LINE, MOMO, VIETTEL_PAY, ZALO_PAY, fontFamily } from '@assets';
-import { Colors } from '@resources';
-import React, { useEffect, useState } from 'react';
+import {EMAIL, LINE, MOMO, VIETTEL_PAY, ZALO_PAY, fontFamily} from '@assets';
+import {Colors} from '@resources';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
   Image,
   ImageSourcePropType,
   Modal,
+  Pressable,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Button } from '../button';
+import {Button} from '../button';
+import {AppContext} from '@shared-state';
 type ItemData = {
   id: string;
-  image: ImageSourcePropType,
-  title: string
+  image: ImageSourcePropType;
+  title: string;
 };
 type Props = {
   visible?: boolean;
-  onPress: (data: {}) => void;
+  onPress: () => void;
   Cancel: () => void;
-
 };
 
 const _Modal: React.FC<Props> = props => {
-  const { onPress, visible, Cancel} = props;
+  const {onPress, visible, Cancel} = props;
 
+  const [widthMomo, setWidthMomo] = React.useState<number>(52);
+  const [widthZaloPay, setWidthZaloPay] = React.useState<number>(60);
+  const [widthViettelPay, setWidthViettelPay] = React.useState<number>(60);
+  const [heightMomo, setHeightMomo] = React.useState<number>(52);
+  const [heightZaloPay, setHeightZaloPay] = React.useState<number>(60);
+  const [heightViettelPay, setHeightViettelPay] = React.useState<number>(60);
+  const {pay, setPay} = React.useContext(AppContext);
+  const [selected, setSelected] = useState<string>(pay);
 
-  const DATA: ItemData[] = [
-    {
-      id: '1',
-      image: MOMO,
-      title: 'MoMo'
-    },
-    {
-      id: '2',
-      image: ZALO_PAY,
-      title: 'ZaloPay'
-
-    },
-    {
-      id: '3',
-      image: VIETTEL_PAY,
-      title: 'ViettelPay'
-
-    },
-  ];
-
-  type ItemProps = {
-    item: ItemData;
-    onPress: () => void;
-    borderColor: string;
-    borderWidth: number;
-
-  };
-
-  const Item = ({ item, onPress, borderColor, borderWidth }: ItemProps) => (
-    <TouchableOpacity onPress={onPress} style={[_styles.item, { borderColor, borderWidth }]}>
-      <Image style={_styles.image} source={item.image}></Image>
-    </TouchableOpacity>
-  );
-
-  const [selectedId, setSelectedId] = useState<string>();
-  const [selected, setSelected] = useState<ItemData>();
-  const handleIndex = (item:ItemData) => {
-    setSelectedId(item.id);
-    setSelected(item)   
-    console.log('Phương thức đc chọn',selected)
-  }
-
- 
-  const renderItem = ({ item }: { item: ItemData }) => {
-    const borderColor = item.id === selectedId ? Colors.GREEN : Colors.WHITE;
-    const borderWith = item.id === selectedId ? 4 : 1;
-  
-   
-    return (
-
-      <Item
-        item={item}
-        onPress={()=>handleIndex(item)}
-        borderColor={borderColor}
-        borderWidth={borderWith}
-      />
-    );
-  };
- 
-  
-  const handleDateChange = () => {
-    if (selected != null) {
-      onPress(selected);
+  useEffect(() => {
+    if (selected === 'Momo') {
+      setWidthMomo(52);
+      setHeightMomo(52);
+      setWidthZaloPay(60);
+      setHeightZaloPay(60);
+      setWidthViettelPay(60);
+      setHeightViettelPay(60);
+    } else if (selected === 'ZaloPay') {
+      setWidthMomo(60);
+      setHeightMomo(60);
+      setWidthZaloPay(52);
+      setHeightZaloPay(52);
+      setWidthViettelPay(60);
+      setHeightViettelPay(60);
+    } else if (selected === 'ViettelPay') {
+      setWidthMomo(60);
+      setHeightMomo(60);
+      setWidthZaloPay(60);
+      setHeightZaloPay(60);
+      setWidthViettelPay(52);
+      setHeightViettelPay(52);
     }
-  }
- 
+  }, [selected]);
 
- 
+  const handleSelectMomo = () => {
+    setWidthMomo(52);
+    setHeightMomo(52);
+    setWidthZaloPay(60);
+    setHeightZaloPay(60);
+    setWidthViettelPay(60);
+    setHeightViettelPay(60);
+    setSelected('Momo');
+  };
+  const handleSelectZaloPay = () => {
+    setWidthMomo(60);
+    setHeightMomo(60);
+    setWidthZaloPay(52);
+    setHeightZaloPay(52);
+    setWidthViettelPay(60);
+    setHeightViettelPay(60);
+    setSelected('ZaloPay');
+  };
+  const handleSelectViettelPay = () => {
+    setWidthMomo(60);
+    setHeightMomo(60);
+    setWidthZaloPay(60);
+    setHeightZaloPay(60);
+    setWidthViettelPay(52);
+    setHeightViettelPay(52);
+    setSelected('ViettelPay');
+  };
 
   return (
     <Modal
@@ -105,7 +98,9 @@ const _Modal: React.FC<Props> = props => {
       transparent={true}
       visible={visible}
       onRequestClose={() => {
-        { !visible }
+        {
+          !visible;
+        }
       }}>
       <StatusBar
         barStyle="dark-content"
@@ -117,31 +112,108 @@ const _Modal: React.FC<Props> = props => {
           <View style={_styles.modalView}>
             <Image style={_styles.line} source={LINE}></Image>
             <Text style={_styles.textBold}>Thay đổi phương thức</Text>
-            <FlatList
+            {/* <FlatList
               horizontal
               data={DATA}
               renderItem={renderItem}
               keyExtractor={item => item.id}
               extraData={selected}
-            />
+            /> */}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+              }}>
+              <Pressable
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: Colors.GREEN,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 10,
+                  marginEnd: 15,
+                }}
+                onPress={handleSelectMomo}>
+                <Image
+                  source={MOMO}
+                  style={{
+                    width: widthMomo,
+                    height: heightMomo,
+                    resizeMode: 'stretch',
+                    alignSelf: 'center',
+                  }}
+                />
+              </Pressable>
+              <Pressable
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: Colors.GREEN,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 10,
+                  marginEnd: 15,
+                }}
+                onPress={handleSelectZaloPay}>
+                <Image
+                  source={ZALO_PAY}
+                  style={{
+                    width: widthZaloPay,
+                    height: heightZaloPay,
+                    resizeMode: 'stretch',
+                    alignSelf: 'center',
+                  }}
+                />
+              </Pressable>
+              <Pressable
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: Colors.GREEN,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 10,
+                  marginEnd: 15,
+                }}
+                onPress={handleSelectViettelPay}>
+                <Image
+                  source={VIETTEL_PAY}
+                  style={{
+                    width: widthViettelPay,
+                    height: heightViettelPay,
+                    resizeMode: 'stretch',
+                    alignSelf: 'center',
+                  }}
+                />
+              </Pressable>
+            </View>
           </View>
           <View style={_styles.row}>
             <Button
               title="Thay đổi"
               imageIconLeft={EMAIL}
               imageIconRight={EMAIL}
-              onPress={handleDateChange}
+              onPress={() => {
+                setPay(selected);
+                onPress();
+              }}
               viewStyle={{
                 width: '40%',
-
-
               }}
             />
             <Button
               title="Hủy"
               imageIconLeft={EMAIL}
               imageIconRight={EMAIL}
-              onPress={Cancel}
+              onPress={() => {
+                setSelected(pay);
+                Cancel();
+              }}
               viewStyle={{
                 width: '40%',
 
@@ -149,10 +221,8 @@ const _Modal: React.FC<Props> = props => {
               }}
             />
           </View>
-
         </View>
       </View>
-
     </Modal>
   );
 };
@@ -163,7 +233,7 @@ const _styles = StyleSheet.create({
     backgroundColor: 'rgba(31, 76, 107, 0.9)',
     width: Dimensions.get('window').width * 1,
     height: Dimensions.get('window').height * 1,
-    position: 'absolute'
+    position: 'absolute',
   },
   centeredView: {
     flex: 1,
@@ -185,7 +255,6 @@ const _styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-
   },
 
   textBold: {
@@ -194,18 +263,17 @@ const _styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: fontFamily.Medium,
     color: Colors.BLUE,
-
   },
   item: {
     margin: 5,
     height: 73,
-    borderRadius: 15
+    borderRadius: 15,
   },
 
   line: {
     height: 2,
     width: 50,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   row: {
     flexDirection: 'row',
@@ -213,12 +281,11 @@ const _styles = StyleSheet.create({
     bottom: 70,
     width: '100%',
     position: 'absolute',
-
   },
   image: {
     height: 65,
-    width: 65
-  }
+    width: 65,
+  },
 });
 
 export const ModalPayment = React.memo(_Modal);

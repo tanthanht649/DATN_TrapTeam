@@ -1,34 +1,65 @@
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { BackgroundApp, Header, ModalPayment } from '@components';
-import { BACKGROUND_WHITE, HEART, ICON_BACK, LOCATION, MOMO, fontFamily } from '@assets';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { HomeStackParamList, SearchStackParamList } from '@navigation';
-import { Tour } from '../home';
-import { Colors, DimensionsStyle } from '@resources';
+import {
+  Image,
+  ImageSourcePropType,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {BackgroundApp, Button, Header, ModalPayment} from '@components';
+import {
+  BACKGROUND_WHITE,
+  FULL_NAME,
+  HEART,
+  ICON_BACK,
+  LOCATION,
+  MOMO,
+  ORDER_BT,
+  VIETTEL_PAY,
+  ZALO_PAY,
+  fontFamily,
+} from '@assets';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {HomeStackParamList, SearchStackParamList} from '@navigation';
+import {Tour} from '../home';
+import {Colors, DimensionsStyle} from '@resources';
+import {AppContext} from '@shared-state';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'Pay'>;
 
 const _Pay: React.FC<PropsType> = props => {
-  const { navigation } = props;
-  const eventRight = () => { };
-  const eventLeft = () => { };
+  const {navigation} = props;
+  const eventRight = () => {};
+  const eventLeft = () => {};
   const eventBack = () => {
     navigation.goBack();
   };
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [selectedData, setSelectedData] = useState<{}>();
+  const {pay} = React.useContext(AppContext);
 
-  const handleDataFromModal = (data:{}) => {
-      setSelectedData(data);
-      console.log('Phương thức đã thay đổi hiển thị ở Pay',selectedData);
-      setModalVisible(false);
-      navigation.navigate("Pay")
+  const [imagePay, setImagePay] = useState<ImageSourcePropType>(MOMO);
+  const [namePay, setNamePay] = useState<string>('Ví MoMo');
+
+  useEffect(() => {
+    if (pay === 'Momo') {
+      setImagePay(MOMO);
+      setNamePay('Ví MoMo');
+    } else if (pay === 'ZaloPay') {
+      setImagePay(ZALO_PAY);
+      setNamePay('Ví ZaloPay');
+    } else if (pay === 'ViettelPay') {
+      setImagePay(VIETTEL_PAY);
+      setNamePay('Ví ViettelPay');
+    }
+  }, [pay]);
+
+  const onPress = () => {
+    setModalVisible(false);
   };
-  
-
 
   const itemTour: Tour = {
     id: 1,
@@ -72,7 +103,7 @@ const _Pay: React.FC<PropsType> = props => {
                 padding: 7,
               }}>
               <Image
-                source={{ uri: itemTour.image }}
+                source={{uri: itemTour.image}}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -118,7 +149,7 @@ const _Pay: React.FC<PropsType> = props => {
                 }}>
                 <Image
                   source={LOCATION}
-                  style={{ width: 12, height: 12, marginEnd: 2 }}
+                  style={{width: 12, height: 12, marginEnd: 2}}
                 />
                 <Text
                   numberOfLines={1}
@@ -141,7 +172,6 @@ const _Pay: React.FC<PropsType> = props => {
                 {itemTour.price.toLocaleString('vi-VN')} VNĐ
               </Text>
             </View>
-
           </View>
 
           <Text
@@ -150,10 +180,10 @@ const _Pay: React.FC<PropsType> = props => {
               {
                 marginTop: 30,
                 marginVertical: 15,
-                marginHorizontal: 20
+                marginHorizontal: 20,
               },
             ]}>
-            Chi tiết thanh toán
+            Chi Tiết Thanh Toán
           </Text>
           <View style={_styles.card}>
             <View style={_styles.row}>
@@ -163,7 +193,7 @@ const _Pay: React.FC<PropsType> = props => {
                   {
                     fontSize: 13,
                     color: Colors.BLUE_TEXT,
-                    fontFamily: fontFamily.Regular
+                    fontFamily: fontFamily.Regular,
                   },
                 ]}>
                 Người lớn x2
@@ -174,7 +204,7 @@ const _Pay: React.FC<PropsType> = props => {
                   {
                     fontSize: 13,
                     color: Colors.BLUE_TEXT,
-                    fontFamily: fontFamily.Regular
+                    fontFamily: fontFamily.Regular,
                   },
                 ]}>
                 13.380.000 VND
@@ -187,7 +217,7 @@ const _Pay: React.FC<PropsType> = props => {
                   {
                     fontSize: 13,
                     color: Colors.BLUE_TEXT,
-                    fontFamily: fontFamily.Regular
+                    fontFamily: fontFamily.Regular,
                   },
                 ]}>
                 Trẻ em x3
@@ -198,7 +228,7 @@ const _Pay: React.FC<PropsType> = props => {
                   {
                     fontSize: 13,
                     color: Colors.BLUE_TEXT,
-                    fontFamily: fontFamily.Regular
+                    fontFamily: fontFamily.Regular,
                   },
                 ]}>
                 1.800.000 VND
@@ -211,7 +241,7 @@ const _Pay: React.FC<PropsType> = props => {
                   {
                     fontSize: 13,
                     color: Colors.BLUE_TEXT,
-                    fontFamily: fontFamily.Regular
+                    fontFamily: fontFamily.Regular,
                   },
                 ]}>
                 Giảm giá
@@ -222,20 +252,20 @@ const _Pay: React.FC<PropsType> = props => {
                   {
                     fontSize: 13,
                     color: Colors.BLUE_TEXT,
-                    fontFamily: fontFamily.Regular
+                    fontFamily: fontFamily.Regular,
                   },
                 ]}>
                 380.000 VND
               </Text>
             </View>
           </View>
-          <View style={_styles.row}>
+          <View style={_styles.sum}>
             <Text
               style={[
                 _styles.text,
                 {
-                  marginVertical: 30,
-                  marginHorizontal: 20
+                  marginVertical: 20,
+                  marginHorizontal: 20,
                 },
               ]}>
               Tổng
@@ -245,38 +275,30 @@ const _Pay: React.FC<PropsType> = props => {
                 _styles.text,
                 {
                   fontSize: 20,
-                  marginVertical: 30,
-                  marginHorizontal: 20
+                  marginVertical: 20,
+                  marginHorizontal: 20,
                 },
               ]}>
               14,800,000 VND
             </Text>
           </View>
           <View style={_styles.row}>
-            <Text
-              style={
-                _styles.text
-              }>
-              Phương thức thanh toán
-            </Text>
-            <Pressable onPress={() => setModalVisible(true)
-            }>
+            <Text style={_styles.text}>Phương Thức Thanh Toán</Text>
+            <Pressable onPress={() => setModalVisible(true)}>
               <Text
                 style={[
                   _styles.text,
                   {
-
                     fontSize: 13,
-                    fontFamily: fontFamily.Bold
+                    fontFamily: fontFamily.Bold,
                   },
                 ]}>
                 Thay đổi
               </Text>
             </Pressable>
-
           </View>
           <View style={_styles.pay}>
-            <Image style={_styles.image} source={MOMO}></Image>
+            <Image style={_styles.image} source={imagePay}></Image>
             <View>
               <Text
                 style={[
@@ -284,10 +306,10 @@ const _Pay: React.FC<PropsType> = props => {
                   {
                     fontSize: 14,
                     color: Colors.BLACK,
-                    fontFamily: fontFamily.Bold
+                    fontFamily: fontFamily.Bold,
                   },
                 ]}>
-                Ví MoMo
+                {namePay}
               </Text>
               <Text
                 style={[
@@ -296,17 +318,36 @@ const _Pay: React.FC<PropsType> = props => {
                     fontSize: 12,
                     color: Colors.BLUE_TEXT,
                     fontFamily: fontFamily.Regular,
-                    
                   },
                 ]}>
-                14.000.380.000 VND
+                14.800.000 VND
               </Text>
             </View>
           </View>
-
+          <Button
+            title="Thanh toán"
+            imageIconLeft={FULL_NAME}
+            imageIconRight={ORDER_BT}
+            onPress={() => {
+              console.log('Đặt tour');
+            }}
+            viewStyle={{
+              width: DimensionsStyle.width * 1 - 40,
+              backgroundColor: Colors.GREEN,
+              borderRadius: 10,
+              marginVertical: 20,
+              marginTop: 40,
+              marginBottom: 10,
+            }}
+          />
         </ScrollView>
-        <ModalPayment visible={modalVisible}   onPress={handleDataFromModal} Cancel={() => { setModalVisible(false) } }></ModalPayment>
-
+        <ModalPayment
+          visible={modalVisible}
+          onPress={onPress}
+          Cancel={() => {
+            setModalVisible(false);
+          }}
+        />
       </SafeAreaView>
     </BackgroundApp>
   );
@@ -320,28 +361,29 @@ const _styles = StyleSheet.create({
   },
   card: {
     height: DimensionsStyle.height * 0.16,
-    width: DimensionsStyle.width * 0.89,
     backgroundColor: Colors.WHITE,
     borderWidth: 1,
-    borderColor: Colors.SOFT_BLUE,
+    borderColor: Colors.GREY,
     borderRadius: 20,
     marginHorizontal: 20,
     paddingVertical: 15,
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 20,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   image: {
     height: 35,
     width: 35,
-    marginRight:10
+    marginRight: 10,
   },
   pay: {
-    height: DimensionsStyle.height * 0.10,
+    height: DimensionsStyle.height * 0.1,
     width: DimensionsStyle.width * 0.5,
     backgroundColor: Colors.WHITE,
     borderWidth: 2,
@@ -353,7 +395,22 @@ const _styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+  },
+
+  sum: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 20,
+    backgroundColor: Colors.GRAY_SEARCH,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: Colors.GREY,
+    marginBottom: 10,
   },
 });
 
