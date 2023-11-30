@@ -121,9 +121,6 @@ export const LOGO_HOME = require('./logo-home.png');
 export const LOGO_RULE = require('./logo_rule.png');
 export const LOGO_VERSION = require('./logo_version.png');
 
-export const MOMO = require('./momo.png');
-export const ZALO_PAY = require('./zalopay.png');
-export const VIETTEL_PAY = require('./viettelpay.png');
 export const EMAIL_LOGIN = require('./email_login.png');
 export const ICON_CALENDAR = require('./icon_calendar.png');
 export const ICON_CLOCK = require('./icon_clock.png');
@@ -164,3 +161,6 @@ export const DT_1 = require('./DT_1.png');
 export const LOCATION_DT = require('./location_dt.png');
 export const LOCATION_ORANGE = require('./location_orange.png');
 export const ORDER_BT = require('./order_bt.png');
+export const MOMO = require('./momo.png');
+export const ZALO_PAY = require('./zalopay.png');
+export const VIETTEL_PAY = require('./viettelpay.png');
