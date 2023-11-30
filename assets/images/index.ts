@@ -162,3 +162,5 @@ export const ALERT_DANGER = require('./alert_danger.png');
 export const CLOSE_ITEM = require('./close_item.png');
 export const DT_1 = require('./DT_1.png');
 export const LOCATION_DT = require('./location_dt.png');
+export const LOCATION_ORANGE = require('./location_orange.png');
+export const ORDER_BT = require('./order_bt.png');

@@ -36,7 +36,7 @@ const Stack = createNativeStackNavigator<HomeStackParamList>();
 const _HomeStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="HomeFull"
+      initialRouteName="DetailTour"
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',
