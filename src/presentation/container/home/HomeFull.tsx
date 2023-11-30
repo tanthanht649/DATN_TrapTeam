@@ -40,9 +40,13 @@ import {
 } from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {
+  HomeStackParamList,
+  OnboardingLoginStackParamList,
+  WelcomeTeamStackParamList,
+} from '@navigation';
 
-type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'HomeFull'>;
+type PropsType = NativeStackScreenProps<HomeStackParamList, 'HomeFull'>;
 
 //Banner
 interface Banner {
@@ -77,12 +81,9 @@ const DATABANNER: Banner[] = [
   },
 ];
 
-const ItemBanner = ({item}: {item: Banner}) => {
+const ItemBanner = ({item, onPress}: {item: Banner; onPress: () => void}) => {
   return (
-    <Pressable
-      onPress={() => {
-        console.log(item.id);
-      }}>
+    <Pressable onPress={onPress}>
       <Image
         source={{uri: item.image}}
         style={{
@@ -116,7 +117,7 @@ const ItemBanner = ({item}: {item: Banner}) => {
 };
 
 //Tour yêu thích
-interface Tour {
+export interface Tour {
   id: number;
   tourist_destinationId: number;
   provide: string;
@@ -133,7 +134,7 @@ interface Tour {
   status: boolean;
 }
 
-const DATATOUR: Tour[] = [
+export const DATATOUR: Tour[] = [
   {
     id: 1,
     tourist_destinationId: 1,
@@ -184,9 +185,15 @@ const DATATOUR: Tour[] = [
   },
 ];
 
-const ItemTourFavorite = ({item}: {item: Tour}) => {
+const ItemTourFavorite = ({
+  item,
+  onPress,
+}: {
+  item: Tour;
+  onPress: () => void;
+}) => {
   return (
-    <View
+    <Pressable
       style={{
         width: DimensionsStyle.width * 0.7,
         height: DimensionsStyle.width * 0.35,
@@ -195,7 +202,8 @@ const ItemTourFavorite = ({item}: {item: Tour}) => {
         backgroundColor: Colors.SOFT_BLUE,
         borderRadius: 20,
         overflow: 'hidden',
-      }}>
+      }}
+      onPress={onPress}>
       <View
         style={{
           width: '50%',
@@ -271,7 +279,7 @@ const ItemTourFavorite = ({item}: {item: Tour}) => {
           {item.price.toLocaleString('vi-VN')} VNĐ
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -381,7 +389,7 @@ const ItemEstates = ({item}: {item: Estates}) => {
 };
 
 //Tour nổi bật
-const DATATOUROUTSTANDING: Tour[] = [
+export const DATATOUROUTSTANDING: Tour[] = [
   {
     id: 1,
     tourist_destinationId: 1,
@@ -446,9 +454,31 @@ const DATATOUROUTSTANDING: Tour[] = [
     schedule: 'Hà Nội',
     status: true,
   },
+  {
+    id: 5,
+    tourist_destinationId: 1,
+    provide: 'Vietnam Travel',
+    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
+    description: 'Điểm đến: Hồ Hoàn Kiếm',
+    available_seats: 10,
+    duration: 1,
+    image: 'https://i.redd.it/x8m1euew4du21.jpg',
+    price: 4450000,
+    departure_date: '2021-10-10',
+    departure_location: 'Hồ Chí Minh, Việt Nam',
+    note: 'Không được hủy',
+    schedule: 'Hà Nội',
+    status: true,
+  },
 ];
 
-const ItemTourOutstanding = ({item}: {item: Tour}) => {
+export const ItemTourOutstanding = ({
+  item,
+  index,
+}: {
+  item: Tour;
+  index: number;
+}) => {
   return (
     <View
       style={{
@@ -459,6 +489,7 @@ const ItemTourOutstanding = ({item}: {item: Tour}) => {
         borderRadius: 20,
         padding: 7,
         marginBottom: 10,
+        marginRight: index % 2 === 0 ? 10 : 0,
       }}>
       <View>
         <Image
@@ -544,6 +575,13 @@ const _HomeFull: React.FC<PropsType> = props => {
     'card' | 'home' | 'review' | 'homefavorite'
   >('home');
 
+  const [hideElement, setHideElement] = useState(false);
+
+  const handleScroll = (event: any) => {
+    const offsetY = event.nativeEvent.contentOffset.y + 10;
+    setHideElement(offsetY > 20);
+  };
+
   useEffect(() => {
     isFavorite ? setIsCheck('homefavorite') : setIsCheck('home');
   }, [isFavorite]);
@@ -558,18 +596,31 @@ const _HomeFull: React.FC<PropsType> = props => {
   const column1Data = DATATOUROUTSTANDING.slice(0, halfwayIndex);
   const column2Data = DATATOUROUTSTANDING.slice(halfwayIndex);
 
+  const handleToListTourBanner = () => {
+    navigation.navigate('ListTourBanner');
+  };
+
   const renderItemBanner = React.useMemo(
     () =>
       ({item}: {item: Banner}) => {
-        return <ItemBanner item={item} key={item.id} />;
+        return (
+          <ItemBanner
+            onPress={() => {
+              console.log(item);
+              handleToListTourBanner();
+            }}
+            item={item}
+            key={item.id}
+          />
+        );
       },
     [],
   );
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
-        return <ItemTourFavorite item={item} key={item.id} />;
+      ({item, onPress}: {item: Tour; onPress: () => void}) => {
+        return <ItemTourFavorite item={item} key={item.id} onPress={onPress} />;
       },
     [],
   );
@@ -584,8 +635,8 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
-        return <ItemTourOutstanding item={item} key={item.id} />;
+      ({item, index}: {item: Tour; index: number}) => {
+        return <ItemTourOutstanding item={item} key={item.id} index={index} />;
       },
     [],
   );
@@ -608,6 +659,18 @@ const _HomeFull: React.FC<PropsType> = props => {
     });
   }, [currentIndex]);
 
+  const handleToListTourFavorite = () => {
+    navigation.navigate('FavoriteEmpty');
+  };
+
+  const handleToFeaturedListHome = () => {
+    navigation.navigate('FeaturedListHome');
+  };
+
+  const handleToFeaturedListDetail = () => {
+    navigation.navigate('FeaturedListDetail');
+  };
+
   return (
     <BackgroundApp source={BACKGROUND_HOME}>
       <HeaderHome2
@@ -618,55 +681,63 @@ const _HomeFull: React.FC<PropsType> = props => {
         }}
       />
       <SafeAreaView style={_styles.containerScrollView}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <TextPlus
-            textBolds={['Thuy Ân!']}
-            text={'Xin chào, Thuy Ân! \nHãy bắt đầu khám phá'}
-            boldStyle={{
-              fontFamily: fontFamily.Bold,
-              color: Colors.GREY_DARK_1,
-              fontSize: 25,
-              lineHeight: 40,
-              letterSpacing: 0.75,
-            }}
-            textStyle={{
-              color: Colors.GREY_DARK_1,
-              fontSize: 25,
-              lineHeight: 40,
-              letterSpacing: 0.75,
-              width: '100%',
-            }}
-            numberOfLines={2}
-          />
-          <Input
-            imageIconLeft={FIND}
-            imageIconRight={FIND}
-            iconRightStyle={{display: 'none'}}
-            label="Tìm kiếm địa điểm, tour du lịch"
-            value={text}
-            onChangeText={text => setText(text)}
-            viewStyle={{
-              marginTop: '5%',
-              marginBottom: '3%',
-              marginEnd: 20,
-              marginStart: 0,
-            }}
-            textInputStyle={{width: '90%'}}
-          />
-          <TopTab
-            isCheck={isCheck}
-            listTabContainer={{
-              marginHorizontal: 0,
-              borderTopEndRadius: 0,
-              borderBottomRightRadius: 0,
-            }}
-          />
+        {hideElement ? null : (
+          <View>
+            <TextPlus
+              textBolds={['Thuy Ân!']}
+              text={'Xin chào, Thuy Ân! \nHãy bắt đầu khám phá'}
+              boldStyle={{
+                fontFamily: fontFamily.Bold,
+                color: Colors.GREY_DARK_1,
+                fontSize: 25,
+                lineHeight: 40,
+                letterSpacing: 0.75,
+              }}
+              textStyle={{
+                color: Colors.GREY_DARK_1,
+                fontSize: 25,
+                lineHeight: 40,
+                letterSpacing: 0.75,
+                width: '100%',
+              }}
+              numberOfLines={2}
+            />
+            <Input
+              imageIconLeft={FIND}
+              imageIconRight={FIND}
+              iconRightStyle={{display: 'none'}}
+              label="Tìm kiếm địa điểm, tour du lịch"
+              value={text}
+              onChangeText={text => setText(text)}
+              viewStyle={{
+                marginTop: '5%',
+                marginBottom: '3%',
+                marginEnd: 20,
+                marginStart: 0,
+              }}
+              textInputStyle={{width: '90%'}}
+              onPressLeft={() => navigation.navigate('SearchResult')}
+            />
+          </View>
+        )}
 
+        <TopTab
+          isCheck={isCheck}
+          listTabContainer={{
+            marginHorizontal: 0,
+            borderTopEndRadius: 0,
+            borderBottomRightRadius: 0,
+            marginBottom: 20,
+          }}
+        />
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          onScroll={handleScroll}>
           <View
             style={{
               flex: 1,
               overflow: 'hidden',
-              marginVertical: 20,
               borderTopLeftRadius: 20,
               borderBottomLeftRadius: 20,
             }}>
@@ -694,6 +765,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                   flexDirection: 'row',
                   alignItems: 'baseline',
                   justifyContent: 'space-between',
+                  marginTop: 15,
                 }}>
                 <Text
                   style={{
@@ -703,7 +775,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                   }}>
                   Tour Yêu thích
                 </Text>
-                <Pressable>
+                <Pressable onPress={handleToListTourFavorite}>
                   <Text
                     style={{
                       fontFamily: fontFamily.Medium,
@@ -725,7 +797,12 @@ const _HomeFull: React.FC<PropsType> = props => {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <View style={{flexDirection: 'row'}}>
                     {DATATOUR.map((item, index) =>
-                      renderItemTourFavorite({item}),
+                      renderItemTourFavorite({
+                        item,
+                        onPress: () => {
+                          navigation.navigate('DetailTour', {item: item});
+                        },
+                      }),
                     )}
                   </View>
                 </ScrollView>
@@ -749,7 +826,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                 }}>
                 Địa điểm nổi bật
               </Text>
-              <Pressable>
+              <Pressable onPress={handleToFeaturedListDetail}>
                 <Text
                   style={{
                     fontFamily: fontFamily.Medium,
@@ -792,7 +869,7 @@ const _HomeFull: React.FC<PropsType> = props => {
               }}>
               Tour nổi bật
             </Text>
-            <Pressable>
+            <Pressable onPress={handleToFeaturedListHome}>
               <Text
                 style={{
                   fontFamily: fontFamily.Medium,
@@ -812,12 +889,12 @@ const _HomeFull: React.FC<PropsType> = props => {
               <View style={_styles.containerFlatlist}>
                 <View>
                   {column1Data.map((item, index) =>
-                    renderItemTourOutstanding({item: item}),
+                    renderItemTourOutstanding({item: item, index: index}),
                   )}
                 </View>
                 <View>
                   {column2Data.map((item, index) =>
-                    renderItemTourOutstanding({item: item}),
+                    renderItemTourOutstanding({item: item, index: index}),
                   )}
                 </View>
               </View>

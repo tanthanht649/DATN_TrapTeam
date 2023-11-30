@@ -10,7 +10,11 @@ import {
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {
+  WelcomeTeamStackParamList,
+  BlogStack,
+  BlogStackParamList,
+} from '@navigation';
 import {BackgroundApp, Header} from '@components';
 import {
   ADD_BLOG,
@@ -18,6 +22,7 @@ import {
   ICON_BACK,
   IMAGE_FEATURED_LIST,
   LINE_BLOG,
+  LOGO_APP,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
@@ -71,7 +76,7 @@ const Item = ({id, title, avatar, image, name, time}: ItemProps) => (
     <Image style={_styles.line} source={LINE_BLOG}></Image>
   </View>
 );
-type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Blogs'>;
+type PropsType = NativeStackScreenProps<BlogStackParamList, 'Blogs'>;
 const _Blog: React.FC<PropsType> = props => {
   const {navigation} = props;
   return (
@@ -79,12 +84,18 @@ const _Blog: React.FC<PropsType> = props => {
       <SafeAreaView style={_styles.container}>
         <Header
           textCenter={'Bài viết'}
-          iconLeft={ICON_BACK}
+          iconLeft={LOGO_APP}
           iconRight={ADD_BLOG}
           eventLeft={() => console.log('IconLeft')}
-          styleIconLeft={{marginLeft: -DimensionsStyle.width * 0.06}}
+          styleIconLeft={{
+            marginLeft: -DimensionsStyle.width * 0.06,
+            width: 40,
+            height: 45,
+            resizeMode: 'stretch',
+          }}
           styleIconRight={{marginRight: -DimensionsStyle.width * 0.06}}
           eventRight={() => console.log(navigation.navigate('CreateBlog'))}
+          styleView={{marginTop: 10}}
         />
         <FlatList
           showsVerticalScrollIndicator={false}
@@ -108,7 +119,7 @@ const _Blog: React.FC<PropsType> = props => {
 
 const _styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 34,
+    paddingHorizontal: 25,
     paddingBottom: 70,
   },
   row: {

@@ -2,7 +2,11 @@ import {Image, Pressable, StyleSheet, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {
+  BlogStackParamList,
+  ProfileStackParamList,
+  WelcomeTeamStackParamList,
+} from '@navigation';
 import {
   BackgroundApp,
   Button,
@@ -20,10 +24,8 @@ import {
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
 
-type PropsType = NativeStackScreenProps<
-  WelcomeTeamStackParamList,
-  'CreateBlog'
->;
+type PropsType = NativeStackScreenProps<BlogStackParamList, 'CreateBlog'> &
+  NativeStackScreenProps<ProfileStackParamList>;
 const _CreateBlog: React.FC<PropsType> = props => {
   const {navigation} = props;
 
@@ -46,7 +48,7 @@ const _CreateBlog: React.FC<PropsType> = props => {
           }}
         />
         <Image style={_styles.image} source={ADD_IMAGE}></Image>
-        <TextInput style={_styles.title} placeholder="Tiêu đề"></TextInput>
+        {/* <TextInput style={_styles.title} placeholder="Tiêu đề"></TextInput> */}
         <Pressable onPress={() => {}}>
           <Image style={_styles.line} source={LINE_BLOG}></Image>
         </Pressable>
@@ -60,7 +62,8 @@ const _CreateBlog: React.FC<PropsType> = props => {
         imageIconLeft={ADD_IMAGE}
         imageIconRight={ADD_IMAGE}
         onPress={() => {
-          setModalVisible(true);
+          // setModalVisible(true);
+          navigation.navigate('Blogs');
         }}
       />
       {/* <ModalSuccessful
@@ -69,8 +72,14 @@ const _CreateBlog: React.FC<PropsType> = props => {
         text="Đăng bài thành công"
         textBold="thành công"
         titleButton="Xem bài biết"></ModalSuccessful> */}
-      {/* <ModalPayment visible={modalVisible} onPress={handleModal}></ModalPayment> */}
-      {/* <ModalFilter visible={modalVisible} onPress={handleModal}  ></ModalFilter> */}
+      {/* <ModalPayment visible={modalVisible} onPress={handleModal} Cancel={()=>{setModalVisible(false)}}></ModalPayment> */}
+      <ModalFilter
+        visible={modalVisible}
+        onPress={handleModal}
+        Cancel={() => {
+          setModalVisible(false);
+        }}
+      />
     </BackgroundApp>
   );
 };
@@ -86,6 +95,7 @@ const _styles = StyleSheet.create({
     overflow: 'hidden',
     alignSelf: 'center',
     marginTop: 30,
+    marginBottom: 30,
   },
   title: {
     fontSize: 24,

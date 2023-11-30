@@ -23,9 +23,12 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {DimensionsStyle} from '@resources';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
-type PropsType = NativeStackScreenProps<
+import {
+  OnboardingLoginStackParamList,
   WelcomeTeamStackParamList,
+} from '@navigation';
+type PropsType = NativeStackScreenProps<
+  OnboardingLoginStackParamList,
   'OnboardingNextThree'
 >;
 

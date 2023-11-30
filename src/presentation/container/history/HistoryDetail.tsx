@@ -43,12 +43,9 @@ import {
 } from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {ProfileStackParamList, WelcomeTeamStackParamList} from '@navigation';
 
-type PropsType = NativeStackScreenProps<
-  WelcomeTeamStackParamList,
-  'HistoryDetail'
->;
+type PropsType = NativeStackScreenProps<ProfileStackParamList, 'HistoryDetail'>;
 
 interface Item {
   id: number;
@@ -163,7 +160,7 @@ const DATA: Item[] = [
   },
 ];
 
-const ItemHistory = ({item}: {item: Item}) => {
+const ItemHistory = ({item, onPress}: {item: Item; onPress: () => void}) => {
   return (
     <View
       style={{
@@ -339,11 +336,12 @@ const ItemHistory = ({item}: {item: Item}) => {
             title="Đánh giá"
             imageIconLeft={FULL_NAME}
             imageIconRight={FULL_NAME}
-            onPress={() => {}}
+            onPress={onPress}
             viewStyle={{
               width: '100%',
               height: 40,
             }}
+            textStyle={{fontSize: 12}}
           />
         </View>
       </View>
@@ -354,13 +352,21 @@ const ItemHistory = ({item}: {item: Item}) => {
 const _HistoryDetail: React.FC<PropsType> = props => {
   const {navigation} = props;
 
+  const handleToAddReview = () => {
+    navigation.navigate('AddReview');
+  };
+
   const renderItemHistory = ({item}: {item: Item}) => {
-    return <ItemHistory item={item} />;
+    return <ItemHistory item={item} onPress={handleToAddReview} />;
   };
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
-      <Header iconLeft={ICON_BACK} textCenter="Chi tiết lịch sử tour" />
+      <Header
+        iconLeft={ICON_BACK}
+        textCenter="Chi tiết lịch sử tour"
+        eventLeft={() => navigation.goBack()}
+      />
       <FlatList
         data={DATA}
         renderItem={renderItemHistory}

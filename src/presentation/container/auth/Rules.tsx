@@ -1,13 +1,24 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {
+  HomeStackParamList,
+  ProfileStackParamList,
+  WelcomeTeamStackParamList,
+} from '@navigation';
 import {BackgroundApp, Header, TextPlus} from '@components';
 import {BACKGROUND_WHITE, ICON_BACK, LOGO_RULE, fontFamily} from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
 
-type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Rule'>;
+type PropsType = NativeStackScreenProps<ProfileStackParamList, 'Rule'>;
 const _Rule: React.FC<PropsType> = props => {
   const {navigation} = props;
 
@@ -17,7 +28,7 @@ const _Rule: React.FC<PropsType> = props => {
         <Header
           textCenter={'Điều khoản và chính sách'}
           iconLeft={ICON_BACK}
-          eventLeft={() => console.log('IconLeft')}
+          eventLeft={() => navigation.goBack()}
           styleIconLeft={{marginLeft: -DimensionsStyle.width * 0.06}}
         />
         <Image source={LOGO_RULE} style={_styles.image}></Image>

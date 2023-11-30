@@ -2,7 +2,7 @@ import {Image, Pressable, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {ProfileStackParamList, WelcomeTeamStackParamList} from '@navigation';
 import {BackgroundApp, Button, Header, Input} from '@components';
 import {
   BACKGROUND_WHITE,
@@ -16,10 +16,7 @@ import {
 } from '@assets';
 import {DimensionsStyle} from '@resources';
 
-type PropsType = NativeStackScreenProps<
-  WelcomeTeamStackParamList,
-  'EditProfile'
->;
+type PropsType = NativeStackScreenProps<ProfileStackParamList, 'EditProfile'>;
 const _EditProfile: React.FC<PropsType> = props => {
   const {navigation} = props;
   const [fullName, setFullName] = useState<string>('Mathew Adam');
@@ -43,7 +40,7 @@ const _EditProfile: React.FC<PropsType> = props => {
         <Header
           textCenter={'Chỉnh sửa thông tin'}
           iconLeft={ICON_BACK}
-          eventLeft={() => console.log('IconLeft')}
+          eventLeft={() => navigation.goBack()}
           styleIconLeft={{marginLeft: -DimensionsStyle.width * 0.06}}
         />
         <View style={_styles.avatar}>
@@ -95,9 +92,7 @@ const _EditProfile: React.FC<PropsType> = props => {
           title="Cập nhật"
           imageIconLeft={FULL_NAME}
           imageIconRight={FULL_NAME}
-          onPress={() => {
-            navigation.navigate('RegisterOTP');
-          }}
+          onPress={() => {}}
           viewStyle={{
             width: 278,
             marginTop: DimensionsStyle.height * 0.2,

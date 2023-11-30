@@ -6,3 +6,7 @@ export * from './home';
 export * from './history';
 export * from './auth';
 export * from './blog';
+export * from './favorite';
+export * from './search';
+export * from './transactions';
+export * from './detail';

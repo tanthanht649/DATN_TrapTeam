@@ -11,19 +11,21 @@ import {
   OnboardingNextThree,
   AllReviews,
   EditProfile,
-  Login,
+  // Login,
   LoginOption,
   Profile,
   Register,
   RegisterOTP,
   FeaturedListHome,
   FeaturedListDetail,
-  Rule,
+  // Rule,
   Version,
   HomeFull,
   HistoryDetail,
   Blogs,
   CreateBlog,
+  FavoriteEmpty,
+  ListTourBanner,
 } from '@containers';
 
 type WelcomeTeamProps = {};
@@ -34,19 +36,21 @@ type OnboardingStartProps = {};
 type OnboardingNextThreeProps = {};
 type AllReviewsProps = {};
 type EditProfileProps = {};
-type LoginProps = {};
+// type LoginProps = {};
 type LoginOptionProps = {};
 type ProfileProps = {};
 type RegisterProps = {};
 type RegisterOTPProps = {};
 type FeaturedListHomeProps = {};
 type FeaturedListDetailProps = {};
-type RuleProps = {};
+// type RuleProps = {};
 type VersionProps = {};
 type HomeFullProps = {};
 type HistoryDetailProps = {};
 type BlogsProps = {};
 type CreateBlogProps = {};
+type FavoriteEmptyProps = {};
+type ListTourBannerProps = {};
 
 export type WelcomeTeamStackParamList = {
   WelcomeTeam: WelcomeTeamProps | undefined;
@@ -57,19 +61,21 @@ export type WelcomeTeamStackParamList = {
   OnboardingNextThree: OnboardingNextThreeProps | undefined;
   AllReviews: AllReviewsProps | undefined;
   EditProfile: EditProfileProps | undefined;
-  Login: LoginProps | undefined;
+  // Login: LoginProps | undefined;
   LoginOption: LoginOptionProps | undefined;
   Profile: ProfileProps | undefined;
   Register: RegisterProps | undefined;
   RegisterOTP: RegisterOTPProps | undefined;
   FeaturedListHome: FeaturedListHomeProps | undefined;
   FeaturedListDetail: FeaturedListDetailProps | undefined;
-  Rule: RuleProps | undefined;
+  // Rule: RuleProps | undefined;
   Version: VersionProps | undefined;
   HomeFull: HomeFullProps | undefined;
   HistoryDetail: HistoryDetailProps | undefined;
   Blogs: BlogsProps | undefined;
   CreateBlog: CreateBlogProps | undefined;
+  FavoriteEmpty: FavoriteEmptyProps | undefined;
+  ListTourBanner: ListTourBannerProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<WelcomeTeamStackParamList>();
@@ -93,19 +99,21 @@ const _StackTest = () => {
       />
       <Stack.Screen name="AllReviews" component={AllReviews} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
-      <Stack.Screen name="Login" component={Login} />
+      {/* <Stack.Screen name="Login" component={Login} /> */}
       <Stack.Screen name="LoginOption" component={LoginOption} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="RegisterOTP" component={RegisterOTP} />
       <Stack.Screen name="FeaturedListHome" component={FeaturedListHome} />
-      <Stack.Screen name="Rule" component={Rule} />
+      {/* <Stack.Screen name="Rule" component={Rule} /> */}
       <Stack.Screen name="Version" component={Version} />
       <Stack.Screen name="FeaturedListDetail" component={FeaturedListDetail} />
       <Stack.Screen name="HomeFull" component={HomeFull} />
       <Stack.Screen name="HistoryDetail" component={HistoryDetail} />
       <Stack.Screen name="Blogs" component={Blogs} />
       <Stack.Screen name="CreateBlog" component={CreateBlog} />
+      <Stack.Screen name="FavoriteEmpty" component={FavoriteEmpty} />
+      <Stack.Screen name="ListTourBanner" component={ListTourBanner} />
     </Stack.Navigator>
   );
 };

@@ -2,7 +2,10 @@ import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {WelcomeTeamStackParamList} from '@navigation';
+import {
+  OnboardingLoginStackParamList,
+  WelcomeTeamStackParamList,
+} from '@navigation';
 import {BackgroundApp, Button, Input, TextPlus} from '@components';
 import {
   BACKGROUND_LOGIN,
@@ -18,7 +21,7 @@ import {
 import {Colors, DimensionsStyle} from '@resources';
 import {AppContext} from '@shared-state';
 
-type PropsType = NativeStackScreenProps<WelcomeTeamStackParamList, 'Login'>;
+type PropsType = NativeStackScreenProps<OnboardingLoginStackParamList, 'Login'>;
 const _Login: React.FC<PropsType> = props => {
   const {navigation} = props;
   const {isLoggedIn, setLoggedIn} = React.useContext(AppContext);

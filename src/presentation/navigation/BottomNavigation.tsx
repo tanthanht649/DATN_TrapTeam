@@ -4,6 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 import {StackTest} from './StackTest';
+import {HomeStack} from './HomeStack';
 import {
   BOTTOM_BLOGS_ACTIVE,
   BOTTOM_BLOGS_INACTIVE,
@@ -16,6 +17,9 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors} from '../resource/value';
+import {BlogStack} from './BlogStack';
+import {ProfileStack} from './ProfileStack';
+import {SearchStack} from './SearchStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,7 +56,7 @@ const _BottomNavigation = () => {
                 source={focused ? BOTTOM_HOUSE_ACTIVE : BOTTOM_HOUSE_INACTIVE}
               />
             );
-          } else if (route.name === 'Search') {
+          } else if (route.name === 'Searchs') {
             return (
               <Image
                 style={{
@@ -95,28 +99,28 @@ const _BottomNavigation = () => {
       })}>
       <Tab.Screen
         name="Home"
-        component={StackTest}
+        component={HomeStack}
         options={{
           tabBarLabel: '.',
         }}
       />
       <Tab.Screen
-        name="Search"
-        component={StackTest}
+        name="Searchs"
+        component={SearchStack}
         options={{
           tabBarLabel: '.',
         }}
       />
       <Tab.Screen
         name="Blogss"
-        component={StackTest}
+        component={BlogStack}
         options={{
           tabBarLabel: '.',
         }}
       />
       <Tab.Screen
         name="Profiles"
-        component={StackTest}
+        component={ProfileStack}
         options={{
           tabBarLabel: '.',
         }}
