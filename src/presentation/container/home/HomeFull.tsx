@@ -599,8 +599,16 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item, onPress}: {item: Tour; onPress: () => void}) => {
-        return <ItemTourFavorite item={item} key={item.id} onPress={onPress} />;
+      ({item}: {item: Tour}) => {
+        return (
+          <ItemTourFavorite
+            item={item}
+            key={item.id}
+            onPress={() => {
+              navigation.navigate('DetailTour');
+            }}
+          />
+        );
       },
     [],
   );
@@ -796,9 +804,6 @@ const _HomeFull: React.FC<PropsType> = props => {
                     {DATATOUR.map((item, index) =>
                       renderItemTourFavorite({
                         item,
-                        onPress: () => {
-                          navigation.navigate('DetailTour', {item: item});
-                        },
                       }),
                     )}
                   </View>

@@ -29,9 +29,16 @@ import {SearchStackParamList} from '@navigation';
 
 type PropsType = NativeStackScreenProps<SearchStackParamList, 'Search'>;
 
-const ItemTourFavorite = ({item}: {item: Tour}) => {
+const ItemTourFavorite = ({
+  item,
+  onPress,
+}: {
+  item: Tour;
+  onPress: () => void;
+}) => {
   return (
-    <View
+    <Pressable
+      onPress={onPress}
       style={{
         width: '100%',
         height: DimensionsStyle.width * 0.35,
@@ -117,7 +124,7 @@ const ItemTourFavorite = ({item}: {item: Tour}) => {
           {item.price.toLocaleString('vi-VN')} VNĐ
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -138,7 +145,13 @@ const _Search: React.FC<PropsType> = props => {
   const renderItemTourFavorite = React.useMemo(
     () =>
       ({item}: {item: Tour}) => {
-        return <ItemTourFavorite item={item} key={item.id} />;
+        return (
+          <ItemTourFavorite
+            item={item}
+            key={item.id}
+            onPress={() => navigation.navigate('DetailTour')}
+          />
+        );
       },
     [],
   );

@@ -1,4 +1,4 @@
-import {Animated, Image, StyleSheet, Text, View} from 'react-native';
+import {Animated, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BackgroundApp, Header, Input, ViewSwitcher} from '@components';
@@ -51,9 +51,15 @@ const _FeaturedListDetail: React.FC<PropsType> = props => {
     listViewType === 'grid' ? setColumn(2) : setColumn(1);
   }, [listViewType]);
 
-  const ItemTourFavorite = ({item}: {item: Tour}) => {
+  const ItemTourFavorite = ({
+    item,
+    onPress,
+  }: {
+    item: Tour;
+    onPress: () => void;
+  }) => {
     return (
-      <View
+      <Pressable
         style={{
           width: '100%',
           height: DimensionsStyle.width * 0.35,
@@ -63,7 +69,8 @@ const _FeaturedListDetail: React.FC<PropsType> = props => {
           borderRadius: 20,
           overflow: 'hidden',
           marginBottom: 10,
-        }}>
+        }}
+        onPress={onPress}>
         <View
           style={{
             width: '50%',
@@ -139,14 +146,23 @@ const _FeaturedListDetail: React.FC<PropsType> = props => {
             {item.price.toLocaleString('vi-VN')} VNĐ
           </Text>
         </View>
-      </View>
+      </Pressable>
     );
   };
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item, index}: {item: Tour, index: number}) => {
-        return <ItemTourOutstanding item={item} key={item.id} index={index}/>;
+      ({item, index}: {item: Tour; index: number}) => {
+        return (
+          <ItemTourOutstanding
+            item={item}
+            key={item.id}
+            index={index}
+            onPress={() => {
+              navigation.navigate('DetailTour');
+            }}
+          />
+        );
       },
     [],
   );
@@ -154,7 +170,15 @@ const _FeaturedListDetail: React.FC<PropsType> = props => {
   const renderItemTourFavorite = React.useMemo(
     () =>
       ({item}: {item: Tour}) => {
-        return <ItemTourFavorite item={item} key={item.id} />;
+        return (
+          <ItemTourFavorite
+            item={item}
+            key={item.id}
+            onPress={() => {
+              navigation.navigate('DetailTour');
+            }}
+          />
+        );
       },
     [],
   );

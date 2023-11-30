@@ -7,7 +7,6 @@ import {
   FeaturedListDetail,
   FavoriteEmpty,
   SearchResult,
-  DetailFull,
   DetailTour,
   BookTour,
   Pay,
@@ -19,7 +18,6 @@ type FeaturedListHomeProps = {};
 type FeaturedListDetailProps = {};
 type FavoriteEmptyProps = {};
 type SearchResultProps = {};
-type DetailFullProps = {};
 type DetailTourProps = {};
 type BookTourProps = {};
 type PayProps = {};
@@ -31,7 +29,6 @@ export type HomeStackParamList = {
   FeaturedListDetail: FeaturedListDetailProps | undefined;
   FavoriteEmpty: FavoriteEmptyProps | undefined;
   SearchResult: SearchResultProps | undefined;
-  DetailFull: DetailFullProps | undefined;
   DetailTour: DetailTourProps | undefined;
   BookTour: BookTourProps | undefined;
   Pay: PayProps | undefined;
@@ -53,7 +50,6 @@ const _HomeStack = () => {
       <Stack.Screen name="FeaturedListDetail" component={FeaturedListDetail} />
       <Stack.Screen name="FavoriteEmpty" component={FavoriteEmpty} />
       <Stack.Screen name="SearchResult" component={SearchResult} />
-      <Stack.Screen name="DetailFull" component={DetailFull} />
       <Stack.Screen name="DetailTour" component={DetailTour} />
       <Stack.Screen name="BookTour" component={BookTour} />
       <Stack.Screen name="Pay" component={Pay} />

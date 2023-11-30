@@ -29,11 +29,7 @@ type PropsType = NativeStackScreenProps<BlogStackParamList, 'CreateBlog'> &
 const _CreateBlog: React.FC<PropsType> = props => {
   const {navigation} = props;
 
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const handleModal = () => {
-    setModalVisible(false);
-    navigation.navigate('Blogs');
-  };
+ 
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -64,20 +60,6 @@ const _CreateBlog: React.FC<PropsType> = props => {
         onPress={() => {
           // setModalVisible(true);
           navigation.navigate('Blogs');
-        }}
-      />
-      {/* <ModalSuccessful
-        visible={modalVisible}
-        onPress={handleModal}
-        text="Đăng bài thành công"
-        textBold="thành công"
-        titleButton="Xem bài biết"></ModalSuccessful> */}
-      {/* <ModalPayment visible={modalVisible} onPress={handleModal} Cancel={()=>{setModalVisible(false)}}></ModalPayment> */}
-      <ModalFilter
-        visible={modalVisible}
-        onPress={handleModal}
-        Cancel={() => {
-          setModalVisible(false);
         }}
       />
     </BackgroundApp>
