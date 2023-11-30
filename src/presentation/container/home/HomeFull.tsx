@@ -5,8 +5,6 @@ import {
   ScrollView,
   Pressable,
   Dimensions,
-  FlatList,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
@@ -15,36 +13,14 @@ import {
   BACKGROUND_HOME,
   FIND,
   HEART,
-  HEART_ACTIVE,
-  HEART_INACTIVE,
-  ICON_BACK,
   LOCATION,
-  LOGO_APP,
-  NOTIFICATION,
-  NOTIFICATION_SELECT,
-  SETTING,
-  START_SMALL,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {
-  BackgroundApp,
-  HeaderHome,
-  HeaderHome2,
-  TopTab,
-  Header,
-  HeaderMessager,
-  Button,
-  TextPlus,
-  Input,
-} from '@components';
+import {BackgroundApp, HeaderHome2, TopTab, TextPlus, Input} from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {
-  HomeStackParamList,
-  OnboardingLoginStackParamList,
-  WelcomeTeamStackParamList,
-} from '@navigation';
+import {HomeStackParamList} from '@navigation';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'HomeFull'>;
 
@@ -320,9 +296,9 @@ const DATAESTATES: Estates[] = [
   },
 ];
 
-const ItemEstates = ({item}: {item: Estates}) => {
+const ItemEstates = ({item, onPress}: {item: Estates; onPress: () => void}) => {
   return (
-    <View
+    <Pressable
       style={{
         width: DimensionsStyle.width * 0.7,
         height: DimensionsStyle.width * 0.35,
@@ -331,7 +307,8 @@ const ItemEstates = ({item}: {item: Estates}) => {
         backgroundColor: Colors.SOFT_BLUE,
         borderRadius: 20,
         overflow: 'hidden',
-      }}>
+      }}
+      onPress={onPress}>
       <View
         style={{
           width: '50%',
@@ -384,7 +361,7 @@ const ItemEstates = ({item}: {item: Estates}) => {
           </Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -475,12 +452,14 @@ export const DATATOUROUTSTANDING: Tour[] = [
 export const ItemTourOutstanding = ({
   item,
   index,
+  onPress,
 }: {
   item: Tour;
   index: number;
+  onPress: () => void;
 }) => {
   return (
-    <View
+    <Pressable
       style={{
         backgroundColor: Colors.SOFT_BLUE,
         width: DimensionsStyle.width * 0.44,
@@ -490,7 +469,8 @@ export const ItemTourOutstanding = ({
         padding: 7,
         marginBottom: 10,
         marginRight: index % 2 === 0 ? 10 : 0,
-      }}>
+      }}
+      onPress={onPress}>
       <View>
         <Image
           source={{uri: item.image}}
@@ -564,7 +544,7 @@ export const ItemTourOutstanding = ({
           </Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -628,7 +608,15 @@ const _HomeFull: React.FC<PropsType> = props => {
   const renderItemEstates = React.useMemo(
     () =>
       ({item}: {item: Estates}) => {
-        return <ItemEstates item={item} key={item.id} />;
+        return (
+          <ItemEstates
+            item={item}
+            key={item.id}
+            onPress={() => {
+              navigation.navigate('FeaturedListDetail');
+            }}
+          />
+        );
       },
     [],
   );
@@ -636,7 +624,16 @@ const _HomeFull: React.FC<PropsType> = props => {
   const renderItemTourOutstanding = React.useMemo(
     () =>
       ({item, index}: {item: Tour; index: number}) => {
-        return <ItemTourOutstanding item={item} key={item.id} index={index} />;
+        return (
+          <ItemTourOutstanding
+            item={item}
+            key={item.id}
+            index={index}
+            onPress={() => {
+              navigation.navigate('DetailTour');
+            }}
+          />
+        );
       },
     [],
   );
@@ -826,7 +823,9 @@ const _HomeFull: React.FC<PropsType> = props => {
                 }}>
                 Địa điểm nổi bật
               </Text>
-              <Pressable onPress={handleToFeaturedListDetail}>
+              <Pressable
+                onPress={handleToFeaturedListDetail}
+                style={{display: 'none'}}>
                 <Text
                   style={{
                     fontFamily: fontFamily.Medium,
