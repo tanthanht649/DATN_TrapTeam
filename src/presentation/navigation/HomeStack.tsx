@@ -10,6 +10,7 @@ import {
   DetailFull,
   DetailTour,
   BookTour,
+  Pay,
 } from '@containers';
 
 type HomeFullProps = {};
@@ -21,6 +22,7 @@ type SearchResultProps = {};
 type DetailFullProps = {};
 type DetailTourProps = {};
 type BookTourProps = {};
+type PayProps = {};
 
 export type HomeStackParamList = {
   HomeFull: HomeFullProps | undefined;
@@ -32,6 +34,7 @@ export type HomeStackParamList = {
   DetailFull: DetailFullProps | undefined;
   DetailTour: DetailTourProps | undefined;
   BookTour: BookTourProps | undefined;
+  Pay: PayProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -39,7 +42,7 @@ const Stack = createNativeStackNavigator<HomeStackParamList>();
 const _HomeStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="BookTour"
+      initialRouteName="Pay"
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',
@@ -53,6 +56,7 @@ const _HomeStack = () => {
       <Stack.Screen name="DetailFull" component={DetailFull} />
       <Stack.Screen name="DetailTour" component={DetailTour} />
       <Stack.Screen name="BookTour" component={BookTour} />
+      <Stack.Screen name="Pay" component={Pay} />
     </Stack.Navigator>
   );
 };
