@@ -1,6 +1,6 @@
 import { EMAIL, LINE, MOMO, VIETTEL_PAY, ZALO_PAY, fontFamily } from '@assets';
-import { Colors} from '@resources';
-import React, { useState } from 'react';
+import { Colors } from '@resources';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   FlatList,
@@ -14,38 +14,38 @@ import {
   View,
 } from 'react-native';
 import { Button } from '../button';
-
+type ItemData = {
+  id: string;
+  image: ImageSourcePropType,
+  title: string
+};
 type Props = {
   visible?: boolean;
-  onPress: () => void;
+  onPress: (data: {}) => void;
   Cancel: () => void;
 
 };
 
 const _Modal: React.FC<Props> = props => {
-  const { onPress, visible ,Cancel} = props;
-  type ItemData = {
-    id: string;
-    image: ImageSourcePropType,
-    title:string
-  };
+  const { onPress, visible, Cancel} = props;
+
 
   const DATA: ItemData[] = [
     {
       id: '1',
       image: MOMO,
-      title:'MoMo'
+      title: 'MoMo'
     },
     {
       id: '2',
       image: ZALO_PAY,
-      title:'ZaloPay'
+      title: 'ZaloPay'
 
     },
     {
       id: '3',
       image: VIETTEL_PAY,
-      title:'ViettelPay'
+      title: 'ViettelPay'
 
     },
   ];
@@ -60,28 +60,44 @@ const _Modal: React.FC<Props> = props => {
 
   const Item = ({ item, onPress, borderColor, borderWidth }: ItemProps) => (
     <TouchableOpacity onPress={onPress} style={[_styles.item, { borderColor, borderWidth }]}>
-      <Image source={item.image}></Image>
+      <Image style={_styles.image} source={item.image}></Image>
     </TouchableOpacity>
   );
-  
-  const [selected, setSelectedId] = useState<string>();
 
+  const [selectedId, setSelectedId] = useState<string>();
+  const [selected, setSelected] = useState<ItemData>();
+  const handleIndex = (item:ItemData) => {
+    setSelectedId(item.id);
+    setSelected(item)   
+    console.log('Phương thức đc chọn',selected)
+  }
 
-
+ 
   const renderItem = ({ item }: { item: ItemData }) => {
-    const borderColor = item.title === selected? Colors.GREEN : Colors.WHITE;
-    const borderWith = item.title=== selected? 4 : 1;
-
+    const borderColor = item.id === selectedId ? Colors.GREEN : Colors.WHITE;
+    const borderWith = item.id === selectedId ? 4 : 1;
+  
+   
     return (
+
       <Item
         item={item}
-        onPress={() => setSelectedId(item.title)}
+        onPress={()=>handleIndex(item)}
         borderColor={borderColor}
         borderWidth={borderWith}
       />
     );
   };
-  console.log(selected)
+ 
+  
+  const handleDateChange = () => {
+    if (selected != null) {
+      onPress(selected);
+    }
+  }
+ 
+
+ 
 
   return (
     <Modal
@@ -110,30 +126,30 @@ const _Modal: React.FC<Props> = props => {
             />
           </View>
           <View style={_styles.row}>
-          <Button
-            title="Thay đổi"
-            imageIconLeft={EMAIL}
-            imageIconRight={EMAIL}
-            onPress={onPress}
-            viewStyle={{
-              width: '40%',
-              
-             
-            }}
-          />
-          <Button
-            title="Hủy"
-            imageIconLeft={EMAIL}
-            imageIconRight={EMAIL}
-            onPress={Cancel}
-            viewStyle={{
-              width: '40%',
-              
-              // bottom: 70
-            }}
-          />
+            <Button
+              title="Thay đổi"
+              imageIconLeft={EMAIL}
+              imageIconRight={EMAIL}
+              onPress={handleDateChange}
+              viewStyle={{
+                width: '40%',
+
+
+              }}
+            />
+            <Button
+              title="Hủy"
+              imageIconLeft={EMAIL}
+              imageIconRight={EMAIL}
+              onPress={Cancel}
+              viewStyle={{
+                width: '40%',
+
+                // bottom: 70
+              }}
+            />
           </View>
-          
+
         </View>
       </View>
 
@@ -173,8 +189,8 @@ const _styles = StyleSheet.create({
   },
 
   textBold: {
-    marginTop:20,
-    marginBottom:10,
+    marginTop: 20,
+    marginBottom: 10,
     fontSize: 20,
     fontFamily: fontFamily.Medium,
     color: Colors.BLUE,
@@ -182,8 +198,8 @@ const _styles = StyleSheet.create({
   },
   item: {
     margin: 5,
-    height:73,
-    borderRadius:15
+    height: 73,
+    borderRadius: 15
   },
 
   line: {
@@ -191,13 +207,17 @@ const _styles = StyleSheet.create({
     width: 50,
     alignSelf: 'center'
   },
-  row:{
-    flexDirection:'row',
-    justifyContent:'space-around',
-     bottom: 70,
-     width: '100%',
-     position: 'absolute',
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    bottom: 70,
+    width: '100%',
+    position: 'absolute',
 
+  },
+  image: {
+    height: 65,
+    width: 65
   }
 });
 
