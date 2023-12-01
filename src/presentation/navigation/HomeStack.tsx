@@ -42,7 +42,7 @@ const Stack = createNativeStackNavigator<HomeStackParamList>();
 const _HomeStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Pay"
+      initialRouteName="HomeFull"
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',

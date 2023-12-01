@@ -33,6 +33,7 @@ import {HomeStackParamList, SearchStackParamList} from '@navigation';
 import {Tour} from '../home';
 import {Colors, DimensionsStyle} from '@resources';
 import SelectDropdown from 'react-native-select-dropdown';
+import { AppContext } from '@shared-state';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'BookTour'>;
 
@@ -165,7 +166,7 @@ const _BookTour: React.FC<PropsType> = props => {
   const [heightZaloPay, setHeightZaloPay] = React.useState<number>(60);
   const [heightViettelPay, setHeightViettelPay] = React.useState<number>(60);
 
-  const [pay, setPay] = React.useState<string>('Momo');
+  const {setPay} = React.useContext(AppContext);
 
   const handleSelectMomo = () => {
     setWidthMomo(52);
