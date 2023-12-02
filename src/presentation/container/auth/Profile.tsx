@@ -17,6 +17,10 @@ import {
   WelcomeTeamStackParamList,
 } from '@navigation';
 import {BackgroundApp, Header, Input, ViewSwitcherProfile} from '@components';
+
+import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+
 import {
   BACKGROUND_WHITE,
   BLOG_PROFILE,
@@ -295,6 +299,23 @@ const _Profile: React.FC<PropsType> = props => {
       );
     }
   };
+
+  async function onGoogleSignOutPress() {
+    try {
+      // Đăng xuất khỏi Firebase Authentication
+      await auth().signOut();
+
+      // Đăng xuất khỏi Google Sign-In
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+
+      // Cập nhật trạng thái đăng nhập trong ứng dụng của bạn
+
+      console.log('Signed out successfully!');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  }
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <ScrollView showsHorizontalScrollIndicator={false}>
@@ -429,6 +450,7 @@ const _Profile: React.FC<PropsType> = props => {
           </Pressable>
           <Pressable
             onPress={() => {
+              onGoogleSignOutPress();
               setLoggedIn(false);
             }}
             style={_styles.card}>
