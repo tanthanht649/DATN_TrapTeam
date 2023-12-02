@@ -33,7 +33,7 @@ import {HomeStackParamList, SearchStackParamList} from '@navigation';
 import {Tour} from '../home';
 import {Colors, DimensionsStyle} from '@resources';
 import SelectDropdown from 'react-native-select-dropdown';
-import { AppContext } from '@shared-state';
+import {AppContext} from '@shared-state';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'BookTour'>;
 
@@ -540,7 +540,7 @@ const _BookTour: React.FC<PropsType> = props => {
               imageIconLeft={FULL_NAME}
               imageIconRight={ORDER_BT}
               onPress={() => {
-                console.log('Đặt tour');
+                navigation.navigate('Pay');
               }}
               viewStyle={{
                 width: DimensionsStyle.width * 1 - 40,

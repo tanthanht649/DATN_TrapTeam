@@ -634,7 +634,7 @@ const _DetailTour: React.FC<PropsType> = props => {
             imageIconLeft={FULL_NAME}
             imageIconRight={ORDER_BT}
             onPress={() => {
-              console.log('Đặt tour');
+              navigation.navigate('BookTour');
             }}
             viewStyle={{
               width: DimensionsStyle.width * 0.7,

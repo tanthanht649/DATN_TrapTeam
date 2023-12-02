@@ -20,10 +20,87 @@ import {
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
 import {AppContext} from '@shared-state';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+
+GoogleSignin.configure({
+  webClientId:
+    '501822796114-pjge4vqejp7vu5b4ad7afkju6aicel5k.apps.googleusercontent.com',
+});
 
 type PropsType = NativeStackScreenProps<OnboardingLoginStackParamList, 'Login'>;
 const _Login: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const [userInfo, setUserInfo] = useState({});
+  // function GoogleSignIn() {
+  //   return (
+  //     <Button
+  //       title="Google Sign-In"
+  //       onPress={() =>
+  //         onGoogleButtonPress().then(() =>
+  //           console.log('Signed in with Google!'),
+  //         )
+  //       }
+  //     />
+  //   );
+  // }
+
+  // async function onGoogleButtonPress() {
+  //   // Check if your device supports Google Play
+  //   await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+  //   // Get the users ID token
+  //   const {idToken} = await GoogleSignin.signIn();
+
+  //   // Create a Google credential with the token
+  //   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+  //   // Sign-in the user with the credential
+  //   return auth().signInWithCredential(googleCredential);
+  // }
+
+  function GoogleSignIn() {
+    return (
+      <Button
+        title="Tiếp tục với email"
+        imageIconLeft={EMAIL}
+        imageIconRight={EMAIL}
+        viewStyle={{
+          width: 278,
+          marginTop: DimensionsStyle.height * 0.13,
+        }}
+        viewIconLeft={{display: 'flex'}}
+        onPress={() =>
+          onGoogleButtonPress().then(userCredential => {
+            console.log('Signed in with Google!');
+            setUserInfo(userCredential.user);
+            setLoggedIn(true); // Console thông tin tài khoản đăng nhập
+          })
+        }
+      />
+    );
+  }
+
+  async function onGoogleButtonPress() {
+    // Kiểm tra xem thiết bị có hỗ trợ Google Play không
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+    // Lấy ID token của người dùng
+    const {idToken} = await GoogleSignin.signIn();
+
+    // Tạo một Google credential với token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+    // Đăng nhập người dùng bằng credential
+    const userCredential = await auth().signInWithCredential(googleCredential);
+
+    return userCredential;
+  }
+
+  console.log(userInfo);
+
   const {isLoggedIn, setLoggedIn} = React.useContext(AppContext);
   const [email, setEmail] = useState<string>('');
   const handleOnchangeEmail = (value: string) => {
@@ -64,7 +141,8 @@ const _Login: React.FC<PropsType> = props => {
         />
       </SafeAreaView>
       <View style={_styles.bottom}>
-        <Button
+        <GoogleSignIn />
+        {/* <Button
           title="Tiếp tục với email"
           imageIconLeft={EMAIL}
           imageIconRight={EMAIL}
@@ -76,7 +154,7 @@ const _Login: React.FC<PropsType> = props => {
             marginTop: DimensionsStyle.height * 0.13,
           }}
           viewIconLeft={{display: 'flex'}}
-        />
+        /> */}
         {/* <View style={_styles.row}>
           <Text
             style={[_styles.text, {fontSize: 12, marginLeft: 0, marginTop: 0}]}>

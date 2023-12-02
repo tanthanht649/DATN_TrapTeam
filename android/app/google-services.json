@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "501822796114",
+    "project_id": "bnbtour-8e2c6",
+    "storage_bucket": "bnbtour-8e2c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501822796114:android:230726f99e14bea3f50a8b",
+        "android_client_info": {
+          "package_name": "com.datn_trapteam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "501822796114-i5nodopjs510hp4bm42uoav08s85hfkc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.datn_trapteam",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "501822796114-pjge4vqejp7vu5b4ad7afkju6aicel5k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBj4F14zOfqAhD9uZ7XLKXbsD7R1XQQP8Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "501822796114-pjge4vqejp7vu5b4ad7afkju6aicel5k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

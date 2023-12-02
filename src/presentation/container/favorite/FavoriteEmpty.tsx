@@ -81,7 +81,12 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
   };
   const renderChildren = ({item}: ListRenderItemInfo<Item>) => {
     return (
-      <View style={_styles.getChildrenStyle} key={item.id}>
+      <Pressable
+        style={_styles.getChildrenStyle}
+        key={item.id}
+        onPress={() => {
+          navigation.navigate('DetailTour');
+        }}>
         <Image
           onError={() => {}}
           style={_styles.img}
@@ -114,12 +119,16 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
             </View>
           </View>
         </View>
-      </View>
+      </Pressable>
     );
   };
   const renderItem = ({item}: {item: Item}) => {
     return (
-      <View style={_styles.itemContainer}>
+      <Pressable
+        style={_styles.itemContainer}
+        onPress={() => {
+          navigation.navigate('DetailTour');
+        }}>
         <Image
           source={item.image}
           style={_styles.itemImage}
@@ -154,7 +163,7 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
             </Text>
           </View>
         </View>
-      </View>
+      </Pressable>
     );
   };
   const renderHiddenItem = ({item}: ListRenderItemInfo<Item>) => (

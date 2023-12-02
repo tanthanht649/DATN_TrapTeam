@@ -21,7 +21,7 @@ const defaultContextValue: AppContextProps = {
 export const AppContext = createContext<AppContextProps>(defaultContextValue);
 
 export const AppContextProvider = ({children}: AppContextProviderProps) => {
-  const [isLoggedIn, setLoggedIn] = useState(true);
+  const [isLoggedIn, setLoggedIn] = useState(false);
   const [pay, setPay] = useState<string>('Momo');
 
   const appContextValue: AppContextProps = {

@@ -8,6 +8,7 @@ import {
   FlatList,
   Animated,
   ImageSourcePropType,
+  Pressable,
 } from 'react-native';
 import React, {useState, useMemo, useEffect, useRef} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -63,9 +64,16 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
 
   const [hideElement, setHideElement] = useState(false);
 
-  const ItemTourFavorite = ({item}: {item: Tour}) => {
+  const ItemTourFavorite = ({
+    item,
+    onPress,
+  }: {
+    item: Tour;
+    onPress: () => void;
+  }) => {
     return (
-      <View
+      <Pressable
+        onPress={onPress}
         style={{
           width: '100%',
           height: DimensionsStyle.width * 0.35,
@@ -151,14 +159,21 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
             {item.price.toLocaleString('vi-VN')} VNĐ
           </Text>
         </View>
-      </View>
+      </Pressable>
     );
   };
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
       ({item, index}: {item: Tour; index: number}) => {
-        return <ItemTourOutstanding item={item} key={item.id} index={index} />;
+        return (
+          <ItemTourOutstanding
+            item={item}
+            key={item.id}
+            index={index}
+            onPress={() => navigation.navigate('DetailTour')}
+          />
+        );
       },
     [],
   );
@@ -166,7 +181,13 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
   const renderItemTourFavorite = React.useMemo(
     () =>
       ({item}: {item: Tour}) => {
-        return <ItemTourFavorite item={item} key={item.id} />;
+        return (
+          <ItemTourFavorite
+            item={item}
+            key={item.id}
+            onPress={() => navigation.navigate('DetailTour')}
+          />
+        );
       },
     [],
   );

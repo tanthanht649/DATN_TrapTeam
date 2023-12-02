@@ -8,7 +8,13 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {BackgroundApp, Button, Header, ModalPayment} from '@components';
+import {
+  BackgroundApp,
+  Button,
+  Header,
+  ModalPayment,
+  ModalSuccessful,
+} from '@components';
 import {
   BACKGROUND_WHITE,
   FULL_NAME,
@@ -40,6 +46,12 @@ const _Pay: React.FC<PropsType> = props => {
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const {pay} = React.useContext(AppContext);
+
+  const [modalVisiblePay, setModalVisiblePay] = useState<boolean>(false);
+  const handleModal = () => {
+    setModalVisiblePay(false);
+    navigation.navigate('HomeFull');
+  };
 
   const [imagePay, setImagePay] = useState<ImageSourcePropType>(MOMO);
   const [namePay, setNamePay] = useState<string>('Ví MoMo');
@@ -329,7 +341,7 @@ const _Pay: React.FC<PropsType> = props => {
             imageIconLeft={FULL_NAME}
             imageIconRight={ORDER_BT}
             onPress={() => {
-              console.log('Đặt tour');
+              setModalVisiblePay(true);
             }}
             viewStyle={{
               width: DimensionsStyle.width * 1 - 40,
@@ -347,6 +359,13 @@ const _Pay: React.FC<PropsType> = props => {
           Cancel={() => {
             setModalVisible(false);
           }}
+        />
+        <ModalSuccessful
+          visible={modalVisiblePay}
+          onPress={handleModal}
+          text="Bạn đã thanh toán thành công"
+          textBold="thành công"
+          titleButton="Tiếp tục khám phá"
         />
       </SafeAreaView>
     </BackgroundApp>
