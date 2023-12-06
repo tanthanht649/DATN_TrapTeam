@@ -61,6 +61,16 @@ const _Profile: React.FC<PropsType> = props => {
   const [selectTab, setSelectTab] = useState(0);
   const dataUser = useSelector((state: RootState) => state.user.dataUsers);
 
+  const [imageAvatar, setImageAvatar] = useState(
+    'https://www.bing.com/th?id=OIP.fN9gx82LKxSZVpTc18meBgHaEo&w=149&h=100&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2',
+  );
+
+  useEffect(() => {
+    if (dataUser) {
+      setImageAvatar(dataUser.avatar.toString());
+    }
+  }, [dataUser]);
+
   useEffect(() => {
     console.log('dataUser', dataUser);
   }, [dataUser]);
@@ -333,7 +343,7 @@ const _Profile: React.FC<PropsType> = props => {
             iconRight={EDIT}
             styleIconRight={{height: 50, width: 50, opacity: 0}}></Header>
           <View style={_styles.avatar}>
-            <Image style={_styles.image} source={IMAGE_TEST}></Image>
+            <Image style={_styles.image} source={{uri: imageAvatar}}></Image>
             <Pressable
               onPress={() => {
                 navigation.navigate('EditProfile');

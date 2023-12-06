@@ -77,6 +77,39 @@ export const signOut = createAsyncThunk('user/signOut', async () => {
   return dataUser;
 });
 
+interface DataUpdateProfile {
+  id: String | undefined;
+  name: string;
+  phone_number: string;
+  avatar: string;
+}
+
+export const updateProfile = createAsyncThunk(
+  'user/updateProfile',
+  async (dataUpdate: DataUpdateProfile) => {
+    const fetchData = async () => {
+      let url = `${CONSTANTS.IP}api/account/updateAccount`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataUpdate),
+      });
+
+      const res = await response.json();
+      return res;
+    };
+    const res = await fetchData();
+    if (res.result) {
+      return res.account;
+      console.log('res.account', res.account);
+    }
+  },
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -91,6 +124,9 @@ const userSlice = createSlice({
         state.dataUsers = action.payload;
       })
       .addCase(signOut.fulfilled, (state, action) => {
+        state.dataUsers = action.payload;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
         state.dataUsers = action.payload;
       });
   },
