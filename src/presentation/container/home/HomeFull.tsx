@@ -21,6 +21,8 @@ import {BackgroundApp, HeaderHome2, TopTab, TextPlus, Input} from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeStackParamList} from '@navigation';
+import {useSelector} from 'react-redux';
+import {RootState} from '@shared-state';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'HomeFull'>;
 
@@ -550,6 +552,12 @@ export const ItemTourOutstanding = ({
 
 const _HomeFull: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
+
+  useEffect(() => {
+    console.log('dataUser', dataUser);
+  }, [dataUser]);
+
   const [isFavorite, setIsFavorite] = React.useState(true);
   const [isCheck, setIsCheck] = React.useState<
     'card' | 'home' | 'review' | 'homefavorite'

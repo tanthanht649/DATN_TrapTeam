@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
@@ -39,7 +39,9 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {AppContext} from '@shared-state';
+import {AppContext, RootState, signOut, useAppDispatch} from '@shared-state';
+import {useSelector} from 'react-redux';
+
 type Item = {
   id: string;
   image: ImageSourcePropType;
@@ -54,8 +56,14 @@ type Item = {
 type PropsType = NativeStackScreenProps<ProfileStackParamList, 'Profile'>;
 const _Profile: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dispatch = useAppDispatch();
   const {isLoggedIn, setLoggedIn} = React.useContext(AppContext);
   const [selectTab, setSelectTab] = useState(0);
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
+
+  useEffect(() => {
+    console.log('dataUser', dataUser);
+  }, [dataUser]);
 
   const [data, setData] = React.useState<Item[]>([
     {
@@ -450,6 +458,7 @@ const _Profile: React.FC<PropsType> = props => {
           </Pressable>
           <Pressable
             onPress={() => {
+              dispatch(signOut());
               onGoogleSignOutPress();
               setLoggedIn(false);
             }}

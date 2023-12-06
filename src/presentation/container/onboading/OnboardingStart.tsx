@@ -9,6 +9,8 @@ import {
   OnboardingLoginStackParamList,
   WelcomeTeamStackParamList,
 } from '@navigation';
+import {useSelector} from 'react-redux';
+import {RootState} from '@shared-state';
 
 type PropsType = NativeStackScreenProps<
   OnboardingLoginStackParamList,
@@ -42,7 +44,8 @@ const checkArray: Check[] = [
 
 const _OnboardingStart: React.FC<PropsType> = props => {
   const {navigation} = props;
-
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
+  console.log('dataUser', dataUser);
   const [data, setData] = React.useState<Point[]>([]);
 
   useEffect(() => {
@@ -56,7 +59,7 @@ const _OnboardingStart: React.FC<PropsType> = props => {
     setData(updatedPoints);
   }, [points, checkArray]);
 
-  console.log(data);
+  // console.log(data);
   return (
     <BackgroundApp source={SPLASH_SCREEN}>
       <SafeAreaView style={_styles.container}>
