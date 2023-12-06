@@ -1,32 +1,22 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {
-  OnboardingLoginStackParamList,
-  WelcomeTeamStackParamList,
-} from '@navigation';
+import {OnboardingLoginStackParamList} from '@navigation';
 import {BackgroundApp, Button, Input, TextPlus} from '@components';
 import {
-  BACKGROUND_LOGIN,
   BACKGROUND_WHITE,
   EMAIL,
   IMAGE_LOGIN_1,
   IMAGE_LOGIN_2,
   IMAGE_LOGIN_3,
   IMAGE_LOGIN_4,
-  LOCK,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
 import {AppContext} from '@shared-state';
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import {User} from '@domain';
 import {useSelector} from 'react-redux';
 import {RootState, getUser, useAppDispatch} from '@shared-state';
 
@@ -37,12 +27,7 @@ GoogleSignin.configure({
 
 type PropsType = NativeStackScreenProps<OnboardingLoginStackParamList, 'Login'>;
 const _Login: React.FC<PropsType> = props => {
-  const {navigation} = props;
   const dispatch = useAppDispatch();
-  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
-  useEffect(() => {
-    console.log('dataUser', dataUser);
-  }, [dataUser]);
   const {setLoggedIn} = React.useContext(AppContext);
   function GoogleSignIn() {
     return (
