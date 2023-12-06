@@ -33,7 +33,7 @@ const _EditProfile: React.FC<PropsType> = props => {
 
   useEffect(() => {
     if (dataUser) {
-      setImageAvatar(dataUser.avatar.toString());
+      setImageAvatar(dataUser?.avatar.toString());
     }
   }, [dataUser]);
 

@@ -684,10 +684,20 @@ const _HomeFull: React.FC<PropsType> = props => {
     navigation.navigate('FeaturedListDetail');
   };
 
+  const [imageAvatar, setImageAvatar] = useState(
+    'https://www.bing.com/th?id=OIP.fN9gx82LKxSZVpTc18meBgHaEo&w=149&h=100&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2',
+  );
+
+  useEffect(() => {
+    if (dataUser) {
+      setImageAvatar(dataUser?.avatar.toString());
+    }
+  }, [dataUser]);
+
   return (
     <BackgroundApp source={BACKGROUND_HOME}>
       <HeaderHome2
-        avatar={AVT_HOME}
+        avatar={imageAvatar}
         checkNotify={true}
         onPressAvatar={() => {
           console.log('avatar');
