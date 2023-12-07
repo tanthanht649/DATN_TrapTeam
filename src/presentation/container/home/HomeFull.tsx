@@ -176,16 +176,6 @@ const ItemTourFavorite = ({
   );
 };
 
-// Địa điểm nổi bật
-interface Estates {
-  id: number;
-  provinceId: string;
-  description: string;
-  name: string;
-  image: string;
-  status: boolean;
-}
-
 const ItemEstates = ({
   item,
   onPress,
@@ -386,8 +376,12 @@ const _HomeFull: React.FC<PropsType> = props => {
   const scrollViewRef = useRef<ScrollView>(null);
   const ITEM_WIDTH = DimensionsStyle.width * 0.7 + 15;
 
-  const handleToListTourBanner = () => {
-    navigation.navigate('ListTourBanner');
+  const handleToListTourBanner = (item: Event) => {
+    navigation.navigate('ListTourBanner', {
+      province_id: item.province_id._id,
+      image: item.image,
+      title: item.title,
+    });
   };
 
   const renderItemBanner = React.useMemo(
@@ -396,8 +390,7 @@ const _HomeFull: React.FC<PropsType> = props => {
         return (
           <ItemBanner
             onPress={() => {
-              console.log(item);
-              handleToListTourBanner();
+              handleToListTourBanner(item);
             }}
             item={item}
             key={item._id}
@@ -501,6 +494,10 @@ const _HomeFull: React.FC<PropsType> = props => {
   const dataEvent = useSelector((state: RootState) => state.event.dataEvents);
   const loadingEvent = useSelector(
     (state: RootState) => state.event.loadingEvent,
+  );
+
+  const loadingFavorite = useSelector(
+    (state: RootState) => state.favorite.loadingFavorite,
   );
 
   useEffect(() => {
@@ -685,25 +682,29 @@ const _HomeFull: React.FC<PropsType> = props => {
                   </Text>
                 </Pressable>
               </View>
-              <View
-                style={{
-                  flex: 1,
-                  overflow: 'hidden',
-                  marginTop: 20,
-                  borderTopLeftRadius: 20,
-                  borderBottomLeftRadius: 20,
-                }}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View style={{flexDirection: 'row'}}>
-                    {dataFavoriteNoId.map((item, index) =>
-                      renderItemTourFavorite({
-                        item,
-                        index,
-                      }),
-                    )}
-                  </View>
-                </ScrollView>
-              </View>
+              {loadingFavorite ? (
+                <Loading height={200} />
+              ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    overflow: 'hidden',
+                    marginTop: 20,
+                    borderTopLeftRadius: 20,
+                    borderBottomLeftRadius: 20,
+                  }}>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <View style={{flexDirection: 'row'}}>
+                      {dataFavoriteNoId.map((item, index) =>
+                        renderItemTourFavorite({
+                          item,
+                          index,
+                        }),
+                      )}
+                    </View>
+                  </ScrollView>
+                </View>
+              )}
             </View>
           ) : null}
 

@@ -14,6 +14,8 @@ const initialState: EventState = {
   dataEvents: dataEvent,
 };
 
+
+// lấy danh sách sự kiện
 export const getAllEvents = createAsyncThunk('event/getEvent', async () => {
   const fetchData = async () => {
     let url = `${CONSTANTS.IP}api/event/getAllEvents`;

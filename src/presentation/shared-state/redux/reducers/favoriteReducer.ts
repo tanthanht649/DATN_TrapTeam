@@ -17,6 +17,8 @@ const initialState: FavoriteState = {
   dataFavoriteNoId: dataFavoriteNoId,
 };
 
+
+// lấy danh sách tour yêu thích của user
 export const getDataFavorite = createAsyncThunk(
   'favorite/getDataFavorite',
   async (user_id: string | undefined) => {

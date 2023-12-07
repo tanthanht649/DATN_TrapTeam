@@ -1,6 +1,9 @@
 export interface Event {
   _id: string;
   image: string;
-  title: String;
-  province_id: String;
+  title: string;
+  province_id: {
+    _id: string;
+    name: string;
+  };
 }

@@ -14,6 +14,8 @@ const initialState: LocationState = {
   dataLocations: dataLocations,
 };
 
+
+// lấy danh sách địa điểm phổ biến
 export const getAllLocation = createAsyncThunk(
   'location/getAllLocation',
   async () => {

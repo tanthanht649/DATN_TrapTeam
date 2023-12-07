@@ -21,6 +21,7 @@ interface DataGetUser {
   phone_number: string | null;
 }
 
+// lấy thông tin user kết hợp lưu thông tin user vào database khi đăng nhập lần đầu
 export const getUser = createAsyncThunk(
   'user/getUser',
   async (dataGetUser: DataGetUser) => {
@@ -72,6 +73,7 @@ export const getUser = createAsyncThunk(
   },
 );
 
+// reset store redux khi logout
 export const logoutAction = createAction('logout');
 
 interface DataUpdateProfile {
@@ -81,6 +83,8 @@ interface DataUpdateProfile {
   avatar: string;
 }
 
+
+// cập nhật thông tin user
 export const updateProfile = createAsyncThunk(
   'user/updateProfile',
   async (dataUpdate: DataUpdateProfile) => {
