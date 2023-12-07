@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import {
-  AVT_HOME,
   BACKGROUND_HOME,
   FIND,
   HEART,
+  HEART_INACTIVE_2,
   LOCATION,
   fontFamily,
 } from '@assets';
@@ -37,7 +37,7 @@ import {
   useAppDispatch,
   getToursOutstanding,
 } from '@shared-state';
-import {Event, Tour, Location, User} from '@domain';
+import {Event, Tour, Location, TourAndFavorite} from '@domain';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'HomeFull'>;
 
@@ -75,57 +75,6 @@ const ItemBanner = ({item, onPress}: {item: Event; onPress: () => void}) => {
     </Pressable>
   );
 };
-
-// export const DATATOUR: Tour[] = [
-//   {
-//     id: 1,
-//     tourist_destinationId: 1,
-//     provide: 'Vietnam Travel',
-//     name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-//     description: 'Điểm đến: Hồ Hoàn Kiếm',
-//     available_seats: 10,
-//     duration: 1,
-//     image: 'https://i.redd.it/x8m1euew4du21.jpg',
-//     price: 4450000,
-//     departure_date: '2021-10-10',
-//     departure_location: 'Hà Nội, Việt Nam',
-//     note: 'Không được hủy',
-//     schedule: 'Hà Nội',
-//     status: true,
-//   },
-//   {
-//     id: 2,
-//     tourist_destinationId: 1,
-//     provide: 'Vietnam Travel',
-//     name: 'Tour Hồ Hoàn Kiếm',
-//     description: 'Điểm đến: Hồ Hoàn Kiếm',
-//     available_seats: 10,
-//     duration: 1,
-//     image: 'https://i.redd.it/x8m1euew4du21.jpg',
-//     price: 4450000,
-//     departure_date: '2021-10-10',
-//     departure_location: 'Hà Nội, Việt Nam',
-//     note: 'Không được hủy',
-//     schedule: 'Hà Nội',
-//     status: true,
-//   },
-//   {
-//     id: 3,
-//     tourist_destinationId: 1,
-//     provide: 'Vietnam Travel',
-//     name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-//     description: 'Điểm đến: Hồ Hoàn Kiếm',
-//     available_seats: 10,
-//     duration: 1,
-//     image: 'https://i.redd.it/x8m1euew4du21.jpg',
-//     price: 4450000,
-//     departure_date: '2021-10-10',
-//     departure_location: 'Hồ Chí Minh, Việt Nam',
-//     note: 'Không được hủy',
-//     schedule: 'Hà Nội',
-//     status: true,
-//   },
-// ];
 
 const ItemTourFavorite = ({
   item,
@@ -237,33 +186,6 @@ interface Estates {
   status: boolean;
 }
 
-const DATAESTATES: Estates[] = [
-  {
-    id: 1,
-    provinceId: 'Hà Nội',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    name: 'Hồ Hoàn Kiếm',
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    status: true,
-  },
-  {
-    id: 2,
-    provinceId: 'Hà Nội',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    name: 'Hồ Hoàn Kiếm',
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    status: true,
-  },
-  {
-    id: 3,
-    provinceId: 'Hà Nội',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    name: 'Hồ Hoàn Kiếm',
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    status: true,
-  },
-];
-
 const ItemEstates = ({
   item,
   onPress,
@@ -339,96 +261,12 @@ const ItemEstates = ({
   );
 };
 
-//Tour nổi bật
-// export const DATATOUROUTSTANDING: Tour[] = [
-//   {
-//     id: 1,
-//     tourist_destinationId: 1,
-//     provide: 'Vietnam Travel',
-//     name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-//     description: 'Điểm đến: Hồ Hoàn Kiếm',
-//     available_seats: 10,
-//     duration: 1,
-//     image: 'https://i.redd.it/x8m1euew4du21.jpg',
-//     price: 4450000,
-//     departure_date: '2021-10-10',
-//     departure_location: 'Hà Nội, Việt Nam',
-//     note: 'Không được hủy',
-//     schedule: 'Hà Nội',
-//     status: true,
-//   },
-//   {
-//     id: 2,
-//     tourist_destinationId: 1,
-//     provide: 'Vietnam Travel',
-//     name: 'Tour Hồ Hoàn Kiếm',
-//     description: 'Điểm đến: Hồ Hoàn Kiếm',
-//     available_seats: 10,
-//     duration: 1,
-//     image: 'https://i.redd.it/x8m1euew4du21.jpg',
-//     price: 4450000,
-//     departure_date: '2021-10-10',
-//     departure_location: 'Hà Nội, Việt Nam',
-//     note: 'Không được hủy',
-//     schedule: 'Hà Nội',
-//     status: true,
-//   },
-//   {
-//     id: 3,
-//     tourist_destinationId: 1,
-//     provide: 'Vietnam Travel',
-//     name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-//     description: 'Điểm đến: Hồ Hoàn Kiếm',
-//     available_seats: 10,
-//     duration: 1,
-//     image: 'https://i.redd.it/x8m1euew4du21.jpg',
-//     price: 4450000,
-//     departure_date: '2021-10-10',
-//     departure_location: 'Hồ Chí Minh, Việt Nam',
-//     note: 'Không được hủy',
-//     schedule: 'Hà Nội',
-//     status: true,
-//   },
-//   {
-//     id: 4,
-//     tourist_destinationId: 1,
-//     provide: 'Vietnam Travel',
-//     name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-//     description: 'Điểm đến: Hồ Hoàn Kiếm',
-//     available_seats: 10,
-//     duration: 1,
-//     image: 'https://i.redd.it/x8m1euew4du21.jpg',
-//     price: 4450000,
-//     departure_date: '2021-10-10',
-//     departure_location: 'Hồ Chí Minh, Việt Nam',
-//     note: 'Không được hủy',
-//     schedule: 'Hà Nội',
-//     status: true,
-//   },
-//   {
-//     id: 5,
-//     tourist_destinationId: 1,
-//     provide: 'Vietnam Travel',
-//     name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-//     description: 'Điểm đến: Hồ Hoàn Kiếm',
-//     available_seats: 10,
-//     duration: 1,
-//     image: 'https://i.redd.it/x8m1euew4du21.jpg',
-//     price: 4450000,
-//     departure_date: '2021-10-10',
-//     departure_location: 'Hồ Chí Minh, Việt Nam',
-//     note: 'Không được hủy',
-//     schedule: 'Hà Nội',
-//     status: true,
-//   },
-// ];
-
 export const ItemTourOutstanding = ({
   item,
   index,
   onPress,
 }: {
-  item: Tour;
+  item: TourAndFavorite;
   index: number;
   onPress: () => void;
 }) => {
@@ -457,7 +295,7 @@ export const ItemTourOutstanding = ({
           }}
         />
         <Image
-          source={HEART}
+          source={item.isFavorite ? HEART : HEART_INACTIVE_2}
           style={{
             width: 30,
             height: 30,
@@ -526,9 +364,7 @@ const _HomeFull: React.FC<PropsType> = props => {
   const {navigation} = props;
   const dispatch = useAppDispatch();
   const dataUser = useSelector((state: RootState) => state.user.dataUsers);
-
   const [isFavorite, setIsFavorite] = React.useState(false);
-
   const [isCheck, setIsCheck] = React.useState<
     'card' | 'home' | 'review' | 'homefavorite'
   >('home');
@@ -606,7 +442,7 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item, index}: {item: Tour; index: number}) => {
+      ({item, index}: {item: TourAndFavorite; index: number}) => {
         return (
           <ItemTourOutstanding
             item={item}
@@ -626,7 +462,6 @@ const _HomeFull: React.FC<PropsType> = props => {
       // Tăng giá trị của currentIndex lên 1
       setCurrentIndex(prevIndex => (prevIndex + 1) % dataEvent.length);
     }, 1500);
-
     // Xóa interval khi component bị unmount
     return () => clearInterval(interval);
   }, []);
@@ -712,9 +547,24 @@ const _HomeFull: React.FC<PropsType> = props => {
     dispatch(getToursOutstanding());
   }, [limitCheckTourOutstanding]);
 
-  const halfwayIndex = Math.ceil(dataToursOutstanding.length / 2);
-  const column1Data = dataToursOutstanding.slice(0, halfwayIndex);
-  const column2Data = dataToursOutstanding.slice(halfwayIndex);
+  const [dataTourAndFavorite, setDataTourAndFavorite] = useState<
+    TourAndFavorite[]
+  >([]);
+
+  useEffect(() => {
+    const tourAndFavorite = dataToursOutstanding.map((item: Tour) => {
+      const isFavorite = dataFavoriteNoId.some(
+        (check: Tour) => check._id === item._id,
+      );
+      return {...item, isFavorite: isFavorite};
+    });
+
+    setDataTourAndFavorite(tourAndFavorite);
+  }, [dataFavorite, dataFavoriteNoId]);
+
+  const halfwayIndex = Math.ceil(dataTourAndFavorite.length / 2);
+  const column1Data = dataTourAndFavorite.slice(0, halfwayIndex);
+  const column2Data = dataTourAndFavorite.slice(halfwayIndex);
 
   return (
     <BackgroundApp source={BACKGROUND_HOME}>
