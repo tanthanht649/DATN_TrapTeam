@@ -408,7 +408,10 @@ const _HomeFull: React.FC<PropsType> = props => {
             item={item}
             key={index}
             onPress={() => {
-              navigation.navigate('DetailTour');
+              navigation.navigate('DetailTour', {
+                tour_id: item._id,
+                isFavorite: true,
+              });
             }}
             index={index}
           />
@@ -504,6 +507,12 @@ const _HomeFull: React.FC<PropsType> = props => {
     dispatch(getAllEvents());
   }, [limitCheck]);
 
+  const [limitCheckFavorite, setLimitCheckFavorite] = useState(false);
+
+  useEffect(() => {
+    if (dataUser && dataUser._id) dispatch(getDataFavorite(dataUser?._id));
+  }, [limitCheckFavorite, dataUser]);
+
   const dataFavoriteNoId = useSelector(
     (state: RootState) => state.favorite.dataFavoriteNoId,
   );
@@ -511,11 +520,6 @@ const _HomeFull: React.FC<PropsType> = props => {
   const dataFavorite = useSelector(
     (state: RootState) => state.favorite.dataFavorites,
   );
-
-  const [limitCheckFavorite, setLimitCheckFavorite] = useState(false);
-  useEffect(() => {
-    if (dataUser && dataUser._id) dispatch(getDataFavorite(dataUser?._id));
-  }, [limitCheckFavorite, dataUser]);
 
   useEffect(() => {
     if (dataFavoriteNoId.length > 0) {

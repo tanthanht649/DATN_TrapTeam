@@ -1,6 +1,13 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect} from 'react';
-import {BackgroundApp, Button, Header} from '@components';
+import {BackgroundApp, Button, Header, Loading} from '@components';
 import {
   AVT,
   BACKGROUND_WHITE,
@@ -8,6 +15,7 @@ import {
   FULL_NAME,
   HEART,
   HEART_INACTIVE,
+  HEART_INACTIVE_2,
   ICON_BACK,
   LOCATION,
   LOCATION_2,
@@ -22,21 +30,61 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Colors, DimensionsStyle} from '@resources';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {HomeStackParamList, WelcomeTeamStackParamList} from '@navigation';
+import {
+  HomeStackParamList,
+  SearchStackParamList,
+  WelcomeTeamStackParamList,
+} from '@navigation';
+import {RootState, getTourById, useAppDispatch} from '@shared-state';
+import {useSelector} from 'react-redux';
 
-type PropsType = NativeStackScreenProps<HomeStackParamList, 'DetailTour'>;
+type PropsType = NativeStackScreenProps<HomeStackParamList, 'DetailTour'> &
+  NativeStackScreenProps<SearchStackParamList, 'DetailTour'>;
 
 const _DetailTour: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dispatch = useAppDispatch();
+  const tour_id = props.route.params?.tour_id;
+  const isFavorite = props.route.params?.isFavorite;
   const [isFull, setIsFull] = React.useState<boolean>(false);
   const [titleButtonShowReview, setTitleButtonShowReview] =
     React.useState<string>('Xem tất cả bình luận');
+  const dataTour = useSelector((state: RootState) => state.tour.tourDetail);
+  const loadingTour = useSelector(
+    (state: RootState) => state.tour.loadingTourDetail,
+  );
 
-  const DATA_IMG_TOP: any = [VHL, DT_1, VHL, DT_1, VHL];
+  useEffect(() => {
+    dispatch(getTourById(tour_id));
+  }, []);
 
-  const ITEM_IMG_TOP = ({item, index}: any) => {
+  const [dataImageTop, setDataImageTop] = React.useState<any>([]);
+  const [dataSchedules, setDataSchedules] = React.useState<any>([]);
+  const daysDifference = (endDate: any, startDate: any) => {
+    const startDay = new Date(startDate);
+    const endDay = new Date(endDate);
+    const timeDifference = Number(endDay) - Number(startDay);
+    const millisecondsPerDay = 24 * 60 * 60 * 1000; // Số mili giây trong một ngày
+    const daysDifference = Math.round(timeDifference / millisecondsPerDay);
+    return daysDifference;
+  };
+
+  const [imageDetail, setImageDetail] = React.useState(dataTour.image);
+  useEffect(() => {
+    if (dataTour && dataTour.locations) {
+      setDataImageTop(dataTour.locations.map(location => location.image));
+      setDataSchedules(dataTour.schedules);
+      setImageDetail(dataTour.image);
+    }
+
+    if (dataImageTop.length > 0) {
+      setDataImageTop(dataImageTop.concat(dataTour.image));
+    }
+  }, [dataTour]);
+
+  const ITEM_IMG_TOP = ({item, index, onPress}: any) => {
     return (
-      <View
+      <Pressable
         style={{
           width: DimensionsStyle.width * 0.15,
           height: DimensionsStyle.width * 0.15,
@@ -47,9 +95,10 @@ const _DetailTour: React.FC<PropsType> = props => {
           padding: 2,
           borderRadius: 10,
           marginBottom: 5,
-        }}>
+        }}
+        onPress={onPress}>
         <Image
-          source={item}
+          source={{uri: item}}
           style={{
             width: '100%',
             height: '100%',
@@ -57,12 +106,21 @@ const _DetailTour: React.FC<PropsType> = props => {
             borderRadius: 10,
           }}
         />
-      </View>
+      </Pressable>
     );
   };
 
-  const renderItemImgTop = ({item, index}: any) => {
-    return <ITEM_IMG_TOP item={item} index={index} key={index} />;
+  const renderItemImgTop = ({item, index, onPress}: any) => {
+    return (
+      <ITEM_IMG_TOP
+        item={item}
+        index={index}
+        key={index}
+        onPress={() => {
+          setImageDetail(item);
+        }}
+      />
+    );
   };
 
   const DATA_SCHEDULE: string[] = [
@@ -347,307 +405,317 @@ const _DetailTour: React.FC<PropsType> = props => {
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
-      <ScrollView
-        style={_styles.container}
-        showsVerticalScrollIndicator={false}>
-        <View>
+      {loadingTour ? (
+        <Loading height={DimensionsStyle.height * 1} />
+      ) : (
+        <ScrollView
+          style={_styles.container}
+          showsVerticalScrollIndicator={false}>
           <View>
-            <Image
-              source={DT_1}
-              style={{
-                width: '100%',
-                height: DimensionsStyle.height * 0.585,
-                resizeMode: 'stretch',
-                opacity: 0.5,
-                borderBottomLeftRadius: 50,
-                borderBottomRightRadius: 50,
-              }}
-            />
-            <Image
-              source={DT_1}
-              style={{
-                width: '96%',
-                height: DimensionsStyle.height * 0.565,
-                resizeMode: 'stretch',
-                alignSelf: 'center',
-                position: 'absolute',
-                marginTop: DimensionsStyle.height * 0.01,
-                borderRadius: 40,
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20,
-              }}
-            />
-            <Header
-              iconLeft={ICON_BACK}
-              iconRight={HEART}
-              eventLeft={() => navigation.goBack()}
-              eventRight={() => console.log('EventRight')}
-              isCheck={true}
-              styleView={_styles.viewHeder}
-            />
-
-            <View
-              style={{
-                width: DimensionsStyle.width * 0.15,
-                height: DimensionsStyle.width * 0.475,
-                position: 'absolute',
-                alignSelf: 'center',
-                bottom: DimensionsStyle.height * 0.03,
-                right: DimensionsStyle.height * 0.03,
-                borderRadius: 10,
-                overflow: 'hidden',
-              }}>
-              <ScrollView
-                nestedScrollEnabled={true}
-                showsVerticalScrollIndicator={false}>
-                {DATA_IMG_TOP.map((item: any, index: any) => {
-                  return renderItemImgTop({item, index});
-                })}
-              </ScrollView>
-            </View>
-          </View>
-          <View style={{marginHorizontal: 20, marginTop: 10}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Text
-                numberOfLines={1}
-                style={{
-                  fontFamily: fontFamily.Bold,
-                  width: DimensionsStyle.width * 0.5,
-                  fontSize: 18,
-                  color: Colors.BLUE_DARK,
-                }}>
-                Tour Tết 2024: Đà Nẵng - Hội An - Quảng Nam
-              </Text>
-              <Text
-                style={{
-                  fontFamily: fontFamily.Bold,
-
-                  fontSize: 18,
-                  color: Colors.RED,
-                }}>
-                6.000.000 VND
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginTop: 20,
-              }}>
+            <View>
               <Image
-                source={LOCATION}
-                style={{width: 15, height: 15, marginEnd: 5}}
-              />
-              <Text
+                source={{uri: imageDetail}}
                 style={{
-                  fontFamily: fontFamily.Medium,
-                  fontSize: 14,
-                  color: Colors.BLUE_DARK,
-                }}>
-                Đà Nẵng - Quảng Nam, Việt Nam
-              </Text>
-            </View>
-
-            <Text
-              style={[
-                _styles.text,
-                {
-                  marginTop: 5,
-                },
-              ]}>
-              Mô tả
-            </Text>
-            <Text
-              style={[
-                _styles.text,
-                {
-                  fontFamily: fontFamily.Medium,
-                  fontSize: 14,
-                  textAlign: 'justify',
-                  lineHeight: 18,
-                  marginTop: 5,
-                },
-              ]}>
-              Điểm đến rất thú vị, có nhiều cảnh đẹp để chụp hình, đồ ăn siêu
-              ngon. Các bạn hướng dẫn viên rất vui vẻ, dễ thương. Điểm đến rất
-              thú vị, có nhiều cảnh đẹp để chụp hình, đồ ăn siêu ngon. Các bạn
-              hướng dẫn viên rất vui vẻ, dễ thương. Điểm đến rất thú vị, có
-              nhiều cảnh đẹp để chụp hình, đồ ăn siêu ngon. Các bạn hướng dẫn
-              viên rất vui vẻ, dễ thương.
-            </Text>
-            <Text
-              style={[
-                _styles.text,
-                {
-                  fontFamily: fontFamily.Medium,
-                  fontSize: 14,
-                  textAlign: 'justify',
-                  lineHeight: 18,
-                  marginTop: 5,
-                },
-              ]}>
-              Trẻ em: 600.000 VND
-            </Text>
-            <Text
-              style={[
-                _styles.text,
-                {
-                  fontFamily: fontFamily.Medium,
-                  fontSize: 14,
-                  textAlign: 'justify',
-                  lineHeight: 18,
-                },
-              ]}>
-              Người lớn: 1.200.000 VND
-            </Text>
-            <Text
-              style={[
-                _styles.text,
-                {
-                  marginBottom: 5,
-                  marginTop: 10,
-                },
-              ]}>
-              Lịch trình
-            </Text>
-            <Text
-              style={[
-                _styles.text,
-                {
-                  fontFamily: fontFamily.Medium,
-                  fontSize: 14,
-                  textAlign: 'justify',
-                  lineHeight: 18,
-                  marginBottom: 5,
-                },
-              ]}>
-              4 ngày 3 đêm
-            </Text>
-            {DATA_SCHEDULE.map((item: any, index: any) => {
-              return renderItemSchedule({item, index});
-            })}
-            <Text
-              style={[
-                _styles.text,
-                {
-                  marginBottom: 5,
-                  marginTop: 10,
-                },
-              ]}>
-              Vị trí
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                paddingBottom: 20,
-                borderBottomWidth: 1,
-                borderBottomColor: Colors.GRAY,
-              }}>
-              <Image
-                source={LOCATION_DT}
-                style={{
-                  width: 50,
-                  height: 50,
+                  width: '100%',
+                  height: DimensionsStyle.height * 0.585,
                   resizeMode: 'stretch',
-                  marginEnd: 10,
+                  opacity: 0.5,
+                  borderBottomLeftRadius: 50,
+                  borderBottomRightRadius: 50,
                 }}
               />
-              <Text
+              <Image
+                source={{uri: imageDetail}}
                 style={{
-                  fontFamily: fontFamily.Medium,
-                  fontSize: 14,
-                  lineHeight: 18,
-                  color: Colors.BLUE_DARK,
-                  marginTop: 5,
-                  width: DimensionsStyle.width * 0.7,
+                  width: '96%',
+                  height: DimensionsStyle.height * 0.565,
+                  resizeMode: 'stretch',
+                  alignSelf: 'center',
+                  position: 'absolute',
+                  marginTop: DimensionsStyle.height * 0.01,
+                  borderRadius: 40,
+                  borderTopLeftRadius: 20,
+                  borderTopRightRadius: 20,
+                }}
+              />
+              <Header
+                iconLeft={ICON_BACK}
+                iconRight={isFavorite ? HEART : HEART_INACTIVE_2}
+                eventLeft={() => navigation.goBack()}
+                eventRight={() => console.log('EventRight')}
+                isCheck={true}
+                styleView={_styles.viewHeder}
+              />
+
+              <View
+                style={{
+                  width: DimensionsStyle.width * 0.15,
+                  height: DimensionsStyle.width * 0.475,
+                  position: 'absolute',
+                  alignSelf: 'center',
+                  bottom: DimensionsStyle.height * 0.03,
+                  right: DimensionsStyle.height * 0.03,
+                  borderRadius: 10,
+                  overflow: 'hidden',
                 }}>
-                Bà Nà Hills, Đà Nẵng - Hội An, Quảng Nam, Việt Nam
+                {loadingTour ? (
+                  <Loading height={DimensionsStyle.width * 0.475} />
+                ) : (
+                  <ScrollView
+                    nestedScrollEnabled={true}
+                    showsVerticalScrollIndicator={false}>
+                    {dataImageTop.map((item: any, index: any) => {
+                      return renderItemImgTop({item, index});
+                    })}
+                  </ScrollView>
+                )}
+              </View>
+            </View>
+            <View style={{marginHorizontal: 20, marginTop: 10}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontFamily: fontFamily.Bold,
+                    width: DimensionsStyle.width * 0.5,
+                    fontSize: 18,
+                    color: Colors.BLUE_DARK,
+                  }}>
+                  {dataTour.name}
+                </Text>
+
+                <Text
+                  style={{
+                    fontFamily: fontFamily.Bold,
+                    fontSize: 18,
+                    color: Colors.RED,
+                  }}>
+                  {Number(dataTour.price).toLocaleString('vi-VN')} VNĐ
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  marginTop: 20,
+                }}>
+                <Image
+                  source={LOCATION}
+                  style={{width: 15, height: 15, marginEnd: 5}}
+                />
+                <Text
+                  style={{
+                    fontFamily: fontFamily.Medium,
+                    fontSize: 14,
+                    color: Colors.BLUE_DARK,
+                  }}>
+                  {dataTour?.province_id?.name}, Việt Nam
+                </Text>
+              </View>
+
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    marginTop: 5,
+                  },
+                ]}>
+                Mô tả
+              </Text>
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    fontFamily: fontFamily.Medium,
+                    fontSize: 14,
+                    textAlign: 'justify',
+                    lineHeight: 18,
+                    marginTop: 5,
+                  },
+                ]}>
+                {/* {dataTour.description} */}
+              </Text>
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    fontFamily: fontFamily.Medium,
+                    fontSize: 14,
+                    textAlign: 'justify',
+                    lineHeight: 18,
+                    marginTop: 5,
+                  },
+                ]}>
+                Trẻ em:{' '}
+                {Math.round(Number(dataTour.price) * 0.6).toLocaleString(
+                  'vi-VN',
+                )}{' '}
+                VND
+              </Text>
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    fontFamily: fontFamily.Medium,
+                    fontSize: 14,
+                    textAlign: 'justify',
+                    lineHeight: 18,
+                  },
+                ]}>
+                Người lớn: {Number(dataTour.price).toLocaleString('vi-VN')} VND
+              </Text>
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    marginBottom: 5,
+                    marginTop: 10,
+                  },
+                ]}>
+                Lịch trình
+              </Text>
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    fontFamily: fontFamily.Medium,
+                    fontSize: 14,
+                    textAlign: 'justify',
+                    lineHeight: 18,
+                    marginBottom: 5,
+                  },
+                ]}>
+                {daysDifference(dataTour.end_date, dataTour.departure_date)}{' '}
+                ngày{' '}
+                {daysDifference(dataTour.end_date, dataTour.departure_date) - 1}{' '}
+                đêm
+              </Text>
+              {dataSchedules.map((item: any, index: any) => {
+                return renderItemSchedule({item, index});
+              })}
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    marginBottom: 5,
+                    marginTop: 10,
+                  },
+                ]}>
+                Vị trí
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  paddingBottom: 20,
+                  borderBottomWidth: 1,
+                  borderBottomColor: Colors.GRAY,
+                }}>
+                <Image
+                  source={LOCATION_DT}
+                  style={{
+                    width: 50,
+                    height: 50,
+                    resizeMode: 'stretch',
+                    marginEnd: 10,
+                  }}
+                />
+                <Text
+                  style={{
+                    fontFamily: fontFamily.Medium,
+                    fontSize: 14,
+                    lineHeight: 18,
+                    color: Colors.BLUE_DARK,
+                    marginTop: 5,
+                    width: DimensionsStyle.width * 0.7,
+                  }}>
+                  Bà Nà Hills, Đà Nẵng - Hội An, Quảng Nam, Việt Nam
+                </Text>
+              </View>
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    marginVertical: 15,
+                  },
+                ]}>
+                Đánh giá
+              </Text>
+              {dataShowReview.map((item: any, index: any) => {
+                return renderItemReview({item, index});
+              })}
+
+              <Button
+                title={titleButtonShowReview}
+                imageIconLeft={FULL_NAME}
+                imageIconRight={FULL_NAME}
+                onPress={() => {
+                  setIsFull(!isFull);
+                }}
+                viewStyle={{
+                  width: DimensionsStyle.width * 0.88,
+                  backgroundColor: Colors.GRAY_SEARCH,
+                  borderRadius: 20,
+                }}
+                textStyle={{
+                  color: Colors.BLUE_DARK,
+                }}
+              />
+
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    marginVertical: 25,
+                  },
+                ]}>
+                Địa điểm tham quan
               </Text>
             </View>
-            <Text
-              style={[
-                _styles.text,
-                {
-                  marginVertical: 15,
-                },
-              ]}>
-              Đánh giá
-            </Text>
-            {dataShowReview.map((item: any, index: any) => {
-              return renderItemReview({item, index});
-            })}
+            <View>
+              {
+                <View style={_styles.containerFlatlist}>
+                  <View>
+                    {column1Data.map((item, index) =>
+                      renderItemLocation({item: item, index: index}),
+                    )}
+                  </View>
+                  <View>
+                    {column2Data.map((item, index) =>
+                      renderItemLocation({item: item, index: index}),
+                    )}
+                  </View>
+                </View>
+              }
+            </View>
 
             <Button
-              title={titleButtonShowReview}
+              title="Đặt tour"
               imageIconLeft={FULL_NAME}
-              imageIconRight={FULL_NAME}
+              imageIconRight={ORDER_BT}
               onPress={() => {
-                setIsFull(!isFull);
+                navigation.navigate('BookTour');
               }}
               viewStyle={{
-                width: DimensionsStyle.width * 0.88,
-                backgroundColor: Colors.GRAY_SEARCH,
-                borderRadius: 20,
+                width: DimensionsStyle.width * 0.7,
+                backgroundColor: Colors.GREEN,
+                borderRadius: 10,
+                marginVertical: 20,
               }}
-              textStyle={{
-                color: Colors.BLUE_DARK,
+              viewIconRight={{
+                display: 'flex',
               }}
             />
-
-            <Text
-              style={[
-                _styles.text,
-                {
-                  marginVertical: 25,
-                },
-              ]}>
-              Địa điểm tham quan
-            </Text>
           </View>
-          <View>
-            {
-              <View style={_styles.containerFlatlist}>
-                <View>
-                  {column1Data.map((item, index) =>
-                    renderItemLocation({item: item, index: index}),
-                  )}
-                </View>
-                <View>
-                  {column2Data.map((item, index) =>
-                    renderItemLocation({item: item, index: index}),
-                  )}
-                </View>
-              </View>
-            }
-          </View>
-
-          <Button
-            title="Đặt tour"
-            imageIconLeft={FULL_NAME}
-            imageIconRight={ORDER_BT}
-            onPress={() => {
-              navigation.navigate('BookTour');
-            }}
-            viewStyle={{
-              width: DimensionsStyle.width * 0.7,
-              backgroundColor: Colors.GREEN,
-              borderRadius: 10,
-              marginVertical: 20,
-            }}
-            viewIconRight={{
-              display: 'flex',
-            }}
-          />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </BackgroundApp>
   );
 };

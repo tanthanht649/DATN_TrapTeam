@@ -1,11 +1,21 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Search, SearchResult, FeaturedListHome, DetailTour, BookTour, Pay} from '@containers';
+import {
+  Search,
+  SearchResult,
+  FeaturedListHome,
+  DetailTour,
+  BookTour,
+  Pay,
+} from '@containers';
 
 type SearchProps = {};
 type SearchResultProps = {};
 type FeaturedListHomeProps = {};
-type DetailTourProps = {};
+type DetailTourProps = {
+  tour_id: string;
+  isFavorite: boolean;
+};
 type BookTourProps = {};
 type PayProps = {};
 
