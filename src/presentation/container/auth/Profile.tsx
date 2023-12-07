@@ -39,8 +39,15 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {AppContext, RootState, signOut, useAppDispatch} from '@shared-state';
+import {
+  AppContext,
+  RootState,
+  logout,
+  signOut,
+  useAppDispatch,
+} from '@shared-state';
 import {useSelector} from 'react-redux';
+import {store} from '@shared-state';
 
 type Item = {
   id: string;
@@ -468,7 +475,7 @@ const _Profile: React.FC<PropsType> = props => {
           </Pressable>
           <Pressable
             onPress={() => {
-              dispatch(signOut());
+              store.dispatch(logout());
               onGoogleSignOutPress();
               setLoggedIn(false);
             }}

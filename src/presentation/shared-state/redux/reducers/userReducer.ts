@@ -1,5 +1,5 @@
 import {User} from '@domain';
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk, createAction} from '@reduxjs/toolkit';
 import {CONSTANTS} from '@core';
 
 export interface UserState {
@@ -72,9 +72,7 @@ export const getUser = createAsyncThunk(
   },
 );
 
-export const signOut = createAsyncThunk('user/signOut', async () => {
-  return dataUser;
-});
+export const logoutAction = createAction('logout');
 
 interface DataUpdateProfile {
   id: String | undefined;
@@ -112,7 +110,12 @@ export const updateProfile = createAsyncThunk(
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    logout: state => {
+      // Reset state về giá trị ban đầu
+      return initialState;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(getUser.pending, state => {
@@ -122,13 +125,11 @@ const userSlice = createSlice({
         state.loadingUser = false;
         state.dataUsers = action.payload;
       })
-      .addCase(signOut.fulfilled, (state, action) => {
-        state.dataUsers = action.payload;
-      })
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.dataUsers = action.payload;
       });
   },
 });
 
+export const {logout} = userSlice.actions;
 export const userReducer = userSlice.reducer;
