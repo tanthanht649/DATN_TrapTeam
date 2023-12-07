@@ -40,10 +40,10 @@ const _Login: React.FC<PropsType> = props => {
           marginTop: DimensionsStyle.height * 0.13,
         }}
         viewIconLeft={{display: 'flex'}}
-        onPress={() =>
+        onPress={() => {
           onGoogleButtonPress().then(userCredential => {
             console.log('Signed in with Google!');
-            setLoggedIn(true);
+
             const dataGetUser = {
               email: userCredential.user.email,
               name: userCredential.user.displayName,
@@ -51,9 +51,9 @@ const _Login: React.FC<PropsType> = props => {
               phone_number: '',
             };
             dispatch(getUser(dataGetUser));
-            // Console thông tin tài khoản đăng nhập
-          })
-        }
+            setLoggedIn(true);
+          });
+        }}
       />
     );
   }

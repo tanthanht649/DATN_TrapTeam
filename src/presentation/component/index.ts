@@ -9,3 +9,4 @@ export * from './toptab';
 export * from './ViewSwitcher';
 export * from './dialog';
 export * from './listItem';
+export * from './loading';

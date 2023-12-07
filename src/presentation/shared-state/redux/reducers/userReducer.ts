@@ -1,17 +1,16 @@
 import {User} from '@domain';
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {CONSTANTS} from '@core';
-import moment from 'moment';
 
 export interface UserState {
-  loading: boolean;
+  loadingUser: boolean;
   dataUsers: User | undefined;
 }
 
 export const dataUser: User = {} as User;
 
 const initialState: UserState = {
-  loading: false,
+  loadingUser: false,
   dataUsers: dataUser,
 };
 
@@ -117,10 +116,10 @@ const userSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(getUser.pending, state => {
-        state.loading = true;
+        state.loadingUser = true;
       })
       .addCase(getUser.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loadingUser = false;
         state.dataUsers = action.payload;
       })
       .addCase(signOut.fulfilled, (state, action) => {

@@ -32,8 +32,8 @@ const _EditProfile: React.FC<PropsType> = props => {
   const [idUser, setIdUser] = useState<string>('a');
 
   useEffect(() => {
-    if (dataUser) {
-      setImageAvatar(dataUser?.avatar.toString());
+    if (dataUser && dataUser.avatar) {
+      setImageAvatar(dataUser.avatar);
     }
   }, [dataUser]);
 

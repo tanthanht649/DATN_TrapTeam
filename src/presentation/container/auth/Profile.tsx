@@ -66,8 +66,8 @@ const _Profile: React.FC<PropsType> = props => {
   );
 
   useEffect(() => {
-    if (dataUser) {
-      setImageAvatar(dataUser?.avatar.toString());
+    if (dataUser && dataUser.avatar) {
+      setImageAvatar(dataUser?.avatar);
     }
   }, [dataUser]);
 

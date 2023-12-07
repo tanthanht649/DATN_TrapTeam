@@ -59,7 +59,6 @@ const _OnboardingStart: React.FC<PropsType> = props => {
     setData(updatedPoints);
   }, [points, checkArray]);
 
-  // console.log(data);
   return (
     <BackgroundApp source={SPLASH_SCREEN}>
       <SafeAreaView style={_styles.container}>

@@ -1,9 +1,9 @@
 export interface User {
-  _id: String;
+  _id: string;
   phone_number: string;
   name: string;
   email: string;
-  avatar: String;
+  avatar: string;
   created_at: Date;
   __v: Number;
 }
