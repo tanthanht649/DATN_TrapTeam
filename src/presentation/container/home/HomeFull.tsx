@@ -535,12 +535,8 @@ const _HomeFull: React.FC<PropsType> = props => {
     (state: RootState) => state.tour.dataToursOutstanding,
   );
 
-  const [limitCheckTourOutstanding, setLimitCheckTourOutstanding] =
-    useState(false);
 
-  useEffect(() => {
-    dispatch(getToursOutstanding());
-  }, [limitCheckTourOutstanding]);
+ 
 
   const [dataTourAndFavorite, setDataTourAndFavorite] = useState<
     TourAndFavorite[]

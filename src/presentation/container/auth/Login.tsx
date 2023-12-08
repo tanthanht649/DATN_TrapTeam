@@ -14,7 +14,7 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {AppContext, getAllEvents} from '@shared-state';
+import {AppContext, getAllEvents, getToursOutstanding} from '@shared-state';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import {useSelector} from 'react-redux';
@@ -32,6 +32,10 @@ const _Login: React.FC<PropsType> = props => {
 
   useEffect(() => {
     dispatch(getAllEvents());
+  }, []);
+
+  useEffect(() => {
+    dispatch(getToursOutstanding());
   }, []);
 
   function GoogleSignIn() {
