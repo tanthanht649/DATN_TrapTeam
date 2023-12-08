@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
@@ -39,7 +39,16 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {AppContext} from '@shared-state';
+import {
+  AppContext,
+  RootState,
+  logout,
+  signOut,
+  useAppDispatch,
+} from '@shared-state';
+import {useSelector} from 'react-redux';
+import {store} from '@shared-state';
+
 type Item = {
   id: string;
   image: ImageSourcePropType;
@@ -54,8 +63,24 @@ type Item = {
 type PropsType = NativeStackScreenProps<ProfileStackParamList, 'Profile'>;
 const _Profile: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dispatch = useAppDispatch();
   const {isLoggedIn, setLoggedIn} = React.useContext(AppContext);
   const [selectTab, setSelectTab] = useState(0);
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
+
+  const [imageAvatar, setImageAvatar] = useState(
+    'https://www.bing.com/th?id=OIP.fN9gx82LKxSZVpTc18meBgHaEo&w=149&h=100&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2',
+  );
+
+  useEffect(() => {
+    if (dataUser && dataUser.avatar) {
+      setImageAvatar(dataUser?.avatar);
+    }
+  }, [dataUser]);
+
+  useEffect(() => {
+    console.log('dataUser', dataUser);
+  }, [dataUser]);
 
   const [data, setData] = React.useState<Item[]>([
     {
@@ -325,7 +350,7 @@ const _Profile: React.FC<PropsType> = props => {
             iconRight={EDIT}
             styleIconRight={{height: 50, width: 50, opacity: 0}}></Header>
           <View style={_styles.avatar}>
-            <Image style={_styles.image} source={IMAGE_TEST}></Image>
+            <Image style={_styles.image} source={{uri: imageAvatar}}></Image>
             <Pressable
               onPress={() => {
                 navigation.navigate('EditProfile');
@@ -450,6 +475,7 @@ const _Profile: React.FC<PropsType> = props => {
           </Pressable>
           <Pressable
             onPress={() => {
+              store.dispatch(logout());
               onGoogleSignOutPress();
               setLoggedIn(false);
             }}

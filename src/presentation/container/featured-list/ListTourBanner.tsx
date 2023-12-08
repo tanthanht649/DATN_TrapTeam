@@ -1,11 +1,12 @@
 import {Animated, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {BackgroundApp, Header, ViewSwitcher} from '@components';
+import {BackgroundApp, Header, Loading, ViewSwitcher} from '@components';
 import {
   BACKGROUND_WHITE,
   D_B,
   HEART,
+  HEART_INACTIVE_2,
   ICON_BACK,
   ICON_DELETE,
   LOCATION,
@@ -14,33 +15,65 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {Tour} from '../home';
 import {ItemTourOutstanding} from '../home';
-import {DATATOUROUTSTANDING, DATATOUR} from '../home';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeStackParamList} from '@navigation';
+import {Tour, TourAndFavorite} from '@domain';
+import {useSelector} from 'react-redux';
+import {RootState, getTourByProvince, useAppDispatch} from '@shared-state';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'ListTourBanner'>;
 
 const _ListTourBanner: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dispatch = useAppDispatch();
+  const province_id = props.route.params?.province_id;
+  const image = props.route.params?.image;
+  const title = props.route.params?.title;
   const [hideElement, setHideElement] = useState(false);
   const [searchName, setSearchName] = useState('');
   const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
-
   const [isLayout, setIsLayout] = useState(false);
   const [column, setColumn] = useState(2);
-
   useEffect(() => {
     listViewType === 'grid' ? setIsLayout(true) : setIsLayout(false);
     listViewType === 'grid' ? setColumn(2) : setColumn(1);
   }, [listViewType]);
 
+  const dataTourByProvince = useSelector(
+    (state: RootState) => state.tour.dataToursByProvince,
+  );
+
+  useEffect(() => {
+    dispatch(getTourByProvince(province_id));
+  }, [province_id]);
+
+  const dataFavoriteNoId = useSelector(
+    (state: RootState) => state.favorite.dataFavoriteNoId,
+  );
+
+  const loadingTour = useSelector((state: RootState) => state.tour.loadingTour);
+
+  const [dataTourAndFavorite, setDataTourAndFavorite] = useState<
+    TourAndFavorite[]
+  >([]);
+
+  useEffect(() => {
+    const tourAndFavorite = dataTourByProvince.map((item: Tour) => {
+      const isFavorite = dataFavoriteNoId.some(
+        (check: Tour) => check._id === item._id,
+      );
+      return {...item, isFavorite: isFavorite};
+    });
+
+    setDataTourAndFavorite(tourAndFavorite);
+  }, [dataFavoriteNoId, dataTourByProvince]);
+
   const ItemTourFavorite = ({
     item,
     onPress,
   }: {
-    item: Tour;
+    item: TourAndFavorite;
     onPress: () => void;
   }) => {
     return (
@@ -72,7 +105,7 @@ const _ListTourBanner: React.FC<PropsType> = props => {
           />
 
           <Image
-            source={HEART}
+            source={item.isFavorite ? HEART : HEART_INACTIVE_2}
             style={{
               width: 30,
               height: 30,
@@ -137,11 +170,11 @@ const _ListTourBanner: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item, index}: {item: Tour; index: number}) => {
+      ({item, index}: {item: TourAndFavorite; index: number}) => {
         return (
           <ItemTourOutstanding
             item={item}
-            key={item.id}
+            key={item._id}
             index={index}
             onPress={() => navigation.navigate('DetailTour')}
           />
@@ -152,11 +185,11 @@ const _ListTourBanner: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
+      ({item}: {item: TourAndFavorite}) => {
         return (
           <ItemTourFavorite
             item={item}
-            key={item.id}
+            key={item._id}
             onPress={() => navigation.navigate('DetailTour')}
           />
         );
@@ -180,7 +213,7 @@ const _ListTourBanner: React.FC<PropsType> = props => {
         {hideElement ? null : (
           <View style={{marginHorizontal: 20, overflow: 'hidden'}}>
             <Image
-              source={D_B}
+              source={{uri: image}}
               style={{
                 width: '100%',
                 height: DimensionsStyle.width * 0.55,
@@ -198,27 +231,32 @@ const _ListTourBanner: React.FC<PropsType> = props => {
                 letterSpacing: 0.5,
                 marginStart: 5,
               }}>
-              Lễ Hội Đua Bò Vùng Bảy Núi
+              {title}
             </Text>
           </View>
         )}
         <View>
           <ViewSwitcher quantityEstates={22} onTabChange={setListViewType} />
         </View>
-        <View style={_styles.containerListFeatured}>
-          <Animated.FlatList
-            data={DATATOUROUTSTANDING}
-            renderItem={
-              isLayout ? renderItemTourOutstanding : renderItemTourFavorite
-            }
-            keyExtractor={item => item.id.toString()}
-            numColumns={column}
-            key={column}
-            style={{height: DimensionsStyle.height * 0.6}}
-            showsVerticalScrollIndicator={false}
-            onScroll={handleScroll}
-          />
-        </View>
+
+        {loadingTour ? (
+          <Loading height={300} />
+        ) : (
+          <View style={_styles.containerListFeatured}>
+            <Animated.FlatList
+              data={dataTourAndFavorite}
+              renderItem={
+                isLayout ? renderItemTourOutstanding : renderItemTourFavorite
+              }
+              keyExtractor={item => item._id.toString()}
+              numColumns={column}
+              key={column}
+              style={{height: DimensionsStyle.height * 0.6}}
+              showsVerticalScrollIndicator={false}
+              onScroll={handleScroll}
+            />
+          </View>
+        )}
       </SafeAreaView>
     </BackgroundApp>
   );

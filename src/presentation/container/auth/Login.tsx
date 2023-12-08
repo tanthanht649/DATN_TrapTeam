@@ -1,31 +1,24 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {
-  OnboardingLoginStackParamList,
-  WelcomeTeamStackParamList,
-} from '@navigation';
+import {OnboardingLoginStackParamList} from '@navigation';
 import {BackgroundApp, Button, Input, TextPlus} from '@components';
 import {
-  BACKGROUND_LOGIN,
   BACKGROUND_WHITE,
   EMAIL,
   IMAGE_LOGIN_1,
   IMAGE_LOGIN_2,
   IMAGE_LOGIN_3,
   IMAGE_LOGIN_4,
-  LOCK,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
 import {AppContext} from '@shared-state';
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
+import {useSelector} from 'react-redux';
+import {RootState, getUser, useAppDispatch} from '@shared-state';
 
 GoogleSignin.configure({
   webClientId:
@@ -34,34 +27,8 @@ GoogleSignin.configure({
 
 type PropsType = NativeStackScreenProps<OnboardingLoginStackParamList, 'Login'>;
 const _Login: React.FC<PropsType> = props => {
-  const {navigation} = props;
-  const [userInfo, setUserInfo] = useState({});
-  // function GoogleSignIn() {
-  //   return (
-  //     <Button
-  //       title="Google Sign-In"
-  //       onPress={() =>
-  //         onGoogleButtonPress().then(() =>
-  //           console.log('Signed in with Google!'),
-  //         )
-  //       }
-  //     />
-  //   );
-  // }
-
-  // async function onGoogleButtonPress() {
-  //   // Check if your device supports Google Play
-  //   await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-  //   // Get the users ID token
-  //   const {idToken} = await GoogleSignin.signIn();
-
-  //   // Create a Google credential with the token
-  //   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-  //   // Sign-in the user with the credential
-  //   return auth().signInWithCredential(googleCredential);
-  // }
-
+  const dispatch = useAppDispatch();
+  const {setLoggedIn} = React.useContext(AppContext);
   function GoogleSignIn() {
     return (
       <Button
@@ -73,13 +40,20 @@ const _Login: React.FC<PropsType> = props => {
           marginTop: DimensionsStyle.height * 0.13,
         }}
         viewIconLeft={{display: 'flex'}}
-        onPress={() =>
+        onPress={() => {
           onGoogleButtonPress().then(userCredential => {
             console.log('Signed in with Google!');
-            setUserInfo(userCredential.user);
-            setLoggedIn(true); // Console thông tin tài khoản đăng nhập
-          })
-        }
+
+            const dataGetUser = {
+              email: userCredential.user.email,
+              name: userCredential.user.displayName,
+              avatar: userCredential.user.photoURL,
+              phone_number: '',
+            };
+            dispatch(getUser(dataGetUser));
+            setLoggedIn(true);
+          });
+        }}
       />
     );
   }
@@ -99,26 +73,6 @@ const _Login: React.FC<PropsType> = props => {
     return userCredential;
   }
 
-  console.log(userInfo);
-
-  const {isLoggedIn, setLoggedIn} = React.useContext(AppContext);
-  const [email, setEmail] = useState<string>('');
-  const handleOnchangeEmail = (value: string) => {
-    setEmail(value);
-    console.log(value);
-  };
-  const [password, setPassword] = useState<string>('');
-  const handleOnchangePassword = (value: string) => {
-    setPassword(value);
-    console.log(value);
-  };
-  const [hidePassword, setHidePassword] = useState(true);
-  const [show, setShow] = useState('Hiện mật khẩu');
-  const managePasswordVisibility = () => {
-    hidePassword ? setShow('Ẩn mật khẩu') : setShow('Hiện mật khẩu');
-    setHidePassword(!hidePassword);
-    console.log(hidePassword);
-  };
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView>
@@ -142,31 +96,6 @@ const _Login: React.FC<PropsType> = props => {
       </SafeAreaView>
       <View style={_styles.bottom}>
         <GoogleSignIn />
-        {/* <Button
-          title="Tiếp tục với email"
-          imageIconLeft={EMAIL}
-          imageIconRight={EMAIL}
-          onPress={() => {
-            setLoggedIn(true);
-          }}
-          viewStyle={{
-            width: 278,
-            marginTop: DimensionsStyle.height * 0.13,
-          }}
-          viewIconLeft={{display: 'flex'}}
-        /> */}
-        {/* <View style={_styles.row}>
-          <Text
-            style={[_styles.text, {fontSize: 12, marginLeft: 0, marginTop: 0}]}>
-            Bạn chưa có tài khoản?
-          </Text>
-          <Pressable
-            onPress={() => {
-              navigation.navigate('Register');
-            }}>
-            <Text style={[_styles.textBold, {fontSize: 12}]}> Đăng kí</Text>
-          </Pressable>
-        </View> */}
       </View>
     </BackgroundApp>
   );

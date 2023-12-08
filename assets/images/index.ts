@@ -164,3 +164,4 @@ export const ORDER_BT = require('./order_bt.png');
 export const MOMO = require('./momo.png');
 export const ZALO_PAY = require('./zalopay.png');
 export const VIETTEL_PAY = require('./viettelpay.png');
+export const HEART_INACTIVE_2 = require('./heart_inactive_home.png');

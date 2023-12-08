@@ -13,7 +13,11 @@ import {
 } from '@containers';
 
 type HomeFullProps = {};
-type ListTourBannerProps = {};
+type ListTourBannerProps = {
+  province_id: string;
+  image: string;
+  title: string;
+};
 type FeaturedListHomeProps = {};
 type FeaturedListDetailProps = {};
 type FavoriteEmptyProps = {};

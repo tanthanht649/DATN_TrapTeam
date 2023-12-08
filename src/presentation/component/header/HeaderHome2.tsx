@@ -29,7 +29,7 @@ const DATA = ['Hà Nội, Việt Nam', 'Đà Nẵng, Việt Nam', 'Hồ Chí Min
 
 export type HeaderHomeProps = {
   // statusNotification: boolean;
-  avatar: ImageSourcePropType;
+  avatar: string;
   // onPressNotification?: () => void;
   onPressAvatar?: () => void;
   // onPressSetting?: () => void;
@@ -92,7 +92,15 @@ const _HeaderHome2: React.FC<HeaderHomeProps> = props => {
             },
           ]}
           onPress={onPressAvatar}>
-          <Image source={avatar} />
+          <Image
+            source={{uri: avatar}}
+            style={{
+              width: 45,
+              height: 45,
+              resizeMode: 'stretch',
+              borderRadius: 50,
+            }}
+          />
         </Pressable>
         {/* <Pressable
           style={[
@@ -174,7 +182,7 @@ const _styles = StyleSheet.create({
     marginStart: 10,
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: Colors.BLACK,
+    borderColor: Colors.GREY,
   },
 
   imageAvatar: {

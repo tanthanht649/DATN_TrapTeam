@@ -9,55 +9,39 @@ import {
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import {
-  AVT_HOME,
   BACKGROUND_HOME,
   FIND,
   HEART,
+  HEART_INACTIVE_2,
   LOCATION,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {BackgroundApp, HeaderHome2, TopTab, TextPlus, Input} from '@components';
+import {
+  BackgroundApp,
+  HeaderHome2,
+  TopTab,
+  TextPlus,
+  Input,
+  Loading,
+} from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeStackParamList} from '@navigation';
+import {useSelector} from 'react-redux';
+import {
+  RootState,
+  getAllEvents,
+  getDataFavorite,
+  getAllLocation,
+  useAppDispatch,
+  getToursOutstanding,
+} from '@shared-state';
+import {Event, Tour, Location, TourAndFavorite} from '@domain';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'HomeFull'>;
 
-//Banner
-interface Banner {
-  id: number;
-  image: string;
-  title: string;
-}
-
-const DATABANNER: Banner[] = [
-  {
-    id: 1,
-    image:
-      'https://th.bing.com/th/id/R.957bb2fa15d85ee8502355045f2b9995?rik=7lPOeXlelRZv%2bw&pid=ImgRaw&r=0',
-    title: 'Chợ nổi Cái răng',
-  },
-  {
-    id: 2,
-    image:
-      'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2022/12/ha-long.jpg',
-    title: 'Vịnh Hạ Long',
-  },
-  {
-    id: 3,
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    title: 'Đà Nẵng',
-  },
-  {
-    id: 4,
-    image:
-      'https://th.bing.com/th/id/R.8ca75c2872c4c28fe560df7a172832d3?rik=j1GMaO4zmCqAjw&pid=ImgRaw&r=0',
-    title: 'Hà Nội',
-  },
-];
-
-const ItemBanner = ({item, onPress}: {item: Banner; onPress: () => void}) => {
+const ItemBanner = ({item, onPress}: {item: Event; onPress: () => void}) => {
   return (
     <Pressable onPress={onPress}>
       <Image
@@ -92,81 +76,14 @@ const ItemBanner = ({item, onPress}: {item: Banner; onPress: () => void}) => {
   );
 };
 
-//Tour yêu thích
-export interface Tour {
-  id: number;
-  tourist_destinationId: number;
-  provide: string;
-  name: string;
-  description: string;
-  available_seats: number;
-  duration: number;
-  image: string;
-  price: number;
-  departure_date: string;
-  departure_location: string;
-  note: string;
-  schedule: string;
-  status: boolean;
-}
-
-export const DATATOUR: Tour[] = [
-  {
-    id: 1,
-    tourist_destinationId: 1,
-    provide: 'Vietnam Travel',
-    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    available_seats: 10,
-    duration: 1,
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    price: 4450000,
-    departure_date: '2021-10-10',
-    departure_location: 'Hà Nội, Việt Nam',
-    note: 'Không được hủy',
-    schedule: 'Hà Nội',
-    status: true,
-  },
-  {
-    id: 2,
-    tourist_destinationId: 1,
-    provide: 'Vietnam Travel',
-    name: 'Tour Hồ Hoàn Kiếm',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    available_seats: 10,
-    duration: 1,
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    price: 4450000,
-    departure_date: '2021-10-10',
-    departure_location: 'Hà Nội, Việt Nam',
-    note: 'Không được hủy',
-    schedule: 'Hà Nội',
-    status: true,
-  },
-  {
-    id: 3,
-    tourist_destinationId: 1,
-    provide: 'Vietnam Travel',
-    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    available_seats: 10,
-    duration: 1,
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    price: 4450000,
-    departure_date: '2021-10-10',
-    departure_location: 'Hồ Chí Minh, Việt Nam',
-    note: 'Không được hủy',
-    schedule: 'Hà Nội',
-    status: true,
-  },
-];
-
 const ItemTourFavorite = ({
   item,
   onPress,
+  index,
 }: {
   item: Tour;
   onPress: () => void;
+  index: number;
 }) => {
   return (
     <Pressable
@@ -259,44 +176,13 @@ const ItemTourFavorite = ({
   );
 };
 
-// Địa điểm nổi bật
-interface Estates {
-  id: number;
-  provinceId: string;
-  description: string;
-  name: string;
-  image: string;
-  status: boolean;
-}
-
-const DATAESTATES: Estates[] = [
-  {
-    id: 1,
-    provinceId: 'Hà Nội',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    name: 'Hồ Hoàn Kiếm',
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    status: true,
-  },
-  {
-    id: 2,
-    provinceId: 'Hà Nội',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    name: 'Hồ Hoàn Kiếm',
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    status: true,
-  },
-  {
-    id: 3,
-    provinceId: 'Hà Nội',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    name: 'Hồ Hoàn Kiếm',
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    status: true,
-  },
-];
-
-const ItemEstates = ({item, onPress}: {item: Estates; onPress: () => void}) => {
+const ItemEstates = ({
+  item,
+  onPress,
+}: {
+  item: Location;
+  onPress: () => void;
+}) => {
   return (
     <Pressable
       style={{
@@ -357,7 +243,7 @@ const ItemEstates = ({item, onPress}: {item: Estates; onPress: () => void}) => {
               fontSize: 12,
               fontFamily: fontFamily.Medium,
             }}>
-            {item.provinceId}
+            {item.province_id.name}
           </Text>
         </View>
       </View>
@@ -365,96 +251,12 @@ const ItemEstates = ({item, onPress}: {item: Estates; onPress: () => void}) => {
   );
 };
 
-//Tour nổi bật
-export const DATATOUROUTSTANDING: Tour[] = [
-  {
-    id: 1,
-    tourist_destinationId: 1,
-    provide: 'Vietnam Travel',
-    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    available_seats: 10,
-    duration: 1,
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    price: 4450000,
-    departure_date: '2021-10-10',
-    departure_location: 'Hà Nội, Việt Nam',
-    note: 'Không được hủy',
-    schedule: 'Hà Nội',
-    status: true,
-  },
-  {
-    id: 2,
-    tourist_destinationId: 1,
-    provide: 'Vietnam Travel',
-    name: 'Tour Hồ Hoàn Kiếm',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    available_seats: 10,
-    duration: 1,
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    price: 4450000,
-    departure_date: '2021-10-10',
-    departure_location: 'Hà Nội, Việt Nam',
-    note: 'Không được hủy',
-    schedule: 'Hà Nội',
-    status: true,
-  },
-  {
-    id: 3,
-    tourist_destinationId: 1,
-    provide: 'Vietnam Travel',
-    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    available_seats: 10,
-    duration: 1,
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    price: 4450000,
-    departure_date: '2021-10-10',
-    departure_location: 'Hồ Chí Minh, Việt Nam',
-    note: 'Không được hủy',
-    schedule: 'Hà Nội',
-    status: true,
-  },
-  {
-    id: 4,
-    tourist_destinationId: 1,
-    provide: 'Vietnam Travel',
-    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    available_seats: 10,
-    duration: 1,
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    price: 4450000,
-    departure_date: '2021-10-10',
-    departure_location: 'Hồ Chí Minh, Việt Nam',
-    note: 'Không được hủy',
-    schedule: 'Hà Nội',
-    status: true,
-  },
-  {
-    id: 5,
-    tourist_destinationId: 1,
-    provide: 'Vietnam Travel',
-    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    available_seats: 10,
-    duration: 1,
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    price: 4450000,
-    departure_date: '2021-10-10',
-    departure_location: 'Hồ Chí Minh, Việt Nam',
-    note: 'Không được hủy',
-    schedule: 'Hà Nội',
-    status: true,
-  },
-];
-
 export const ItemTourOutstanding = ({
   item,
   index,
   onPress,
 }: {
-  item: Tour;
+  item: TourAndFavorite;
   index: number;
   onPress: () => void;
 }) => {
@@ -483,7 +285,7 @@ export const ItemTourOutstanding = ({
           }}
         />
         <Image
-          source={HEART}
+          source={item.isFavorite ? HEART : HEART_INACTIVE_2}
           style={{
             width: 30,
             height: 30,
@@ -550,7 +352,9 @@ export const ItemTourOutstanding = ({
 
 const _HomeFull: React.FC<PropsType> = props => {
   const {navigation} = props;
-  const [isFavorite, setIsFavorite] = React.useState(true);
+  const dispatch = useAppDispatch();
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
+  const [isFavorite, setIsFavorite] = React.useState(false);
   const [isCheck, setIsCheck] = React.useState<
     'card' | 'home' | 'review' | 'homefavorite'
   >('home');
@@ -572,25 +376,24 @@ const _HomeFull: React.FC<PropsType> = props => {
   const scrollViewRef = useRef<ScrollView>(null);
   const ITEM_WIDTH = DimensionsStyle.width * 0.7 + 15;
 
-  const halfwayIndex = Math.ceil(DATATOUROUTSTANDING.length / 2);
-  const column1Data = DATATOUROUTSTANDING.slice(0, halfwayIndex);
-  const column2Data = DATATOUROUTSTANDING.slice(halfwayIndex);
-
-  const handleToListTourBanner = () => {
-    navigation.navigate('ListTourBanner');
+  const handleToListTourBanner = (item: Event) => {
+    navigation.navigate('ListTourBanner', {
+      province_id: item.province_id._id,
+      image: item.image,
+      title: item.title,
+    });
   };
 
   const renderItemBanner = React.useMemo(
     () =>
-      ({item}: {item: Banner}) => {
+      ({item}: {item: Event}) => {
         return (
           <ItemBanner
             onPress={() => {
-              console.log(item);
-              handleToListTourBanner();
+              handleToListTourBanner(item);
             }}
             item={item}
-            key={item.id}
+            key={item._id}
           />
         );
       },
@@ -599,14 +402,15 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
+      ({item, index}: {item: Tour; index: number}) => {
         return (
           <ItemTourFavorite
             item={item}
-            key={item.id}
+            key={index}
             onPress={() => {
               navigation.navigate('DetailTour');
             }}
+            index={index}
           />
         );
       },
@@ -615,11 +419,11 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemEstates = React.useMemo(
     () =>
-      ({item}: {item: Estates}) => {
+      ({item}: {item: Location}) => {
         return (
           <ItemEstates
             item={item}
-            key={item.id}
+            key={item._id}
             onPress={() => {
               navigation.navigate('FeaturedListDetail');
             }}
@@ -631,11 +435,11 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item, index}: {item: Tour; index: number}) => {
+      ({item, index}: {item: TourAndFavorite; index: number}) => {
         return (
           <ItemTourOutstanding
             item={item}
-            key={item.id}
+            key={item._id}
             index={index}
             onPress={() => {
               navigation.navigate('DetailTour');
@@ -649,9 +453,8 @@ const _HomeFull: React.FC<PropsType> = props => {
   useEffect(() => {
     const interval = setInterval(() => {
       // Tăng giá trị của currentIndex lên 1
-      setCurrentIndex(prevIndex => (prevIndex + 1) % DATABANNER.length);
+      setCurrentIndex(prevIndex => (prevIndex + 1) % dataEvent.length);
     }, 1500);
-
     // Xóa interval khi component bị unmount
     return () => clearInterval(interval);
   }, []);
@@ -676,10 +479,94 @@ const _HomeFull: React.FC<PropsType> = props => {
     navigation.navigate('FeaturedListDetail');
   };
 
+  const [imageAvatar, setImageAvatar] = useState(
+    'https://www.bing.com/th?id=OIP.fN9gx82LKxSZVpTc18meBgHaEo&w=149&h=100&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2',
+  );
+
+  const [limitCheck, setLimitCheck] = useState(0);
+
+  useEffect(() => {
+    if (dataUser && dataUser.avatar) {
+      setImageAvatar(dataUser.avatar.toString());
+    }
+  }, [dataUser]);
+
+  const dataEvent = useSelector((state: RootState) => state.event.dataEvents);
+  const loadingEvent = useSelector(
+    (state: RootState) => state.event.loadingEvent,
+  );
+
+  const loadingFavorite = useSelector(
+    (state: RootState) => state.favorite.loadingFavorite,
+  );
+
+  useEffect(() => {
+    dispatch(getAllEvents());
+  }, [limitCheck]);
+
+  const dataFavoriteNoId = useSelector(
+    (state: RootState) => state.favorite.dataFavoriteNoId,
+  );
+
+  const dataFavorite = useSelector(
+    (state: RootState) => state.favorite.dataFavorites,
+  );
+
+  const [limitCheckFavorite, setLimitCheckFavorite] = useState(false);
+  useEffect(() => {
+    if (dataUser && dataUser._id) dispatch(getDataFavorite(dataUser?._id));
+  }, [limitCheckFavorite, dataUser]);
+
+  useEffect(() => {
+    if (dataFavoriteNoId.length > 0) {
+      setIsFavorite(true);
+    }
+  }, [dataFavoriteNoId]);
+
+  const dataLocations = useSelector(
+    (state: RootState) => state.location.dataLocations,
+  );
+
+  const [limitCheckLocation, setLimitCheckLocation] = useState(false);
+
+  useEffect(() => {
+    dispatch(getAllLocation());
+  }, [limitCheckLocation]);
+
+  const dataToursOutstanding = useSelector(
+    (state: RootState) => state.tour.dataToursOutstanding,
+  );
+
+  const [limitCheckTourOutstanding, setLimitCheckTourOutstanding] =
+    useState(false);
+
+  useEffect(() => {
+    dispatch(getToursOutstanding());
+  }, [limitCheckTourOutstanding]);
+
+  const [dataTourAndFavorite, setDataTourAndFavorite] = useState<
+    TourAndFavorite[]
+  >([]);
+
+  useEffect(() => {
+    const tourAndFavorite = dataToursOutstanding.map((item: Tour) => {
+      const isFavorite = dataFavoriteNoId.some(
+        (check: Tour) => check._id === item._id,
+      );
+      return {...item, isFavorite: isFavorite};
+    });
+
+    setDataTourAndFavorite(tourAndFavorite);
+  }, [dataFavorite, dataFavoriteNoId]);
+
+  const halfwayIndex = Math.ceil(dataTourAndFavorite.length / 2);
+  const column1Data = dataTourAndFavorite.slice(0, halfwayIndex);
+  const column2Data = dataTourAndFavorite.slice(halfwayIndex);
+
   return (
     <BackgroundApp source={BACKGROUND_HOME}>
       <HeaderHome2
-        avatar={AVT_HOME}
+        avatar={imageAvatar}
         checkNotify={true}
         onPressAvatar={() => {
           console.log('avatar');
@@ -689,8 +576,8 @@ const _HomeFull: React.FC<PropsType> = props => {
         {hideElement ? null : (
           <View>
             <TextPlus
-              textBolds={['Thuy Ân!']}
-              text={'Xin chào, Thuy Ân! \nHãy bắt đầu khám phá'}
+              textBolds={[dataUser?.name + '']}
+              text={`Xin chào, ${dataUser?.name}! \nHãy bắt đầu khám phá`}
               boldStyle={{
                 fontFamily: fontFamily.Bold,
                 color: Colors.GREY_DARK_1,
@@ -746,20 +633,24 @@ const _HomeFull: React.FC<PropsType> = props => {
               borderTopLeftRadius: 20,
               borderBottomLeftRadius: 20,
             }}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              ref={scrollViewRef}
-              pagingEnabled
-              onMomentumScrollEnd={event => {
-                const contentOffset = event.nativeEvent.contentOffset.x;
-                const index = Math.round(contentOffset / ITEM_WIDTH);
-                setCurrentIndex(index);
-              }}>
-              <View style={{flexDirection: 'row'}}>
-                {DATABANNER.map((item, index) => renderItemBanner({item}))}
-              </View>
-            </ScrollView>
+            {loadingEvent ? (
+              <Loading height={200} />
+            ) : (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                ref={scrollViewRef}
+                pagingEnabled
+                onMomentumScrollEnd={event => {
+                  const contentOffset = event.nativeEvent.contentOffset.x;
+                  const index = Math.round(contentOffset / ITEM_WIDTH);
+                  setCurrentIndex(index);
+                }}>
+                <View style={{flexDirection: 'row'}}>
+                  {dataEvent.map((item, index) => renderItemBanner({item}))}
+                </View>
+              </ScrollView>
+            )}
           </View>
 
           {isFavorite ? (
@@ -791,24 +682,29 @@ const _HomeFull: React.FC<PropsType> = props => {
                   </Text>
                 </Pressable>
               </View>
-              <View
-                style={{
-                  flex: 1,
-                  overflow: 'hidden',
-                  marginVertical: 20,
-                  borderTopLeftRadius: 20,
-                  borderBottomLeftRadius: 20,
-                }}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View style={{flexDirection: 'row'}}>
-                    {DATATOUR.map((item, index) =>
-                      renderItemTourFavorite({
-                        item,
-                      }),
-                    )}
-                  </View>
-                </ScrollView>
-              </View>
+              {loadingFavorite ? (
+                <Loading height={200} />
+              ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    overflow: 'hidden',
+                    marginTop: 20,
+                    borderTopLeftRadius: 20,
+                    borderBottomLeftRadius: 20,
+                  }}>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <View style={{flexDirection: 'row'}}>
+                      {dataFavoriteNoId.map((item, index) =>
+                        renderItemTourFavorite({
+                          item,
+                          index,
+                        }),
+                      )}
+                    </View>
+                  </ScrollView>
+                </View>
+              )}
             </View>
           ) : null}
 
@@ -825,6 +721,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                   fontFamily: fontFamily.Bold,
                   color: Colors.BLUE_TEXT_HOME,
                   fontSize: 20,
+                  marginTop: 20,
                 }}>
                 Địa điểm nổi bật
               </Text>
@@ -851,7 +748,9 @@ const _HomeFull: React.FC<PropsType> = props => {
               }}>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={{flexDirection: 'row'}}>
-                  {DATAESTATES.map((item, index) => renderItemEstates({item}))}
+                  {dataLocations.map((item, index) =>
+                    renderItemEstates({item}),
+                  )}
                 </View>
               </ScrollView>
             </View>

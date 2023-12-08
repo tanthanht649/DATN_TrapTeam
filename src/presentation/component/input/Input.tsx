@@ -31,6 +31,7 @@ type Props = {
   value: string;
   onChangeText?: (value: string) => void;
   textInputStyle?: StyleProp<ViewStyle>;
+  editable?: boolean;
 };
 
 const _Input: React.FC<Props> = props => {
@@ -58,6 +59,7 @@ const _Input: React.FC<Props> = props => {
         <TextInput
           placeholder={label}
           value={value}
+          editable={props.editable ? props.editable : true}
           style={[
             _styles.input,
             {
