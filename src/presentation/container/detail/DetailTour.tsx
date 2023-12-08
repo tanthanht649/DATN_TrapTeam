@@ -14,29 +14,28 @@ import {
   DT_1,
   FULL_NAME,
   HEART,
-  HEART_INACTIVE,
   HEART_INACTIVE_2,
   ICON_BACK,
   LOCATION,
-  LOCATION_2,
   LOCATION_DT,
   LOCATION_ORANGE,
   ORDER_BT,
-  SETTING_BG,
   VHL,
   VHL_FL_1,
   fontFamily,
 } from '@assets';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {Colors, DimensionsStyle} from '@resources';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {HomeStackParamList, SearchStackParamList} from '@navigation';
 import {
-  HomeStackParamList,
-  SearchStackParamList,
-  WelcomeTeamStackParamList,
-} from '@navigation';
-import {RootState, getTourById, useAppDispatch} from '@shared-state';
+  RootState,
+  getAllReviews,
+  getTourById,
+  useAppDispatch,
+} from '@shared-state';
 import {useSelector} from 'react-redux';
+import {Location, Review, TourAndLocation} from '@domain';
+import moment from 'moment';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'DetailTour'> &
   NativeStackScreenProps<SearchStackParamList, 'DetailTour'>;
@@ -46,19 +45,20 @@ const _DetailTour: React.FC<PropsType> = props => {
   const dispatch = useAppDispatch();
   const tour_id = props.route.params?.tour_id;
   const isFavorite = props.route.params?.isFavorite;
-  const [isFull, setIsFull] = React.useState<boolean>(false);
   const [titleButtonShowReview, setTitleButtonShowReview] =
     React.useState<string>('Xem tất cả bình luận');
-  const dataTour = useSelector((state: RootState) => state.tour.tourDetail);
-  const loadingTour = useSelector(
-    (state: RootState) => state.tour.loadingTourDetail,
-  );
 
   useEffect(() => {
     dispatch(getTourById(tour_id));
   }, []);
 
+  const dataTour = useSelector((state: RootState) => state.tour.tourDetail);
+  const loadingTour = useSelector(
+    (state: RootState) => state.tour.loadingTourDetail,
+  );
+
   const [dataImageTop, setDataImageTop] = React.useState<any>([]);
+  const [dataLocationString, setDataLocationString] = React.useState<any>([]);
   const [dataSchedules, setDataSchedules] = React.useState<any>([]);
   const daysDifference = (endDate: any, startDate: any) => {
     const startDay = new Date(startDate);
@@ -69,18 +69,26 @@ const _DetailTour: React.FC<PropsType> = props => {
     return daysDifference;
   };
 
-  const [imageDetail, setImageDetail] = React.useState(dataTour.image);
+  const [imageDetail, setImageDetail] = React.useState('');
   useEffect(() => {
     if (dataTour && dataTour.locations) {
       setDataImageTop(dataTour.locations.map(location => location.image));
       setDataSchedules(dataTour.schedules);
       setImageDetail(dataTour.image);
-    }
-
-    if (dataImageTop.length > 0) {
-      setDataImageTop(dataImageTop.concat(dataTour.image));
+      setDataLocationString(dataTour.locations.map(location => location.name));
     }
   }, [dataTour]);
+
+  useEffect(() => {
+    if (dataTour.locations)
+      if (dataImageTop.length === dataTour.locations.length) {
+        {
+          if (dataImageTop.length > 0) {
+            setDataImageTop(dataImageTop.concat(dataTour.image));
+          }
+        }
+      }
+  }, [dataImageTop]);
 
   const ITEM_IMG_TOP = ({item, index, onPress}: any) => {
     return (
@@ -123,13 +131,6 @@ const _DetailTour: React.FC<PropsType> = props => {
     );
   };
 
-  const DATA_SCHEDULE: string[] = [
-    'ĐÀ NẴNG - SƠN TRÀ - MỸ KHÊ',
-    'KHÁM PHÁ CAO NGUYÊN BÀ BÀ - TẮM BIỂN - MỸ KHÊ',
-    'CÙ LAO CHÀM - PHỐ CỔ HỘI AN',
-    'KHÁM PHÁ ĐÀ NẴNG',
-  ];
-
   const ITEM_SCHEDULE = ({item, index}: any) => {
     return (
       <View
@@ -156,173 +157,7 @@ const _DetailTour: React.FC<PropsType> = props => {
     return <ITEM_SCHEDULE item={item} index={index} key={index} />;
   };
 
-  interface Review {
-    id: number;
-    name: string;
-    date: string;
-    content: string;
-    avatar: any;
-  }
-
-  const DATAREVIEW: Review[] = [
-    {
-      id: 1,
-      name: 'Tấn Thành',
-      date: '20/10/2021',
-      content:
-        'Điểm đến rất thú vị, có nhiều cảnh đẹp để chụp hình, đồ ăn siêu ngon. Các bạn hướng dẫn viên rất vui vẻ, dễ thương.',
-      avatar: AVT,
-    },
-    {
-      id: 2,
-      name: 'Diễm Kiều',
-      date: '20/10/2021',
-      content:
-        'Phong cảnh rất đẹp, khí hậu mùa thu mát mẻ. Tour rất vui, và chuyên nghiệp.',
-      avatar: AVT,
-    },
-    {
-      id: 3,
-      name: 'Thuy Ân',
-      date: '20/10/2021',
-      content:
-        'Phong cảnh rất đẹp, khí hậu mùa thu mát mẻ. Tour rất vui, và chuyên nghiệp.',
-      avatar: AVT,
-    },
-    {
-      id: 4,
-      name: 'Phi Long',
-      date: '20/10/2021',
-      content:
-        'Điểm đến rất thú vị, có nhiều cảnh đẹp để chụp hình, đồ ăn siêu ngon. Các bạn hướng dẫn viên rất vui vẻ, dễ thương.',
-      avatar: AVT,
-    },
-    {
-      id: 5,
-      name: 'Mỹ Linh',
-      date: '20/10/2021',
-      content:
-        'Điểm đến rất thú vị, có nhiều cảnh đẹp để chụp hình, đồ ăn siêu ngon. Các bạn hướng dẫn viên rất vui vẻ, dễ thương.',
-      avatar: AVT,
-    },
-    {
-      id: 6,
-      name: 'Trọng LV',
-      date: '20/10/2021',
-      content:
-        'Điểm đến rất thú vị, có nhiều cảnh đẹp để chụp hình, đồ ăn siêu ngon. Các bạn hướng dẫn viên rất vui vẻ, dễ thương.',
-      avatar: AVT,
-    },
-  ];
-
-  const ItemReview = ({item, index}: any) => {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-          alignItems: 'flex-start',
-          marginBottom: 15,
-          marginHorizontal: 30,
-          alignSelf: 'center',
-          backgroundColor: Colors.GRAY_SEARCH,
-          borderRadius: 25,
-          padding: 15,
-        }}>
-        <View
-          style={{
-            padding: 3,
-            backgroundColor: Colors.WHITE,
-            marginEnd: 10,
-            borderRadius: 100,
-          }}>
-          <Image
-            source={item.avatar}
-            style={{
-              width: 50,
-              height: 50,
-              resizeMode: 'stretch',
-              borderRadius: 25,
-            }}
-          />
-        </View>
-
-        <View>
-          <Text
-            style={{
-              fontFamily: fontFamily.Black,
-              fontSize: 16,
-              lineHeight: 20,
-              color: Colors.BLUE_DARK,
-              paddingTop: 10,
-              marginBottom: 5,
-            }}>
-            {item.name}
-          </Text>
-          <Text
-            style={{
-              fontFamily: fontFamily.Medium,
-              fontSize: 14,
-              lineHeight: 22,
-              color: Colors.BLUE_TEXT_HOME,
-              textAlign: 'justify',
-            }}>
-            {item.content}
-          </Text>
-          <Text
-            style={{
-              fontFamily: fontFamily.Medium,
-              fontSize: 12,
-              lineHeight: 20,
-              color: Colors.BLUE_2,
-              marginTop: 5,
-            }}>
-            {item.date}
-          </Text>
-        </View>
-      </View>
-    );
-  };
-
-  const renderItemReview = ({item, index}: any) => {
-    return <ItemReview item={item} index={index} key={item.id} />;
-  };
-
-  interface Location {
-    id: number;
-    name: string;
-    image: any;
-    address: string;
-  }
-
-  const DATALOCATION: Location[] = [
-    {
-      id: 1,
-      name: 'Bà Nà Hills',
-      image: VHL,
-      address: 'Đà Nẵng, Việt Nam',
-    },
-    {
-      id: 2,
-      name: 'Hội An',
-      image: DT_1,
-      address: 'Quảng Nam, Việt Nam',
-    },
-    {
-      id: 3,
-      name: 'Cù Lao Chàm',
-      image: DT_1,
-      address: 'Quảng Nam, Việt Nam',
-    },
-    {
-      id: 4,
-      name: 'Bà Nà Hills',
-      image: VHL_FL_1,
-      address: 'Đà Nẵng, Việt Nam',
-    },
-  ];
-
-  const ItemLocation = ({item, index}: any) => {
+  const ItemLocation = ({item, index}: {item: Location; index: number}) => {
     return (
       <View
         style={{
@@ -334,7 +169,7 @@ const _DetailTour: React.FC<PropsType> = props => {
           borderRadius: 25,
         }}>
         <Image
-          source={item.image}
+          source={{uri: item.image}}
           style={{
             width: '100%',
             height: DimensionsStyle.width * 0.5 - 25,
@@ -373,7 +208,7 @@ const _DetailTour: React.FC<PropsType> = props => {
                 lineHeight: 20,
                 color: Colors.BLUE_2,
               }}>
-              {item.address}
+              {item.province_id.name}
             </Text>
           </View>
         </View>
@@ -382,26 +217,162 @@ const _DetailTour: React.FC<PropsType> = props => {
   };
 
   const renderItemLocation = ({item, index}: any) => {
-    return <ItemLocation item={item} index={index} key={item.id} />;
+    return <ItemLocation item={item} index={index} key={index} />;
   };
+  const [dataLocations, setDataLocations] = React.useState<Location[]>([]);
+  const [column1Data, setColumn1Data] = React.useState<Location[]>([]);
+  const [column2Data, setColumn2Data] = React.useState<Location[]>([]);
 
-  const halfwayIndex = Math.ceil(DATALOCATION.length / 2);
-  const column1Data = DATALOCATION.slice(0, halfwayIndex);
-  const column2Data = DATALOCATION.slice(halfwayIndex);
+  useEffect(() => {
+    if (dataTour) {
+      if (dataTour.locations) {
+        setDataLocations(dataTour.locations);
+      }
+    }
+  }, [dataTour]);
 
-  const [dataShowReview, setDataShowReview] = React.useState<Review[]>(
-    DATAREVIEW.slice(0, 2),
+  useEffect(() => {
+    if (dataLocations.length > 0) {
+      const halfwayIndex = Math.round(dataLocations.length / 2);
+      setColumn1Data(dataLocations.slice(0, halfwayIndex));
+      setColumn2Data(dataLocations.slice(halfwayIndex));
+    }
+  }, [dataLocations]);
+
+  const [isFull, setIsFull] = React.useState<boolean>(false);
+
+  useEffect(() => {
+    dispatch(getAllReviews(tour_id));
+  }, []);
+  const loadingReview = useSelector(
+    (state: RootState) => state.review.loadingReview,
   );
+  const dataReview = useSelector(
+    (state: RootState) => state.review.dataReviews,
+  );
+
+  const [dataShowReview, setDataShowReview] = React.useState<Review[]>([]);
+
+  useEffect(() => {
+    if (dataReview) {
+      if (dataReview.length > 0) {
+        isFull
+          ? setDataShowReview(dataReview)
+          : setDataShowReview(dataReview.slice(0, 2));
+      }
+    }
+  }, [dataReview]);
 
   useEffect(() => {
     isFull
-      ? setDataShowReview(DATAREVIEW)
-      : setDataShowReview(DATAREVIEW.slice(0, 2));
+      ? setDataShowReview(dataReview)
+      : setDataShowReview(dataReview.slice(0, 2));
 
     isFull
       ? setTitleButtonShowReview('Thu gọn bình luận')
       : setTitleButtonShowReview('Xem tất cả bình luận');
   }, [isFull]);
+
+  const [isReview, setIsReview] = React.useState<boolean>(false);
+
+  useEffect(() => {
+    if (dataReview.length > 0) {
+      setIsReview(true);
+    }
+  }, [dataReview]);
+
+  const convertISOToDate = (isoString: string) => {
+    // Chuyển đổi chuỗi ISO thành đối tượng Moment
+    const momentObj = moment(isoString);
+
+    // Chuyển đổi đối tượng Moment thành chuỗi định dạng dd/MM/yyyy
+    const formattedDate = momentObj.format('DD/MM/YYYY');
+
+    return formattedDate;
+  };
+
+  const convertArrayToString = (array: [string]) => {
+    // Sử dụng phương pháp map() để trích xuất giá trị của mỗi phần tử trong mảng
+    const values = array.map(item => item);
+
+    // Sử dụng phương pháp join() để kết hợp các giá trị thành một chuỗi, với dấu phẩy làm dấu phân cách
+    const result = values.join(', ');
+    return result;
+  };
+
+  const ItemReview = ({item, index}: any) => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          marginBottom: 15,
+          marginHorizontal: 30,
+          alignSelf: 'center',
+          backgroundColor: Colors.GRAY_SEARCH,
+          borderRadius: 25,
+          padding: 15,
+          width: '100%',
+        }}>
+        <View
+          style={{
+            padding: 3,
+            backgroundColor: Colors.WHITE,
+            marginEnd: 10,
+            borderRadius: 100,
+          }}>
+          <Image
+            source={{uri: item.user_id.avatar}}
+            style={{
+              width: 50,
+              height: 50,
+              resizeMode: 'stretch',
+              borderRadius: 25,
+            }}
+          />
+        </View>
+
+        <View>
+          <Text
+            style={{
+              fontFamily: fontFamily.Black,
+              fontSize: 16,
+              lineHeight: 20,
+              color: Colors.BLUE_DARK,
+              paddingTop: 10,
+              marginBottom: 5,
+            }}>
+            {item.user_id.name}
+          </Text>
+          <Text
+            style={{
+              fontFamily: fontFamily.Medium,
+              fontSize: 14,
+              lineHeight: 22,
+              color: Colors.BLUE_TEXT_HOME,
+              textAlign: 'justify',
+            }}>
+            {item.content}
+          </Text>
+          <Text
+            style={{
+              fontFamily: fontFamily.Medium,
+              fontSize: 12,
+              lineHeight: 20,
+              color: Colors.BLUE_2,
+              marginTop: 5,
+            }}>
+            {convertISOToDate(item.created_at)}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderItemReview = ({item, index}: any) => {
+    return <ItemReview item={item} index={index} key={item._id} />;
+  };
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -413,31 +384,41 @@ const _DetailTour: React.FC<PropsType> = props => {
           showsVerticalScrollIndicator={false}>
           <View>
             <View>
-              <Image
-                source={{uri: imageDetail}}
-                style={{
-                  width: '100%',
-                  height: DimensionsStyle.height * 0.585,
-                  resizeMode: 'stretch',
-                  opacity: 0.5,
-                  borderBottomLeftRadius: 50,
-                  borderBottomRightRadius: 50,
-                }}
-              />
-              <Image
-                source={{uri: imageDetail}}
-                style={{
-                  width: '96%',
-                  height: DimensionsStyle.height * 0.565,
-                  resizeMode: 'stretch',
-                  alignSelf: 'center',
-                  position: 'absolute',
-                  marginTop: DimensionsStyle.height * 0.01,
-                  borderRadius: 40,
-                  borderTopLeftRadius: 20,
-                  borderTopRightRadius: 20,
-                }}
-              />
+              {imageDetail === '' ? (
+                <Loading height={DimensionsStyle.height * 0.585} />
+              ) : (
+                <Image
+                  source={{uri: imageDetail}}
+                  style={{
+                    width: '100%',
+                    height: DimensionsStyle.height * 0.585,
+                    resizeMode: 'stretch',
+                    opacity: 0.5,
+                    borderBottomLeftRadius: 50,
+                    borderBottomRightRadius: 50,
+                  }}
+                />
+              )}
+
+              {imageDetail === '' ? (
+                <Loading height={DimensionsStyle.height * 0.585} />
+              ) : (
+                <Image
+                  source={{uri: imageDetail}}
+                  style={{
+                    width: '96%',
+                    height: DimensionsStyle.height * 0.565,
+                    resizeMode: 'stretch',
+                    alignSelf: 'center',
+                    position: 'absolute',
+                    marginTop: DimensionsStyle.height * 0.01,
+                    borderRadius: 40,
+                    borderTopLeftRadius: 20,
+                    borderTopRightRadius: 20,
+                  }}
+                />
+              )}
+
               <Header
                 iconLeft={ICON_BACK}
                 iconRight={isFavorite ? HEART : HEART_INACTIVE_2}
@@ -539,7 +520,7 @@ const _DetailTour: React.FC<PropsType> = props => {
                     marginTop: 5,
                   },
                 ]}>
-                {/* {dataTour.description} */}
+                {dataTour.description}
               </Text>
               <Text
                 style={[
@@ -636,7 +617,8 @@ const _DetailTour: React.FC<PropsType> = props => {
                     marginTop: 5,
                     width: DimensionsStyle.width * 0.7,
                   }}>
-                  Bà Nà Hills, Đà Nẵng - Hội An, Quảng Nam, Việt Nam
+                  {convertArrayToString(dataLocationString)},{' '}
+                  {dataTour?.province_id?.name}, Việt Nam
                 </Text>
               </View>
               <Text
@@ -648,9 +630,31 @@ const _DetailTour: React.FC<PropsType> = props => {
                 ]}>
                 Đánh giá
               </Text>
-              {dataShowReview.map((item: any, index: any) => {
-                return renderItemReview({item, index});
-              })}
+              {isReview ? (
+                <View>
+                  {loadingReview ? (
+                    <Loading height={DimensionsStyle.height * 0.3} />
+                  ) : (
+                    <View>
+                      {dataShowReview.map((item: any, index: any) => {
+                        return renderItemReview({item, index});
+                      })}
+                    </View>
+                  )}
+                </View>
+              ) : (
+                <Text
+                  style={{
+                    width: DimensionsStyle.width * 0.8,
+                    alignSelf: 'center',
+                    textAlign: 'center',
+                    fontFamily: fontFamily.Medium,
+                    fontSize: 14,
+                    color: Colors.BLUE_DARK,
+                  }}>
+                  Chưa có đánh giá nào về chuyến du lịch này
+                </Text>
+              )}
 
               <Button
                 title={titleButtonShowReview}
@@ -663,6 +667,7 @@ const _DetailTour: React.FC<PropsType> = props => {
                   width: DimensionsStyle.width * 0.88,
                   backgroundColor: Colors.GRAY_SEARCH,
                   borderRadius: 20,
+                  display: isReview ? 'flex' : 'none',
                 }}
                 textStyle={{
                   color: Colors.BLUE_DARK,

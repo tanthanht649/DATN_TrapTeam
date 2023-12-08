@@ -109,7 +109,12 @@ export const getTourById = createAsyncThunk(
 const tourSlice = createSlice({
   name: 'tour',
   initialState,
-  reducers: {},
+  reducers: {
+    logoutTour: state => {
+      // Reset state về giá trị ban đầu
+      return initialState;
+    },
+  },
   extraReducers: builder => {
     builder.addCase(getToursOutstanding.pending, state => {
       state.loadingTour = true;
@@ -144,4 +149,5 @@ const tourSlice = createSlice({
   },
 });
 
+export const {logoutTour} = tourSlice.actions;
 export const tourReducer = tourSlice.reducer;

@@ -486,8 +486,6 @@ const _HomeFull: React.FC<PropsType> = props => {
     'https://www.bing.com/th?id=OIP.fN9gx82LKxSZVpTc18meBgHaEo&w=149&h=100&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2',
   );
 
-  const [limitCheck, setLimitCheck] = useState(0);
-
   useEffect(() => {
     if (dataUser && dataUser.avatar) {
       setImageAvatar(dataUser.avatar.toString());
@@ -502,10 +500,6 @@ const _HomeFull: React.FC<PropsType> = props => {
   const loadingFavorite = useSelector(
     (state: RootState) => state.favorite.loadingFavorite,
   );
-
-  useEffect(() => {
-    dispatch(getAllEvents());
-  }, [limitCheck]);
 
   const [limitCheckFavorite, setLimitCheckFavorite] = useState(false);
 

@@ -14,7 +14,7 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {AppContext} from '@shared-state';
+import {AppContext, getAllEvents} from '@shared-state';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import {useSelector} from 'react-redux';
@@ -29,6 +29,11 @@ type PropsType = NativeStackScreenProps<OnboardingLoginStackParamList, 'Login'>;
 const _Login: React.FC<PropsType> = props => {
   const dispatch = useAppDispatch();
   const {setLoggedIn} = React.useContext(AppContext);
+
+  useEffect(() => {
+    dispatch(getAllEvents());
+  }, []);
+
   function GoogleSignIn() {
     return (
       <Button
@@ -50,8 +55,10 @@ const _Login: React.FC<PropsType> = props => {
               avatar: userCredential.user.photoURL,
               phone_number: '',
             };
-            dispatch(getUser(dataGetUser));
-            setLoggedIn(true);
+            const result = dispatch(getUser(dataGetUser));
+            if (result.arg.email == userCredential.user.email) {
+              setLoggedIn(true);
+            }
           });
         }}
       />

@@ -5,7 +5,8 @@ import {
   eventReducer,
   favoriteReducer,
   locationReducer,
-  tourReducer
+  tourReducer,
+  reviewReducer,
 } from './reducers';
 
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
     favorite: favoriteReducer,
     location: locationReducer,
     tour: tourReducer,
+    review: reviewReducer,
   },
 });
 

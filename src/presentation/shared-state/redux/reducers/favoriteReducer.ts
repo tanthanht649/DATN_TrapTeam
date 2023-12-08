@@ -47,7 +47,10 @@ export const getDataFavorite = createAsyncThunk(
 const favoriteSlice = createSlice({
   name: 'favorite',
   initialState,
-  reducers: {},
+  reducers: {logoutFavorite: state => {
+    // Reset state về giá trị ban đầu
+    return initialState;
+  },},
   extraReducers: builder => {
     builder
       .addCase(getDataFavorite.pending, state => {
@@ -65,4 +68,5 @@ const favoriteSlice = createSlice({
   },
 });
 
+export const {logoutFavorite} = favoriteSlice.actions;
 export const favoriteReducer = favoriteSlice.reducer;
