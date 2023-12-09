@@ -448,7 +448,10 @@ const _HomeFull: React.FC<PropsType> = props => {
             key={item._id}
             index={index}
             onPress={() => {
-              navigation.navigate('DetailTour');
+              navigation.navigate('DetailTour', {
+                tour_id: item._id,
+                isFavorite: item.isFavorite,
+              });
             }}
           />
         );

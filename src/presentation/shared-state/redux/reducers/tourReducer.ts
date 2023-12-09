@@ -10,6 +10,7 @@ export interface TourState {
   loadingTourDetail: boolean;
   dataTourByLocation: Tour[];
   dataSearchName: Tour[];
+  dataSearch: Tour[];
 }
 
 export const dataToursOutstanding: Tour[] = [];
@@ -17,6 +18,7 @@ export const dataToursByProvince: Tour[] = [];
 export const dataTourDetail = {} as TourAndLocation;
 export const dataTourByLocation: Tour[] = [];
 export const dataSearchName: Tour[] = [];
+export const dataSearch: Tour[] = [];
 
 const initialState: TourState = {
   loadingTour: false,
@@ -26,6 +28,7 @@ const initialState: TourState = {
   loadingTourDetail: false,
   dataTourByLocation: dataTourByLocation,
   dataSearchName: dataSearchName,
+  dataSearch: dataSearch,
 };
 
 // lấy danh sách tour nổi bật
@@ -167,6 +170,33 @@ export const findTourByNames = createAsyncThunk(
   },
 );
 
+export const findTourByScreenSearch = createAsyncThunk(
+  'tour/findTourByScreenSearch',
+  async (name: string | undefined) => {
+    const fetchData = async () => {
+      let url = `${CONSTANTS.IP}api/tour/getTourByName?name=${name}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const res = await response.json();
+      return res;
+    };
+    const res = await fetchData();
+
+    if (res.result) {
+      return res.tours;
+    } else {
+      return [];
+    }
+  },
+);
+
 const tourSlice = createSlice({
   name: 'tour',
   initialState,
@@ -225,6 +255,16 @@ const tourSlice = createSlice({
       state.dataSearchName = action.payload;
     });
     builder.addCase(findTourByNames.rejected, state => {
+      state.loadingTour = false;
+    });
+    builder.addCase(findTourByScreenSearch.pending, state => {
+      state.loadingTour = true;
+    });
+    builder.addCase(findTourByScreenSearch.fulfilled, (state, action) => {
+      state.loadingTour = false;
+      state.dataSearch = action.payload;
+    });
+    builder.addCase(findTourByScreenSearch.rejected, state => {
       state.loadingTour = false;
     });
   },

@@ -7,7 +7,7 @@ import {
   TextInput,
   FlatList,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaInsetsContext,
   SafeAreaView,
@@ -16,6 +16,7 @@ import {BackgroundApp, Header, Input, ModalFilter} from '@components';
 import {
   BACKGROUND_WHITE,
   HEART,
+  HEART_INACTIVE_2,
   ICON_BACK,
   ICON_FILTER,
   LOCATION,
@@ -23,9 +24,16 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {Tour, DATATOUR} from '../home';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {SearchStackParamList} from '@navigation';
+import {Tour, TourAndFavorite} from '@domain';
+import {useSelector} from 'react-redux';
+import {
+  RootState,
+  findTourByNames,
+  findTourByScreenSearch,
+  useAppDispatch,
+} from '@shared-state';
 
 type PropsType = NativeStackScreenProps<SearchStackParamList, 'Search'>;
 
@@ -33,7 +41,7 @@ const ItemTourFavorite = ({
   item,
   onPress,
 }: {
-  item: Tour;
+  item: TourAndFavorite;
   onPress: () => void;
 }) => {
   return (
@@ -65,7 +73,7 @@ const ItemTourFavorite = ({
         />
 
         <Image
-          source={HEART}
+          source={item.isFavorite ? HEART : HEART_INACTIVE_2}
           style={{
             width: 30,
             height: 30,
@@ -130,6 +138,7 @@ const ItemTourFavorite = ({
 
 const _Search: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dispatch = useAppDispatch();
   const eventRight = () => {
     setModalVisible(true);
   };
@@ -144,17 +153,72 @@ const _Search: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
+      ({item}: {item: TourAndFavorite}) => {
         return (
           <ItemTourFavorite
             item={item}
-            key={item.id}
-            onPress={() => navigation.navigate('DetailTour')}
+            key={item._id}
+            onPress={() =>
+              navigation.navigate('DetailTour', {
+                tour_id: item._id,
+                isFavorite: item.isFavorite,
+              })
+            }
           />
         );
       },
     [],
   );
+
+  const dataSearchStore = useSelector(
+    (state: RootState) => state.tour.dataSearch,
+  );
+
+  const dataFavoriteNoId = useSelector(
+    (state: RootState) => state.favorite.dataFavoriteNoId,
+  );
+
+  const dataToursOutstanding = useSelector(
+    (state: RootState) => state.tour.dataToursOutstanding,
+  );
+
+  const [dataSearch, setDataSearch] = useState<Tour[]>(dataToursOutstanding);
+
+  const [dataTourAndFavorite, setDataTourAndFavorite] = useState<
+    TourAndFavorite[]
+  >([]);
+
+  useEffect(() => {
+    const tourAndFavorite = dataSearch.map((item: Tour) => {
+      const isFavorite = dataFavoriteNoId.some(
+        (check: Tour) => check._id === item._id,
+      );
+      return {...item, isFavorite: isFavorite};
+    });
+
+    setDataTourAndFavorite(tourAndFavorite);
+  }, [dataFavoriteNoId, dataSearch]);
+
+  let timeoutId: any = null;
+  const handleSearch = (text: string) => {
+    setTextSearch(text);
+
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => {
+      dispatch(findTourByScreenSearch(text));
+    }, 3000);
+  };
+
+  useEffect(() => {
+    if (textSearch === '') {
+      setDataSearch(dataToursOutstanding);
+    } else {
+      setDataSearch(dataSearchStore);
+    }
+  }, [dataSearchStore]);
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -167,7 +231,7 @@ const _Search: React.FC<PropsType> = props => {
             <TextInput
               style={_styles.textInput}
               onChangeText={text => {
-                setTextSearch(text);
+                handleSearch(text);
               }}
               placeholder="Tìm kiếm"
             />
@@ -178,16 +242,16 @@ const _Search: React.FC<PropsType> = props => {
         </View>
         <View style={_styles.title}>
           <Text style={_styles.textTitle}>Gợi ý</Text>
-          <Pressable onPress={() => navigation.navigate('FeaturedListHome')}>
+          <Pressable style={{display: 'none'}}>
             <Text style={_styles.textSeeAll}>Xem tất cả</Text>
           </Pressable>
         </View>
 
         <FlatList
-          data={DATATOUR}
+          data={dataTourAndFavorite}
           renderItem={renderItemTourFavorite}
-          keyExtractor={item => item.id.toString()}
-          showsHorizontalScrollIndicator={false}
+          keyExtractor={item => item._id.toString()}
+          showsVerticalScrollIndicator={false}
         />
 
         <ModalFilter
