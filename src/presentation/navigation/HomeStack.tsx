@@ -23,7 +23,9 @@ type FeaturedListDetailProps = {
   location_id: string;
 };
 type FavoriteEmptyProps = {};
-type SearchResultProps = {};
+type SearchResultProps = {
+  isFilter: boolean;
+};
 type DetailTourProps = {
   tour_id: string;
   isFavorite: boolean;

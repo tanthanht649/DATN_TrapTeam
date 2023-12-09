@@ -21,6 +21,7 @@ import {
   BACKGROUND_WHITE,
   CLOSE_ITEM,
   HEART,
+  HEART_INACTIVE_2,
   ICON_BACK,
   ICON_FILTER,
   LOCATION,
@@ -28,14 +29,16 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {Tour} from '../home';
 import {ItemTourOutstanding} from '../home';
-import {DATATOUROUTSTANDING, DATATOUR} from '../home';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {SearchStackParamList} from '@navigation';
+import {HomeStackParamList, SearchStackParamList} from '@navigation';
+import {Tour, TourAndFavorite} from '@domain';
+import {useSelector} from 'react-redux';
+import {RootState} from '@shared-state';
 
-type PropsType = NativeStackScreenProps<SearchStackParamList, 'SearchResult'>;
+type PropsType = NativeStackScreenProps<SearchStackParamList, 'SearchResult'> &
+  NativeStackScreenProps<HomeStackParamList, 'SearchResult'>;
 
 const ItemFind = ({item}: {item: string}) => {
   return (
@@ -72,26 +75,57 @@ const ItemFind = ({item}: {item: string}) => {
 
 const _SearchResult: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const isFilter = props.route.params?.isFilter;
   const [textSearch, setTextSearch] = useState('');
   const [isFound, setIsFound] = useState(true);
   const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
-
   const [isLayout, setIsLayout] = useState(false);
   const [column, setColumn] = useState(2);
+
+  const dataSearchName = useSelector(
+    (state: RootState) => state.tour.dataSearchName,
+  );
+
+  useEffect(() => {
+    if (dataSearchName.length === 0) {
+      setIsFound(false);
+    } else {
+      setIsFound(true);
+    }
+  }, [dataSearchName]);
+
+  const dataFavoriteNoId = useSelector(
+    (state: RootState) => state.favorite.dataFavoriteNoId,
+  );
+
+  const [dataTourAndFavorite, setDataTourAndFavorite] = useState<
+    TourAndFavorite[]
+  >([]);
+
+  useEffect(() => {
+    const tourAndFavorite = dataSearchName.map((item: Tour) => {
+      const isFavorite = dataFavoriteNoId.some(
+        (check: Tour) => check._id === item._id,
+      );
+      return {...item, isFavorite: isFavorite};
+    });
+
+    setDataTourAndFavorite(tourAndFavorite);
+  }, [dataFavoriteNoId, dataSearchName]);
 
   // 'Phổ biến', 'Hà Nội', '200.000 - 500.000'
 
   const DATAFIND: string[] = ['Phổ biến', 'Hà Nội', '200.000 - 500.000'];
 
   const [marginBottom, setMarginBottom] = useState(0);
+
   useEffect(() => {
-    if (DATAFIND.length > 0) {
+    if (isFilter) {
       setMarginBottom(130);
-    } else if ((DATAFIND.length = 0)) {
-      console.log('DATAFIND.length', DATAFIND.length);
+    } else {
       setMarginBottom(40);
     }
-  }, [DATAFIND]);
+  }, [isFilter]);
 
   const renderItemFind = React.useMemo(
     () =>
@@ -110,7 +144,7 @@ const _SearchResult: React.FC<PropsType> = props => {
     item,
     onPress,
   }: {
-    item: Tour;
+    item: TourAndFavorite;
     onPress: () => void;
   }) => {
     return (
@@ -142,7 +176,7 @@ const _SearchResult: React.FC<PropsType> = props => {
           />
 
           <Image
-            source={HEART}
+            source={item.isFavorite ? HEART : HEART_INACTIVE_2}
             style={{
               width: 30,
               height: 30,
@@ -207,14 +241,17 @@ const _SearchResult: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item, index}: {item: Tour; index: number}) => {
+      ({item, index}: {item: TourAndFavorite; index: number}) => {
         return (
           <ItemTourOutstanding
             item={item}
-            key={item.id}
+            key={item._id}
             index={index}
             onPress={() => {
-              navigation.navigate('DetailTour');
+              navigation.navigate('DetailTour', {
+                tour_id: item._id,
+                isFavorite: item.isFavorite,
+              });
             }}
           />
         );
@@ -224,12 +261,17 @@ const _SearchResult: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
+      ({item}: {item: TourAndFavorite}) => {
         return (
           <ItemTourFavorite
             item={item}
-            key={item.id}
-            onPress={() => navigation.navigate('DetailTour')}
+            key={item._id}
+            onPress={() =>
+              navigation.navigate('DetailTour', {
+                tour_id: item._id,
+                isFavorite: item.isFavorite,
+              })
+            }
           />
         );
       },
@@ -237,7 +279,6 @@ const _SearchResult: React.FC<PropsType> = props => {
   );
 
   const eventRight = () => {};
-  const eventLeft = () => {};
   const eventBack = () => {
     navigation.goBack();
   };
@@ -247,7 +288,6 @@ const _SearchResult: React.FC<PropsType> = props => {
       <SafeAreaView style={_styles.container}>
         <Header
           iconLeft={ICON_BACK}
-          iconRight={ICON_FILTER}
           eventLeft={eventBack}
           eventRight={eventRight}
           textCenter="Kết quả tìm kiếm"
@@ -265,8 +305,7 @@ const _SearchResult: React.FC<PropsType> = props => {
                 onTabChange={setListViewType}
               />
             </View>
-
-            {DATAFIND.length > 0 ? (
+            {isFilter ? (
               <View>
                 <FlatList
                   data={DATAFIND}
@@ -278,19 +317,16 @@ const _SearchResult: React.FC<PropsType> = props => {
                 />
               </View>
             ) : null}
+
             <View style={_styles.containerListFeatured}>
               <FlatList
-                data={DATATOUROUTSTANDING}
+                data={dataTourAndFavorite}
                 renderItem={
                   isLayout ? renderItemTourOutstanding : renderItemTourFavorite
                 }
-                keyExtractor={item => item.id.toString()}
+                keyExtractor={item => item._id.toString()}
                 numColumns={column}
                 key={column}
-                style={{
-                  height: DimensionsStyle.height * 1,
-                  marginBottom: marginBottom,
-                }}
                 showsVerticalScrollIndicator={false}
               />
             </View>
@@ -375,6 +411,7 @@ const _styles = StyleSheet.create({
   containerListFeatured: {
     marginHorizontal: 20,
     alignSelf: 'center',
+    flex: 1,
   },
 
   iconRight: {

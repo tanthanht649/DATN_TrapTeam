@@ -36,6 +36,7 @@ import {
   getAllLocation,
   useAppDispatch,
   getToursOutstanding,
+  findTourByNames,
 } from '@shared-state';
 import {Event, Tour, Location, TourAndFavorite} from '@domain';
 
@@ -552,6 +553,15 @@ const _HomeFull: React.FC<PropsType> = props => {
   const column1Data = dataTourAndFavorite.slice(0, halfwayIndex);
   const column2Data = dataTourAndFavorite.slice(halfwayIndex);
 
+  const dataSearch = useSelector(
+    (state: RootState) => state.tour.dataSearchName,
+  );
+
+  const handleSearch = () => {
+    dispatch(findTourByNames(text));
+    setText('');
+  };
+
   return (
     <BackgroundApp source={BACKGROUND_HOME}>
       <HeaderHome2
@@ -597,7 +607,10 @@ const _HomeFull: React.FC<PropsType> = props => {
                 marginStart: 0,
               }}
               textInputStyle={{width: '90%'}}
-              onPressLeft={() => navigation.navigate('SearchResult')}
+              onPressLeft={() => {
+                handleSearch();
+                navigation.navigate('SearchResult', {isFilter: false});
+              }}
             />
           </View>
         )}

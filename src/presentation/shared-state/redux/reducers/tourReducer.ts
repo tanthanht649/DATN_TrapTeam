@@ -9,12 +9,14 @@ export interface TourState {
   tourDetail: TourAndLocation;
   loadingTourDetail: boolean;
   dataTourByLocation: Tour[];
+  dataSearchName: Tour[];
 }
 
 export const dataToursOutstanding: Tour[] = [];
 export const dataToursByProvince: Tour[] = [];
 export const dataTourDetail = {} as TourAndLocation;
 export const dataTourByLocation: Tour[] = [];
+export const dataSearchName: Tour[] = [];
 
 const initialState: TourState = {
   loadingTour: false,
@@ -23,6 +25,7 @@ const initialState: TourState = {
   tourDetail: dataTourDetail,
   loadingTourDetail: false,
   dataTourByLocation: dataTourByLocation,
+  dataSearchName: dataSearchName,
 };
 
 // lấy danh sách tour nổi bật
@@ -137,6 +140,33 @@ export const getTourByLocation = createAsyncThunk(
   },
 );
 
+export const findTourByNames = createAsyncThunk(
+  'tour/findTourByNames',
+  async (name: string | undefined) => {
+    const fetchData = async () => {
+      let url = `${CONSTANTS.IP}api/tour/getTourByName?name=${name}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const res = await response.json();
+      return res;
+    };
+    const res = await fetchData();
+
+    if (res.result) {
+      return res.tours;
+    } else {
+      return [];
+    }
+  },
+);
+
 const tourSlice = createSlice({
   name: 'tour',
   initialState,
@@ -185,6 +215,16 @@ const tourSlice = createSlice({
       state.dataTourByLocation = action.payload;
     });
     builder.addCase(getTourByLocation.rejected, state => {
+      state.loadingTour = false;
+    });
+    builder.addCase(findTourByNames.pending, state => {
+      state.loadingTour = true;
+    });
+    builder.addCase(findTourByNames.fulfilled, (state, action) => {
+      state.loadingTour = false;
+      state.dataSearchName = action.payload;
+    });
+    builder.addCase(findTourByNames.rejected, state => {
       state.loadingTour = false;
     });
   },
