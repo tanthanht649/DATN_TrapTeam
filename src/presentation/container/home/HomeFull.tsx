@@ -428,7 +428,9 @@ const _HomeFull: React.FC<PropsType> = props => {
             item={item}
             key={item._id}
             onPress={() => {
-              navigation.navigate('FeaturedListDetail');
+              navigation.navigate('FeaturedListDetail', {
+                location_id: item._id,
+              });
             }}
           />
         );
@@ -476,10 +478,6 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const handleToFeaturedListHome = () => {
     navigation.navigate('FeaturedListHome');
-  };
-
-  const handleToFeaturedListDetail = () => {
-    navigation.navigate('FeaturedListDetail');
   };
 
   const [imageAvatar, setImageAvatar] = useState(
@@ -534,9 +532,6 @@ const _HomeFull: React.FC<PropsType> = props => {
   const dataToursOutstanding = useSelector(
     (state: RootState) => state.tour.dataToursOutstanding,
   );
-
-
- 
 
   const [dataTourAndFavorite, setDataTourAndFavorite] = useState<
     TourAndFavorite[]
@@ -719,9 +714,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                 }}>
                 Địa điểm nổi bật
               </Text>
-              <Pressable
-                onPress={handleToFeaturedListDetail}
-                style={{display: 'none'}}>
+              <Pressable style={{display: 'none'}}>
                 <Text
                   style={{
                     fontFamily: fontFamily.Medium,

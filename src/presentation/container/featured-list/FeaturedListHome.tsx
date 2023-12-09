@@ -1,45 +1,26 @@
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ScrollView,
-  FlatList,
-  Animated,
-  ImageSourcePropType,
-  Pressable,
-} from 'react-native';
-import React, {useState, useMemo, useEffect, useRef} from 'react';
+import {StyleSheet, Text, View, Image, Animated, Pressable} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {BackgroundApp, Header, Input, ViewSwitcher} from '@components';
+import {BackgroundApp, Header, ViewSwitcher} from '@components';
 import {
   BACKGROUND_WHITE,
-  EMAIL_LOGIN,
-  FAVORITE,
-  FIND,
   HEART,
-  HEART_ACTIVE,
   HEART_INACTIVE,
   ICON_BACK,
-  ICON_LOGOUT,
-  IMAGE_FEATURED_LIST,
-  IMAGE_FEATURED_LIST_2,
-  IMAGE_FEATURED_LIST_3,
   IMG_FL_1,
   IMG_FL_2,
   IMG_FL_3,
   LOCATION,
   SETTING,
-  START_SMALL,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {Tour} from '../home';
 import {ItemTourOutstanding} from '../home';
-import {DATATOUROUTSTANDING, DATATOUR} from '../home';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeStackParamList, SearchStackParamList} from '@navigation';
+import {useSelector} from 'react-redux';
+import {Tour, TourAndFavorite} from '@domain';
+import {RootState} from '@shared-state';
 
 type PropsType = NativeStackScreenProps<
   HomeStackParamList,
@@ -47,15 +28,33 @@ type PropsType = NativeStackScreenProps<
 > &
   NativeStackScreenProps<SearchStackParamList, 'FeaturedListHome'>;
 
-const {height: screenHeight} = Dimensions.get('window');
-
 const _FeaturedListHome: React.FC<PropsType> = props => {
   const {navigation} = props;
   const [searchName, setSearchName] = useState('');
   const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
-
   const [isLayout, setIsLayout] = useState(false);
   const [column, setColumn] = useState(2);
+
+  const dataFavoriteNoId = useSelector(
+    (state: RootState) => state.favorite.dataFavoriteNoId,
+  );
+  const dataToursOutstanding = useSelector(
+    (state: RootState) => state.tour.dataToursOutstanding,
+  );
+
+  const [dataTourAndFavorite, setDataTourAndFavorite] = useState<
+    TourAndFavorite[]
+  >([]);
+
+  useEffect(() => {
+    const tourAndFavorite = dataToursOutstanding.map((item: Tour) => {
+      const isFavorite = dataFavoriteNoId.some(
+        (check: Tour) => check._id === item._id,
+      );
+      return {...item, isFavorite: isFavorite};
+    });
+    setDataTourAndFavorite(tourAndFavorite);
+  }, [dataFavoriteNoId, dataToursOutstanding]);
 
   useEffect(() => {
     listViewType === 'grid' ? setIsLayout(true) : setIsLayout(false);
@@ -165,11 +164,11 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item, index}: {item: Tour; index: number}) => {
+      ({item, index}: {item: TourAndFavorite; index: number}) => {
         return (
           <ItemTourOutstanding
             item={item}
-            key={item.id}
+            key={item._id}
             index={index}
             onPress={() => navigation.navigate('DetailTour')}
           />
@@ -184,7 +183,7 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
         return (
           <ItemTourFavorite
             item={item}
-            key={item.id}
+            key={item._id}
             onPress={() => navigation.navigate('DetailTour')}
           />
         );
@@ -233,16 +232,19 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
           </Text>
         </View>
         <View>
-          <ViewSwitcher quantityEstates={10} onTabChange={setListViewType} />
+          <ViewSwitcher
+            quantityEstates={dataTourAndFavorite.length}
+            onTabChange={setListViewType}
+          />
         </View>
 
         <View style={_styles.containerListFeatured}>
           <Animated.FlatList
-            data={DATATOUROUTSTANDING}
+            data={dataTourAndFavorite}
             renderItem={
               isLayout ? renderItemTourOutstanding : renderItemTourFavorite
             }
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item._id.toString()}
             numColumns={column}
             key={column}
             style={{height: DimensionsStyle.height * 0.6}}

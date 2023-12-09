@@ -30,7 +30,6 @@ import {
 } from '@assets';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeStackParamList, SearchStackParamList} from '@navigation';
-import {Tour} from '../home';
 import {Colors, DimensionsStyle} from '@resources';
 import SelectDropdown from 'react-native-select-dropdown';
 import {AppContext} from '@shared-state';

@@ -8,11 +8,13 @@ export interface TourState {
   dataToursByProvince: Tour[];
   tourDetail: TourAndLocation;
   loadingTourDetail: boolean;
+  dataTourByLocation: Tour[];
 }
 
 export const dataToursOutstanding: Tour[] = [];
 export const dataToursByProvince: Tour[] = [];
 export const dataTourDetail = {} as TourAndLocation;
+export const dataTourByLocation: Tour[] = [];
 
 const initialState: TourState = {
   loadingTour: false,
@@ -20,6 +22,7 @@ const initialState: TourState = {
   dataToursByProvince: dataToursByProvince,
   tourDetail: dataTourDetail,
   loadingTourDetail: false,
+  dataTourByLocation: dataTourByLocation,
 };
 
 // lấy danh sách tour nổi bật
@@ -106,6 +109,34 @@ export const getTourById = createAsyncThunk(
   },
 );
 
+// lấy danh sách tour chứa địa điểm phổ biến
+export const getTourByLocation = createAsyncThunk(
+  'tour/getTourByLocation',
+  async (location_id: string | undefined) => {
+    const fetchData = async () => {
+      let url = `${CONSTANTS.IP}api/tour/getTourByLocation?location_id=${location_id}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const res = await response.json();
+      return res;
+    };
+    const res = await fetchData();
+
+    if (res.result) {
+      return res.tours;
+    } else {
+      return [];
+    }
+  },
+);
+
 const tourSlice = createSlice({
   name: 'tour',
   initialState,
@@ -145,6 +176,16 @@ const tourSlice = createSlice({
     });
     builder.addCase(getTourById.rejected, state => {
       state.loadingTourDetail = false;
+    });
+    builder.addCase(getTourByLocation.pending, state => {
+      state.loadingTour = true;
+    });
+    builder.addCase(getTourByLocation.fulfilled, (state, action) => {
+      state.loadingTour = false;
+      state.dataTourByLocation = action.payload;
+    });
+    builder.addCase(getTourByLocation.rejected, state => {
+      state.loadingTour = false;
     });
   },
 });

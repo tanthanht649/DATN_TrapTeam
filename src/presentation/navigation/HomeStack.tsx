@@ -19,7 +19,9 @@ type ListTourBannerProps = {
   title: string;
 };
 type FeaturedListHomeProps = {};
-type FeaturedListDetailProps = {};
+type FeaturedListDetailProps = {
+  location_id: string;
+};
 type FavoriteEmptyProps = {};
 type SearchResultProps = {};
 type DetailTourProps = {

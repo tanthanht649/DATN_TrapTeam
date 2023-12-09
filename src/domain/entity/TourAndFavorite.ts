@@ -18,5 +18,5 @@ export interface TourAndFavorite {
   is_popular: Boolean;
   schedules: Array<string>;
   locations: Array<string>;
-  isFavorite: Boolean;
+  isFavorite: boolean;
 }
