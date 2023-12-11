@@ -6,6 +6,7 @@ import {
   Image,
   TextInput,
   FlatList,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
@@ -25,7 +26,7 @@ import {
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {SearchStackParamList} from '@navigation';
+import {HomeStackParamList, SearchStackParamList} from '@navigation';
 import {Tour, TourAndFavorite} from '@domain';
 import {useSelector} from 'react-redux';
 import {
@@ -34,6 +35,7 @@ import {
   findTourByScreenSearch,
   useAppDispatch,
 } from '@shared-state';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 type PropsType = NativeStackScreenProps<SearchStackParamList, 'Search'>;
 
@@ -146,9 +148,22 @@ const _Search: React.FC<PropsType> = props => {
   const eventBack = () => {};
   const [textSearch, setTextSearch] = useState('');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const handleModal = () => {
+  const handleModal = (
+    locationProvinces: string,
+    is_popular: boolean,
+    minPrice: string,
+    maxPrice: string,
+    dayFind: string,
+  ) => {
     setModalVisible(false);
-    navigation.navigate('SearchResult');
+    navigation.navigate('SearchResult', {
+      isFilter: true,
+      locationProvinces,
+      is_popular,
+      minPrice,
+      maxPrice,
+      dayFind,
+    });
   };
 
   const renderItemTourFavorite = React.useMemo(
@@ -246,14 +261,12 @@ const _Search: React.FC<PropsType> = props => {
             <Text style={_styles.textSeeAll}>Xem tất cả</Text>
           </Pressable>
         </View>
-
         <FlatList
           data={dataTourAndFavorite}
           renderItem={renderItemTourFavorite}
           keyExtractor={item => item._id.toString()}
           showsVerticalScrollIndicator={false}
         />
-
         <ModalFilter
           visible={modalVisible}
           onPress={handleModal}

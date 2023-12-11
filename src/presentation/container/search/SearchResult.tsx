@@ -76,6 +76,12 @@ const ItemFind = ({item}: {item: string}) => {
 const _SearchResult: React.FC<PropsType> = props => {
   const {navigation} = props;
   const isFilter = props.route.params?.isFilter;
+  const locationProvinces = props.route.params?.locationProvinces;
+  const is_popular = props.route.params?.is_popular;
+  const minPrice = props.route.params?.minPrice;
+  const maxPrice = props.route.params?.maxPrice;
+  const dayFind = props.route.params?.dayFind;
+
   const [textSearch, setTextSearch] = useState('');
   const [isFound, setIsFound] = useState(true);
   const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
@@ -113,9 +119,13 @@ const _SearchResult: React.FC<PropsType> = props => {
     setDataTourAndFavorite(tourAndFavorite);
   }, [dataFavoriteNoId, dataSearchName]);
 
-  // 'Phổ biến', 'Hà Nội', '200.000 - 500.000'
+  const price =
+    Number(minPrice).toLocaleString('vi-VN') +
+    ' - ' +
+    Number(maxPrice).toLocaleString('vi-VN');
+  const is_popular_text = is_popular ? 'Phổ biến' : 'Không nổi bật';
 
-  const DATAFIND: string[] = ['Phổ biến', 'Hà Nội', '200.000 - 500.000'];
+  const DATAFIND: string[] = [is_popular_text, locationProvinces + '', price];
 
   const [marginBottom, setMarginBottom] = useState(0);
 

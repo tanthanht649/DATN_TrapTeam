@@ -48,6 +48,7 @@ import {
   logoutFavorite,
   logoutEvent,
   useAppDispatch,
+  logoutProvince,
 } from '@shared-state';
 import {useSelector} from 'react-redux';
 import {store} from '@shared-state';
@@ -479,6 +480,7 @@ const _Profile: React.FC<PropsType> = props => {
               store.dispatch(logoutLocation());
               store.dispatch(logoutFavorite());
               store.dispatch(logoutEvent());
+              store.dispatch(logoutProvince());
               onGoogleSignOutPress();
               setLoggedIn(false);
             }}

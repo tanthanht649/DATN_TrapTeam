@@ -1,6 +1,6 @@
 import {ARROW_DOWN, CALENDAR_FILTER, EMAIL, LINE, fontFamily} from '@assets';
-import {Colors, DimensionsStyle} from '@resources';
-import React, {useState} from 'react';
+import {Colors} from '@resources';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -17,15 +17,26 @@ import {
   FlatList,
   TextInput,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {Button} from '../button';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
+import {useSelector} from 'react-redux';
+import {RootState, findTourByFilter, useAppDispatch} from '@shared-state';
+import moment from 'moment';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 type Props = {
   ModalStyle?: StyleProp<ViewStyle>;
   visible?: boolean;
-  onPress: () => void;
+  onPress: (
+    locationProvinces: string,
+    is_popular: boolean,
+    minPrice: string,
+    maxPrice: string,
+    dayFind: string,
+  ) => void;
   Cancel: () => void;
 };
 type ItemLocation = {
@@ -33,86 +44,22 @@ type ItemLocation = {
   title: string;
 };
 
-// type ItemLocationProps = {
-//   item: ItemLocation;
-//   onPress: () => void;
-// };
-
 type ItemCountry = {
   id: string;
   title: string;
 };
 
-// type ItemCountryProps = {
-//   item: ItemCountry;
-//   onPress: () => void;
-// };
-
 const _Modal: React.FC<Props> = props => {
-  const {onPress, Cancel, visible} = props;
-  // const [location, setLocation] = useState<string>('Hà nội');
-  // const [modalVisibleLocation, setModalVisibleLocation] = useState(false);
-  // const [selectedId, setSelectedId] = useState<string>();
-  // const ItemDay = ({ item, onPress }: ItemLocationProps) => (
-  //   <TouchableOpacity onPress={onPress} style={[_styles.item, { backgroundColor: item.id === selectedId ? Colors.GREEN : Colors.GRAY_SEARCH }]}>
-  //     <Text style={[_styles.text, { color: item.id === selectedId ? Colors.WHITE : Colors.BLUE_TEXT }]}>{item.title}</Text>
-  //   </TouchableOpacity>
-  // );
-  // const handleSelectLocation = (item: ItemLocation) => {
-  //   setLocation(item.title)
-  //   setSelectedId(item.id);
-  //   console.log(item.title)
-  //   setModalVisibleLocation(false)
-  // }
-  const [dataLocation, setDataLocation] = React.useState<ItemLocation[]>([
-    {
-      id: '1',
-      title: 'Hà Nội',
-    },
-    {
-      id: '2',
-      title: 'Hồ Chí Minh',
-    },
-    {
-      id: '3',
-      title: 'Đà nẵng',
-    },
-    {
-      id: '4',
-      title: 'Sóc trăng',
-    },
-    {
-      id: '5',
-      title: 'Đắk Lắk',
-    },
-  ]);
-  // const [country, setCountry] = useState<string>('Việt Nam');
-  // const [modalVisibleCountry, setModalVisibleCountry] = useState(false);
-  // const [selected, setSelected] = useState<string>();
-  // const ItemCountry = ({ item, onPress }: ItemCountryProps) => (
-  //   <TouchableOpacity onPress={onPress} style={[_styles.item, { backgroundColor: item.id === selected ? Colors.GREEN : Colors.GRAY_SEARCH }]}>
-  //     <Text style={[_styles.text, { color: item.id === selected ? Colors.WHITE : Colors.BLUE_TEXT }]}>{item.title}</Text>
-  //   </TouchableOpacity>
-  // );
-  // const handleSelectCountry = (item: ItemCountry) => {
-  //   setCountry(item.title)
-  //   setSelected(item.id);
-  //   console.log(item.title)
-  //   setModalVisibleCountry(false)
-  // }
+  const dispatch = useAppDispatch();
+  const dataProvince = useSelector(
+    (state: RootState) => state.province.dataProvince,
+  );
 
+  const {onPress, Cancel, visible} = props;
   const [dataCountry, setDataCountry] = React.useState<ItemCountry[]>([
     {
       id: '1',
       title: 'Việt Nam',
-    },
-    {
-      id: '2',
-      title: 'Lào',
-    },
-    {
-      id: '3',
-      title: 'Thái Lan',
     },
   ]);
   const renderDropdownIcon = () => {
@@ -132,15 +79,11 @@ const _Modal: React.FC<Props> = props => {
   const DATA: ItemData[] = [
     {
       id: '1',
-      title: 'Yêu thích',
+      title: 'Nổi bật',
     },
     {
       id: '2',
-      title: 'Phổ biến',
-    },
-    {
-      id: '3',
-      title: 'Nổi bật',
+      title: 'Không nổi bật',
     },
   ];
 
@@ -155,48 +98,50 @@ const _Modal: React.FC<Props> = props => {
     <TouchableOpacity
       onPress={onPress}
       style={[_styles.category, {backgroundColor}]}>
-      <Text style={[_styles.text, {color, fontSize: 11}]}>{item.title}</Text>
+      <Text style={[_styles.text, {color, fontSize: 13}]}>{item.title}</Text>
     </TouchableOpacity>
   );
 
-  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [is_popular, setIsPopular] = useState<string>('Nổi bật');
 
   const renderItem = ({item}: {item: ItemData}) => {
     const backgroundColor =
-      item.title === selectedCategory ? Colors.BLUE : Colors.GRAY_SEARCH;
-    const color = item.title === selectedCategory ? Colors.WHITE : Colors.BLUE;
+      item.title === is_popular ? Colors.BLUE : Colors.GRAY_SEARCH;
+    const color = item.title === is_popular ? Colors.WHITE : Colors.BLUE;
     return (
       <Item
         item={item}
-        onPress={() => setSelectedCategory(item.title)}
+        onPress={() => setIsPopular(item.title)}
         backgroundColor={backgroundColor}
         color={color}
       />
     );
   };
-
-  // console.log('====>category:' + selectedCategory)
-
-  const [price, setPrice] = useState<string>('');
+  const [locationProvinces, setLocationProvinces] = useState<string>(
+    dataProvince[0].name,
+  );
+  const [minPrice, setMinPrice] = useState<string>('');
   const handleOnchangePrice = (value: string) => {
-    setPrice(value);
-    console.log(value);
+    setMinPrice(value);
   };
-  const [hight, setHight] = useState<string>('');
+  const [maxPrice, setMaxPrice] = useState<string>('');
   const handleOnchangeHight = (value: string) => {
-    setHight(value);
-    console.log(value);
+    setMaxPrice(value);
   };
-
+  const inputDateFormat = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
+  const outputDateFormat = 'DD/MM/YYYY';
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [dayFind, setDayFind] = useState<string>(
+    moment(new Date(), inputDateFormat).format(outputDateFormat),
+  );
   const [showPicker, setShowPicker] = useState(false);
   const formattedDate = selectedDate.toLocaleDateString('en-GB');
   const handleDateChange = (event: any, date?: Date) => {
     if (date) {
       setSelectedDate(date);
+      setDayFind(moment(date, inputDateFormat).format(outputDateFormat));
     }
     setShowPicker(Platform.OS === 'ios');
-    console.log(formattedDate);
   };
 
   const showDatePicker = () => {
@@ -218,210 +163,174 @@ const _Modal: React.FC<Props> = props => {
         backgroundColor={'rgba(31, 76, 107, 0.9)'}
         translucent
       />
+
       <View style={_styles.background}>
         <View style={_styles.centeredView}>
           <View style={_styles.modalView}>
-            <ScrollView
-              style={_styles.scroll}
-              showsVerticalScrollIndicator={false}>
-              <Image style={_styles.line} source={LINE}></Image>
-              <Text style={_styles.textBold}>Bộ lọc</Text>
-              <Text style={_styles.textBold}>Địa điểm</Text>
-              <View style={_styles.row}>
-                <SelectDropdown
-                  showsVerticalScrollIndicator={false}
-                  renderDropdownIcon={renderDropdownIcon}
-                  dropdownIconPosition="left"
-                  defaultButtonText="Hà Nội"
-                  buttonStyle={_styles.container}
-                  buttonTextStyle={[
-                    _styles.text,
-                    {fontSize: 13, color: Colors.BLUE_TEXT, marginVertical: 0},
-                  ]}
-                  dropdownStyle={_styles.modalViewLocation}
-                  selectedRowStyle={[
-                    _styles.item,
-                    {backgroundColor: Colors.GREEN},
-                  ]}
-                  selectedRowTextStyle={[_styles.text, {color: Colors.WHITE}]}
-                  rowStyle={_styles.item}
-                  rowTextStyle={_styles.text}
-                  data={dataLocation}
-                  onSelect={(selectedItem, index) => {
-                    console.log(selectedItem, index);
-                  }}
-                  buttonTextAfterSelection={(selectedItem, index) => {
-                    // Hiển thị giá trị của thuộc tính 'title' sau khi một mục được chọn
-                    return selectedItem.title;
-                  }}
-                  rowTextForSelection={(item, index) => {
-                    // Hiển thị giá trị của thuộc tính 'title' cho mỗi mục trong dropdown
-                    return item.title;
-                  }}
-                />
-                <SelectDropdown
-                  showsVerticalScrollIndicator={false}
-                  renderDropdownIcon={renderDropdownIcon}
-                  dropdownIconPosition="left"
-                  defaultButtonText="Việt Nam"
-                  buttonStyle={_styles.container}
-                  buttonTextStyle={[
-                    _styles.text,
-                    {fontSize: 13, color: Colors.BLUE_TEXT, marginVertical: 0},
-                  ]}
-                  dropdownStyle={_styles.modalViewLocation}
-                  selectedRowStyle={[
-                    _styles.item,
-                    {backgroundColor: Colors.GREEN},
-                  ]}
-                  selectedRowTextStyle={[_styles.text, {color: Colors.WHITE}]}
-                  rowStyle={_styles.item}
-                  rowTextStyle={_styles.text}
-                  data={dataCountry}
-                  onSelect={(selectedItem, index) => {
-                    console.log(selectedItem, index);
-                  }}
-                  buttonTextAfterSelection={(selectedItem, index) => {
-                    // Hiển thị giá trị của thuộc tính 'title' sau khi một mục được chọn
-                    return selectedItem.title;
-                  }}
-                  rowTextForSelection={(item, index) => {
-                    // Hiển thị giá trị của thuộc tính 'title' cho mỗi mục trong dropdown
-                    return item.title;
-                  }}
-                />
-                {/* <View
-                  style={_styles.container}>
-                  <Pressable onPress={() => setModalVisibleLocation(true)}>
-                    <Image
-                      source={ARROW_DOWN}
-                      style={_styles.iconLeft}
-                    />
-                  </Pressable>
-                  <Text >{location}</Text>
-                  <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisibleLocation}
-                    onRequestClose={() => {
-                      setModalVisibleLocation(!modalVisibleLocation);
-                    }}>
-                    <View style={_styles.centeredViewLocation}>
-                      <View style={_styles.modalViewLocation}>
-                        <ScrollView
-                          showsVerticalScrollIndicator={false}>
-                          {dataLocation.map((item: ItemLocation) => (
-                            <ItemDay item={item} key={item.id} onPress={() => handleSelectLocation(item)} />
-                          ))}
-                        </ScrollView>
-                      </View>
-                    </View>
-                  </Modal>
-                </View>
-                <View
-                  style={_styles.container}>
-                  <Pressable onPress={() => setModalVisibleCountry(true)}>
-                    <Image
-                      source={ARROW_DOWN}
-                      style={_styles.iconLeft}
-                    />
-                  </Pressable>
-                  <Text >{country}</Text>
-                  <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisibleCountry}
-                    onRequestClose={() => {
-                      setModalVisibleLocation(!modalVisibleCountry);
-                    }}>
-                    <View style={_styles.centeredViewLocation}>
-                      <View style={_styles.modalViewLocation}>
-                        <ScrollView
-                          showsVerticalScrollIndicator={false}>
-                          {dataCountry.map((item: ItemCountry) => (
-                            <ItemCountry item={item} key={item.id} onPress={() => handleSelectCountry(item)} />
-                          ))}
-                        </ScrollView>
-                      </View>
-                    </View>
-                  </Modal>
-                </View> */}
-              </View>
-              <Text style={_styles.textBold}>Loại</Text>
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={DATA}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-                extraData={selectedCategory}
-              />
-              <Text style={_styles.textBold}>Giá thấp nhất</Text>
-              <View style={_styles.input}>
-                <TextInput
-                  value={price}
-                  onChangeText={handleOnchangePrice}
-                  style={[
-                    _styles.text,
-                    {
-                      marginVertical: 5,
-                      fontSize: 15,
-                      textAlign: 'left',
-                      width: '85%',
-                    },
-                  ]}
-                  placeholder="Giá thấp nhất"></TextInput>
-                <Pressable onPress={() => {}}>
-                  <Text style={[_styles.text, {fontSize: 13}]}>VND</Text>
-                </Pressable>
-              </View>
-              <Text style={_styles.textBold}>Giá cao nhất</Text>
-              <View style={_styles.input}>
-                <TextInput
-                  value={hight}
-                  onChangeText={handleOnchangeHight}
-                  style={[
-                    _styles.text,
-                    {
-                      marginVertical: 5,
-                      fontSize: 15,
-                      textAlign: 'left',
-                      width: '85%',
-                    },
-                  ]}
-                  placeholder="Giá cao nhất"></TextInput>
-                <Pressable onPress={() => {}}>
-                  <Text style={[_styles.text, {fontSize: 13}]}>VND</Text>
-                </Pressable>
-              </View>
-              <Text style={_styles.textBold}>Ngày khởi hành</Text>
-
-              <View style={_styles.input}>
-                <Text
-                  style={[
-                    _styles.text,
-                    {
-                      marginVertical: 5,
-                      fontSize: 15,
-                      textAlign: 'left',
-                      width: '85%',
-                    },
-                  ]}>
-                  {formattedDate}
-                </Text>
-                {showPicker && (
-                  <DateTimePicker
-                    value={selectedDate}
-                    mode="date"
-                    display="default"
-                    onChange={handleDateChange}
+            <KeyboardAvoidingView
+              enabled
+              style={{flex: 1}}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+              <ScrollView
+                style={_styles.scroll}
+                showsVerticalScrollIndicator={false}>
+                <Image style={_styles.line} source={LINE}></Image>
+                <Text style={_styles.textBold}>Bộ lọc</Text>
+                <Text style={_styles.textBold}>Địa điểm</Text>
+                <View style={_styles.row}>
+                  <SelectDropdown
+                    showsVerticalScrollIndicator={false}
+                    renderDropdownIcon={renderDropdownIcon}
+                    dropdownIconPosition="left"
+                    defaultButtonText={dataProvince[0].name}
+                    buttonStyle={_styles.container}
+                    buttonTextStyle={[
+                      _styles.text,
+                      {
+                        fontSize: 13,
+                        color: Colors.BLUE_TEXT,
+                        marginVertical: 0,
+                      },
+                    ]}
+                    dropdownStyle={_styles.modalViewLocation}
+                    selectedRowStyle={[
+                      _styles.item,
+                      {backgroundColor: Colors.GREEN},
+                    ]}
+                    selectedRowTextStyle={[_styles.text, {color: Colors.WHITE}]}
+                    rowStyle={_styles.item}
+                    rowTextStyle={_styles.text}
+                    data={dataProvince}
+                    onSelect={(selectedItem, index) => {
+                      setLocationProvinces(selectedItem.name);
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                      // Hiển thị giá trị của thuộc tính 'title' sau khi một mục được chọn
+                      return selectedItem.name;
+                    }}
+                    rowTextForSelection={(item, index) => {
+                      // Hiển thị giá trị của thuộc tính 'title' cho mỗi mục trong dropdown
+                      return item.name;
+                    }}
                   />
-                )}
-                <Pressable onPress={showDatePicker}>
-                  <Image source={CALENDAR_FILTER} style={_styles.iconLeft} />
-                </Pressable>
-              </View>
-            </ScrollView>
+                  <SelectDropdown
+                    showsVerticalScrollIndicator={false}
+                    renderDropdownIcon={renderDropdownIcon}
+                    dropdownIconPosition="left"
+                    defaultButtonText="Việt Nam"
+                    buttonStyle={_styles.container}
+                    buttonTextStyle={[
+                      _styles.text,
+                      {
+                        fontSize: 13,
+                        color: Colors.BLUE_TEXT,
+                        marginVertical: 0,
+                      },
+                    ]}
+                    dropdownStyle={_styles.modalViewLocation}
+                    selectedRowStyle={[
+                      _styles.item,
+                      {backgroundColor: Colors.GREEN},
+                    ]}
+                    selectedRowTextStyle={[_styles.text, {color: Colors.WHITE}]}
+                    rowStyle={_styles.item}
+                    rowTextStyle={_styles.text}
+                    data={dataCountry}
+                    onSelect={(selectedItem, index) => {
+                      console.log(selectedItem, index);
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                      // Hiển thị giá trị của thuộc tính 'title' sau khi một mục được chọn
+                      return selectedItem.title;
+                    }}
+                    rowTextForSelection={(item, index) => {
+                      // Hiển thị giá trị của thuộc tính 'title' cho mỗi mục trong dropdown
+                      return item.title;
+                    }}
+                  />
+                </View>
+                <Text style={_styles.textBold}>Loại</Text>
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                  data={DATA}
+                  renderItem={renderItem}
+                  keyExtractor={item => item.id}
+                  extraData={setIsPopular}
+                />
+                <Text style={_styles.textBold}>Giá thấp nhất</Text>
+                <View style={_styles.input}>
+                  <TextInput
+                    value={minPrice}
+                    keyboardType="numeric"
+                    onChangeText={handleOnchangePrice}
+                    style={[
+                      _styles.text,
+                      {
+                        marginVertical: 5,
+                        fontSize: 15,
+                        textAlign: 'left',
+                        width: '85%',
+                      },
+                    ]}
+                    placeholder="Giá thấp nhất"
+                  />
+                  <Pressable onPress={() => {}}>
+                    <Text style={[_styles.text, {fontSize: 13}]}>VND</Text>
+                  </Pressable>
+                </View>
+
+                <Text style={_styles.textBold}>Giá cao nhất</Text>
+
+                <View style={_styles.input}>
+                  <TextInput
+                    value={maxPrice}
+                    keyboardType="numeric"
+                    onChangeText={handleOnchangeHight}
+                    style={[
+                      _styles.text,
+                      {
+                        marginVertical: 5,
+                        fontSize: 15,
+                        textAlign: 'left',
+                        width: '85%',
+                      },
+                    ]}
+                    placeholder="Giá cao nhất"></TextInput>
+                  <Pressable onPress={() => {}}>
+                    <Text style={[_styles.text, {fontSize: 13}]}>VND</Text>
+                  </Pressable>
+                </View>
+
+                <Text style={_styles.textBold}>Ngày khởi hành</Text>
+
+                <View style={_styles.input}>
+                  <Text
+                    style={[
+                      _styles.text,
+                      {
+                        marginVertical: 5,
+                        fontSize: 15,
+                        textAlign: 'left',
+                        width: '85%',
+                      },
+                    ]}>
+                    {formattedDate}
+                  </Text>
+                  {showPicker && (
+                    <DateTimePicker
+                      value={selectedDate}
+                      mode="date"
+                      display="default"
+                      onChange={handleDateChange}
+                    />
+                  )}
+                  <Pressable onPress={showDatePicker}>
+                    <Image source={CALENDAR_FILTER} style={_styles.iconLeft} />
+                  </Pressable>
+                </View>
+              </ScrollView>
+            </KeyboardAvoidingView>
           </View>
         </View>
         <View style={_styles.rowbutton}>
@@ -429,7 +338,30 @@ const _Modal: React.FC<Props> = props => {
             title="Tìm kiếm"
             imageIconLeft={EMAIL}
             imageIconRight={EMAIL}
-            onPress={onPress}
+            onPress={() => {
+              const data = {
+                locationProvinces: locationProvinces,
+                is_popular: is_popular === 'Nổi bật' ? true : false,
+                minPrice: minPrice,
+                maxPrice: maxPrice,
+                dayFind: dayFind,
+              };
+              dispatch(findTourByFilter(data));
+              setDayFind(
+                moment(new Date(), inputDateFormat).format(outputDateFormat),
+              );
+              setLocationProvinces(dataProvince[0].name);
+              setMinPrice('');
+              setMaxPrice('');
+              setIsPopular('Nổi bật');
+              onPress(
+                locationProvinces,
+                is_popular === 'Nổi bật' ? true : false,
+                minPrice,
+                maxPrice,
+                dayFind,
+              );
+            }}
             viewStyle={{
               width: '40%',
               height: 50,
@@ -564,7 +496,7 @@ const _styles = StyleSheet.create({
   category: {
     marginTop: 15,
     height: 47,
-    width: Dimensions.get('window').width * 0.23,
+    width: Dimensions.get('window').width * 0.3,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

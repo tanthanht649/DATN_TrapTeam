@@ -197,6 +197,42 @@ export const findTourByScreenSearch = createAsyncThunk(
   },
 );
 
+interface DataFindFilter {
+  locationProvinces: string;
+  is_popular: boolean;
+  minPrice: string;
+  maxPrice: string;
+  dayFind: string;
+}
+
+// tìm kiếm theo filter
+export const findTourByFilter = createAsyncThunk(
+  'tour/findTourByFilter',
+  async (data: DataFindFilter) => {
+    const fetchData = async () => {
+      let url = `${CONSTANTS.IP}api/tour/getTourByFilter?locationProvinces=${data.locationProvinces}&is_popular=${data.is_popular}&minPrice=${data.minPrice}&maxPrice=${data.maxPrice}&dayFind=${data.dayFind}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const res = await response.json();
+      return res;
+    };
+    const res = await fetchData();
+
+    if (res.result) {
+      return res.tours;
+    } else {
+      return [];
+    }
+  },
+);
+
 const tourSlice = createSlice({
   name: 'tour',
   initialState,
@@ -265,6 +301,16 @@ const tourSlice = createSlice({
       state.dataSearch = action.payload;
     });
     builder.addCase(findTourByScreenSearch.rejected, state => {
+      state.loadingTour = false;
+    });
+    builder.addCase(findTourByFilter.pending, state => {
+      state.loadingTour = true;
+    });
+    builder.addCase(findTourByFilter.fulfilled, (state, action) => {
+      state.loadingTour = false;
+      state.dataSearchName = action.payload;
+    });
+    builder.addCase(findTourByFilter.rejected, state => {
       state.loadingTour = false;
     });
   },
