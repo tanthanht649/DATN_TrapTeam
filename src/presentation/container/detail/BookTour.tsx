@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BackgroundApp, Button, Header} from '@components';
 import {
@@ -46,8 +46,8 @@ type PropsType = NativeStackScreenProps<HomeStackParamList, 'BookTour'> &
 const _BookTour: React.FC<PropsType> = props => {
   const {navigation} = props;
   const dispatch = useAppDispatch();
-  const [adult, setAdult] = React.useState<number>(1);
-  const [child, setChild] = React.useState<number>(1);
+  const [adult, setAdult] = React.useState<number>(0);
+  const [child, setChild] = React.useState<number>(0);
   const eventRight = () => {};
   const eventLeft = () => {};
   const eventBack = () => {
@@ -70,7 +70,8 @@ const _BookTour: React.FC<PropsType> = props => {
   const [dataLocationDefault, setDataLocationDefault] = React.useState<
     LocationInBookTour[]
   >([]);
-  const dataLocationBookTour: LocationInBookTour[] = [];
+
+  const array = useRef<LocationInBookTour[]>([]);
 
   useEffect(() => {
     // tạo mảng mới từ dataDetail chỉ có 2 thuộc tính là _id và name
@@ -81,6 +82,15 @@ const _BookTour: React.FC<PropsType> = props => {
       };
     });
     setDataLocationDefault(dataLocation);
+
+    const dataLocation2 = dataTourDetail?.locations.map(item => {
+      return {
+        _id: item._id,
+        name: item.name,
+      };
+    });
+
+    array.current = dataLocation2;
   }, []);
 
   const [dataLocationOption, setDataLocationOption] = React.useState<
@@ -97,12 +107,6 @@ const _BookTour: React.FC<PropsType> = props => {
     });
     setDataLocationOption(dataLocation);
   }, []);
-
-  useEffect(() => {
-    dataLocationDefault.map(item => {
-      dataLocationBookTour.push(item);
-    });
-  }, [dataLocationDefault]);
 
   const renderDropdownIcon = () => {
     return (
@@ -149,7 +153,7 @@ const _BookTour: React.FC<PropsType> = props => {
         rowTextStyle={_styles.textSelect}
         data={dataLocationOption}
         onSelect={selectedItem => {
-          dataLocationBookTour[indexRender] = selectedItem;
+          array.current[indexRender] = selectedItem;
         }}
         buttonTextAfterSelection={(selectedItem, index) => {
           // Hiển thị giá trị của thuộc tính 'title' sau khi một mục được chọn
@@ -219,11 +223,34 @@ const _BookTour: React.FC<PropsType> = props => {
     setPay('ViettelPay');
   };
 
-  const compareArrays = () => {
+  // const compareArrays = (
+  //   dataLocationDefault: LocationInBookTour[],
+  //   dataLocationBookTour: LocationInBookTour[],
+  // ) => {
+  //   let differences = 0;
+
+  //   const aIds = dataLocationDefault.map(item => item._id);
+  //   const bIds = dataLocationBookTour.map(item => item._id);
+
+  //   for (let i = 0; i < aIds.length; i++) {
+  //     if (!bIds.includes(aIds[i])) {
+  //       differences++;
+  //     }
+  //   }
+
+  //   return differences;
+  // };
+
+  const compareArrays = (
+    dataLocationDefault: LocationInBookTour[],
+    dataLocationBookTourRef: React.MutableRefObject<LocationInBookTour[]>,
+  ) => {
+    console.log('default', dataLocationDefault);
+    console.log('custom', dataLocationBookTourRef.current);
     let differences = 0;
 
     const aIds = dataLocationDefault.map(item => item._id);
-    const bIds = dataLocationBookTour.map(item => item._id);
+    const bIds = dataLocationBookTourRef.current.map(item => item._id);
 
     for (let i = 0; i < aIds.length; i++) {
       if (!bIds.includes(aIds[i])) {
@@ -234,7 +261,7 @@ const _BookTour: React.FC<PropsType> = props => {
     return differences;
   };
 
-  const hasDuplicates = () => {
+  const hasDuplicates = (dataLocationBookTour: LocationInBookTour[]) => {
     const uniqueValues = new Set(
       dataLocationBookTour.map(item => JSON.stringify(item)),
     );
@@ -248,6 +275,13 @@ const _BookTour: React.FC<PropsType> = props => {
   useEffect(() => {
     dispatch(getQuantityBookingTour(dataTourDetail._id));
   }, [dataTourDetail]);
+
+  useEffect(() => {
+    dispatch(getQuantityBookingTour(dataTourDetail._id));
+  }, [quantity]);
+
+  const [quantityUI, setQuantityUI] = useState<number>(quantity);
+  const [priceUI, setPriceUI] = useState<number>(0);
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -366,13 +400,12 @@ const _BookTour: React.FC<PropsType> = props => {
               </Text>
 
               <Text
-                style={[
-                  _styles.text,
-                  {
-                    marginVertical: 10,
-                  },
-                ]}>
-                Yêu cầu
+                style={{
+                  fontFamily: fontFamily.Medium,
+                  fontSize: 14,
+                  color: Colors.BLUE_TEXT,
+                }}>
+                Còn lại: {50 - quantityUI} chỗ
               </Text>
             </View>
 
@@ -388,7 +421,11 @@ const _BookTour: React.FC<PropsType> = props => {
                 <TouchableOpacity
                   style={_styles.buttonNumberic}
                   onPress={() => {
-                    adult > 1 ? setAdult(adult - 1) : setAdult(1);
+                    adult > 0 ? setAdult(adult - 1) : setAdult(0);
+                    adult > 0 ? setQuantityUI(quantityUI - 1) : null;
+                    adult > 0
+                      ? setPriceUI(priceUI - dataTourDetail.price)
+                      : null;
                   }}>
                   <Text
                     style={[
@@ -413,6 +450,8 @@ const _BookTour: React.FC<PropsType> = props => {
                   style={_styles.buttonNumberic}
                   onPress={() => {
                     setAdult(adult + 1);
+                    setQuantityUI(quantityUI + 1);
+                    setPriceUI(priceUI + dataTourDetail.price);
                   }}>
                   <Text style={[_styles.textNumberic]}>+</Text>
                 </TouchableOpacity>
@@ -430,7 +469,11 @@ const _BookTour: React.FC<PropsType> = props => {
                 <TouchableOpacity
                   style={_styles.buttonNumberic}
                   onPress={() => {
-                    child > 1 ? setChild(child - 1) : setChild(1);
+                    child > 0 ? setChild(child - 1) : setChild(0);
+                    child > 0 ? setQuantityUI(quantityUI - 1) : null;
+                    child > 0
+                      ? setPriceUI(priceUI - dataTourDetail.price * 0.6)
+                      : null;
                   }}>
                   <Text
                     style={[
@@ -455,6 +498,8 @@ const _BookTour: React.FC<PropsType> = props => {
                   style={_styles.buttonNumberic}
                   onPress={() => {
                     setChild(child + 1);
+                    setQuantityUI(quantityUI + 1);
+                    setPriceUI(priceUI + dataTourDetail.price * 0.6);
                   }}>
                   <Text style={[_styles.textNumberic]}>+</Text>
                 </TouchableOpacity>
@@ -471,7 +516,7 @@ const _BookTour: React.FC<PropsType> = props => {
                     color: Colors.GREY_BAREL,
                   },
                 ]}>
-                30.000.000
+                {priceUI.toLocaleString('vi-VN')}
               </Text>
               <Text
                 style={[
@@ -616,15 +661,21 @@ const _BookTour: React.FC<PropsType> = props => {
               imageIconRight={ORDER_BT}
               onPress={() => {
                 // navigation.navigate('Pay');
-                const resulthasDuplicates = hasDuplicates();
+                const resulthasDuplicates = hasDuplicates(array.current);
                 if (resulthasDuplicates) {
                   console.log('Có trùng');
+                  console.log(array.current);
                 } else {
-                  const resultcompareArrays = compareArrays();
+                  const resultcompareArrays = compareArrays(
+                    dataLocationDefault,
+                    array,
+                  );
                   if (resultcompareArrays == 0) {
                     console.log('Không có thay đổi');
+                    console.log(array.current);
                   } else {
                     console.log(`Có ${resultcompareArrays} thay đổi`);
+                    console.log(array.current);
                   }
                 }
               }}
