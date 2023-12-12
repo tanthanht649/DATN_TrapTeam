@@ -6,15 +6,18 @@ export interface LocationState {
   loadingLocation: boolean;
   dataLocations: Location[];
   locationById: Location;
+  locationByProvince: Location[];
 }
 
 export const dataLocations: Location[] = [];
 export const locationById: Location = {} as Location;
+export const locationByProvince: Location[] = [];
 
 const initialState: LocationState = {
   loadingLocation: false,
   dataLocations: dataLocations,
   locationById: locationById,
+  locationByProvince: locationByProvince,
 };
 
 // lấy danh sách địa điểm phổ biến
@@ -72,6 +75,34 @@ export const getLocationsById = createAsyncThunk(
   },
 );
 
+// lấy danh sách địa điểm của tỉnh
+export const getLocationsByProvince = createAsyncThunk(
+  'location/getLocationsByProvince',
+  async (province_id: string | undefined) => {
+    const fetchData = async () => {
+      let url = `${CONSTANTS.IP}api/location/getLocationByProvinceId?province_id=${province_id}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const res = await response.json();
+      return res;
+    };
+    const res = await fetchData();
+
+    if (res.result) {
+      return res.locations;
+    } else {
+      return [];
+    }
+  },
+);
+
 const locationSlice = createSlice({
   name: 'location',
   initialState,
@@ -100,6 +131,16 @@ const locationSlice = createSlice({
       state.locationById = action.payload;
     });
     builder.addCase(getLocationsById.rejected, state => {
+      state.loadingLocation = false;
+    });
+    builder.addCase(getLocationsByProvince.pending, state => {
+      state.loadingLocation = true;
+    });
+    builder.addCase(getLocationsByProvince.fulfilled, (state, action) => {
+      state.loadingLocation = false;
+      state.locationByProvince = action.payload;
+    });
+    builder.addCase(getLocationsByProvince.rejected, state => {
       state.loadingLocation = false;
     });
   },

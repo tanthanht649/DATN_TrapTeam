@@ -8,5 +8,5 @@ export interface Location {
   name: string;
   image: string;
   description: string;
-  is_popular: Boolean;
+  is_popular: boolean;
 }

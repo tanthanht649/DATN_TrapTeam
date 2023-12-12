@@ -7,7 +7,8 @@ import {
   locationReducer,
   tourReducer,
   reviewReducer,
-  provinceReducer
+  provinceReducer,
+  bookingTourReducer
 } from './reducers';
 
 export const store = configureStore({
@@ -19,6 +20,7 @@ export const store = configureStore({
     tour: tourReducer,
     review: reviewReducer,
     province: provinceReducer,
+    bookingTour: bookingTourReducer,
   },
 });
 

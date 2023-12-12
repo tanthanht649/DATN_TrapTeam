@@ -30,6 +30,7 @@ import {HomeStackParamList, SearchStackParamList} from '@navigation';
 import {
   RootState,
   getAllReviews,
+  getLocationsByProvince,
   getTourById,
   useAppDispatch,
 } from '@shared-state';
@@ -373,6 +374,14 @@ const _DetailTour: React.FC<PropsType> = props => {
   const renderItemReview = ({item, index}: any) => {
     return <ItemReview item={item} index={index} key={item._id} />;
   };
+
+  useEffect(() => {
+    if (dataTour) {
+      if (dataTour.province_id) {
+        dispatch(getLocationsByProvince(dataTour.province_id._id));
+      }
+    }
+  }, [dataTour]);
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>

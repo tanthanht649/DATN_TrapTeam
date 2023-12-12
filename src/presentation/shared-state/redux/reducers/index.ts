@@ -5,3 +5,4 @@ export * from './locationReducer';
 export * from './tourReducer';
 export * from './reviewReducer';
 export * from './provinceReducer';
+export * from './bookingTourReducer';
