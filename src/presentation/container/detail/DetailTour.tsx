@@ -31,6 +31,7 @@ import {
   RootState,
   getAllReviews,
   getLocationsByProvince,
+  getQuantityBookingTour,
   getTourById,
   useAppDispatch,
 } from '@shared-state';
@@ -380,6 +381,12 @@ const _DetailTour: React.FC<PropsType> = props => {
       if (dataTour.province_id) {
         dispatch(getLocationsByProvince(dataTour.province_id._id));
       }
+    }
+  }, [dataTour]);
+
+  useEffect(() => {
+    if (dataTour && dataTour._id) {
+      dispatch(getQuantityBookingTour(dataTour._id));
     }
   }, [dataTour]);
 

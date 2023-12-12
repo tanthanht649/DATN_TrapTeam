@@ -37,6 +37,52 @@ export const getQuantityBookingTour = createAsyncThunk(
   },
 );
 
+interface DataBookingTour {
+  user_id: string | undefined;
+  tour_id: string | undefined;
+  discount: number | undefined;
+  adult_count: number | undefined;
+  child_count: number | undefined;
+  price: number | undefined;
+  note: string | undefined;
+  role: boolean | undefined;
+  location_custom:
+    | [
+        {
+          _id: string;
+          name: string;
+        },
+      ]
+    | undefined;
+}
+
+export const addBookingTour = createAsyncThunk(
+  'bookingTour/addBookingTour',
+  async (data: DataBookingTour) => {
+    const fetchData = async () => {
+      let url = `${CONSTANTS.IP}api/bookingtour/addNewBookingTour`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const res = await response.json();
+      return res;
+    };
+    const res = await fetchData();
+
+    if (res.result) {
+      console.log(res);
+      return res.result;
+    }
+  },
+);
+
 const bookingTourSlice = createSlice({
   name: 'bookingTour',
   initialState,
@@ -55,6 +101,15 @@ const bookingTourSlice = createSlice({
       state.quantity = action.payload;
     });
     builder.addCase(getQuantityBookingTour.rejected, state => {
+      state.loadingBookingTour = false;
+    });
+    builder.addCase(addBookingTour.pending, state => {
+      state.loadingBookingTour = true;
+    });
+    builder.addCase(addBookingTour.fulfilled, (state, action) => {
+      state.loadingBookingTour = false;
+    });
+    builder.addCase(addBookingTour.rejected, state => {
       state.loadingBookingTour = false;
     });
   },

@@ -36,7 +36,20 @@ type DetailTourProps = {
   isFavorite: boolean;
 };
 type BookTourProps = {};
-type PayProps = {};
+
+type PayProps = {
+  user_id: string;
+  tour_id: string;
+  discount: number;
+  adult_account: number;
+  child_account: number;
+  price: number;
+  note: string;
+  role: boolean;
+  location_custom: [{_id: string; name: string}];
+};
+
+
 
 export type HomeStackParamList = {
   HomeFull: HomeFullProps | undefined;

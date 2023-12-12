@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -53,6 +54,7 @@ const _BookTour: React.FC<PropsType> = props => {
   const eventBack = () => {
     navigation.goBack();
   };
+  const [noteUI, setNoteUI] = useState<string>('');
 
   const locationByProvince = useSelector(
     (state: RootState) => state.location.locationByProvince,
@@ -223,30 +225,10 @@ const _BookTour: React.FC<PropsType> = props => {
     setPay('ViettelPay');
   };
 
-  // const compareArrays = (
-  //   dataLocationDefault: LocationInBookTour[],
-  //   dataLocationBookTour: LocationInBookTour[],
-  // ) => {
-  //   let differences = 0;
-
-  //   const aIds = dataLocationDefault.map(item => item._id);
-  //   const bIds = dataLocationBookTour.map(item => item._id);
-
-  //   for (let i = 0; i < aIds.length; i++) {
-  //     if (!bIds.includes(aIds[i])) {
-  //       differences++;
-  //     }
-  //   }
-
-  //   return differences;
-  // };
-
   const compareArrays = (
     dataLocationDefault: LocationInBookTour[],
     dataLocationBookTourRef: React.MutableRefObject<LocationInBookTour[]>,
   ) => {
-    console.log('default', dataLocationDefault);
-    console.log('custom', dataLocationBookTourRef.current);
     let differences = 0;
 
     const aIds = dataLocationDefault.map(item => item._id);
@@ -272,17 +254,18 @@ const _BookTour: React.FC<PropsType> = props => {
     (state: RootState) => state.bookingTour.quantity,
   );
 
-  useEffect(() => {
-    dispatch(getQuantityBookingTour(dataTourDetail._id));
-  }, [dataTourDetail]);
-
-  useEffect(() => {
-    dispatch(getQuantityBookingTour(dataTourDetail._id));
-  }, [quantity]);
-
   const [quantityUI, setQuantityUI] = useState<number>(quantity);
   const [priceUI, setPriceUI] = useState<number>(0);
 
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
+
+  const discountTour = (adult: number) => {
+    if (adult > 20) {
+      return dataTourDetail.price * (adult - 20) * 0.1;
+    } else {
+      return 0;
+    }
+  };
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView style={_styles.container}>
@@ -558,6 +541,8 @@ const _BookTour: React.FC<PropsType> = props => {
                 lineHeight: 18,
               }}
               multiline={true}
+              value={noteUI}
+              onChangeText={text => setNoteUI(text)}
             />
             <Text
               style={{
@@ -660,11 +645,68 @@ const _BookTour: React.FC<PropsType> = props => {
               imageIconLeft={FULL_NAME}
               imageIconRight={ORDER_BT}
               onPress={() => {
-                // navigation.navigate('Pay');
+                if (adult == 0) {
+                  if (child > 0) {
+                    Alert.alert(
+                      'Thông báo',
+                      'Bạn phải chọn số người lớn',
+                      [
+                        {
+                          text: 'OK',
+                          onPress: () => console.log('OK Pressed'),
+                          style: 'cancel',
+                        },
+                      ],
+                      {cancelable: false},
+                    );
+                  }
+                }
+
+                if (adult == 0 && child == 0) {
+                  Alert.alert(
+                    'Thông báo',
+                    'Bạn phải chọn số lượng đặt',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Pressed'),
+                        style: 'cancel',
+                      },
+                    ],
+                    {cancelable: false},
+                  );
+                }
+
+                if (adult + child > 50 - quantity) {
+                  Alert.alert(
+                    'Thông báo',
+                    'Số lượng đặt không được vượt quá số lượng còn lại',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Pressed'),
+                        style: 'cancel',
+                      },
+                    ],
+                    {cancelable: false},
+                  );
+                }
+
                 const resulthasDuplicates = hasDuplicates(array.current);
                 if (resulthasDuplicates) {
                   console.log('Có trùng');
-                  console.log(array.current);
+                  Alert.alert(
+                    'Thông báo',
+                    'Bạn không được chọn trùng địa điểm',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Pressed'),
+                        style: 'cancel',
+                      },
+                    ],
+                    {cancelable: false},
+                  );
                 } else {
                   const resultcompareArrays = compareArrays(
                     dataLocationDefault,
@@ -672,10 +714,49 @@ const _BookTour: React.FC<PropsType> = props => {
                   );
                   if (resultcompareArrays == 0) {
                     console.log('Không có thay đổi');
-                    console.log(array.current);
+                    const user_id = dataUser?._id;
+                    const tour_id = dataTourDetail?._id;
+                    const discount: number = discountTour(adult);
+                    const adult_account = adult;
+                    const child_account = child;
+                    const price = priceUI - discount;
+                    const note = noteUI;
+                    const role = false;
+                    const location_custom: LocationInBookTour[] = array.current;
+                    navigation.navigate('Pay', {
+                      user_id: user_id,
+                      tour_id: tour_id,
+                      discount: discount,
+                      adult_account: adult_account,
+                      child_account: child_account,
+                      price: price,
+                      note: note,
+                      role: role,
+                      location_custom: location_custom,
+                    });
                   } else {
                     console.log(`Có ${resultcompareArrays} thay đổi`);
-                    console.log(array.current);
+                    const user_id = dataUser?._id;
+                    const tour_id = dataTourDetail?._id;
+                    const discount: number = discountTour(adult);
+                    const adult_account = adult;
+                    const child_account = child;
+                    const price =
+                      priceUI - discount + resultcompareArrays * 300000;
+                    const note = noteUI;
+                    const role = true;
+                    const location_custom: LocationInBookTour[] = array.current;
+                    navigation.navigate('Pay', {
+                      user_id: user_id,
+                      tour_id: tour_id,
+                      discount: discount,
+                      adult_account: adult_account,
+                      child_account: child_account,
+                      price: price,
+                      note: note,
+                      role: role,
+                      location_custom: location_custom,
+                    });
                   }
                 }
               }}
