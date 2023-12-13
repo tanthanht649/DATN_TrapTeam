@@ -1,14 +1,19 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {CONSTANTS} from '@core';
+import {BookingTour} from '@domain';
 
 export interface BookingTourState {
   loadingBookingTour: boolean;
   quantity: number;
+  listBookingTour: BookingTour[];
 }
+
+export const listBookingTour: BookingTour[] = [];
 
 const initialState: BookingTourState = {
   loadingBookingTour: false,
   quantity: 0,
+  listBookingTour: listBookingTour,
 };
 
 // lấy số lượng khách đã có tour đã đặt theo tour_id
@@ -83,6 +88,32 @@ export const addBookingTour = createAsyncThunk(
   },
 );
 
+// lấy booking tour theo user_id
+export const getBookingTourByUserId = createAsyncThunk(
+  'bookingTour/getBookingTourByUserId',
+  async (user_id: string | undefined) => {
+    const fetchData = async () => {
+      let url = `${CONSTANTS.IP}api/bookingtour/getAllBookingToursByUser?user_id=${user_id}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const res = await response.json();
+      return res;
+    };
+    const res = await fetchData();
+
+    if (res.result) {
+      return res.bookingTours;
+    }
+  },
+);
+
 const bookingTourSlice = createSlice({
   name: 'bookingTour',
   initialState,
@@ -110,6 +141,16 @@ const bookingTourSlice = createSlice({
       state.loadingBookingTour = false;
     });
     builder.addCase(addBookingTour.rejected, state => {
+      state.loadingBookingTour = false;
+    });
+    builder.addCase(getBookingTourByUserId.pending, state => {
+      state.loadingBookingTour = true;
+    });
+    builder.addCase(getBookingTourByUserId.fulfilled, (state, action) => {
+      state.loadingBookingTour = false;
+      state.listBookingTour = action.payload;
+    });
+    builder.addCase(getBookingTourByUserId.rejected, state => {
       state.loadingBookingTour = false;
     });
   },

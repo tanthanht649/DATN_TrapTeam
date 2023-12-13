@@ -20,7 +20,9 @@ type CreateBlogProps = {};
 type BlogsProps = {};
 type VersionProps = {};
 type EditProfileProps = {};
-type AddReviewProps = {};
+type AddReviewProps = {
+  tour_id: string;
+};
 
 export type ProfileStackParamList = {
   Profile: ProfileProps | undefined;

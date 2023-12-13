@@ -37,6 +37,7 @@ import {
   useAppDispatch,
   getToursOutstanding,
   findTourByNames,
+  getBookingTourByUserId,
 } from '@shared-state';
 import {Event, Tour, Location, TourAndFavorite} from '@domain';
 
@@ -506,8 +507,15 @@ const _HomeFull: React.FC<PropsType> = props => {
   const [limitCheckFavorite, setLimitCheckFavorite] = useState(false);
 
   useEffect(() => {
-    if (dataUser && dataUser._id) dispatch(getDataFavorite(dataUser?._id));
+    if (dataUser && dataUser._id) {
+      dispatch(getDataFavorite(dataUser?._id));
+      dispatch(getBookingTourByUserId(dataUser?._id));
+    }
   }, [limitCheckFavorite, dataUser]);
+
+  const listBookingTour = useSelector(
+    (state: RootState) => state.bookingTour.listBookingTour,
+  );
 
   const dataFavoriteNoId = useSelector(
     (state: RootState) => state.favorite.dataFavoriteNoId,

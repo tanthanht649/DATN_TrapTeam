@@ -723,7 +723,7 @@ const _BookTour: React.FC<PropsType> = props => {
                     const note = noteUI;
                     const role = false;
                     const location_custom: LocationInBookTour[] = array.current;
-                    navigation.navigate('Pay', {
+                    navigation.replace('Pay', {
                       user_id: user_id,
                       tour_id: tour_id,
                       discount: discount,
@@ -746,7 +746,7 @@ const _BookTour: React.FC<PropsType> = props => {
                     const note = noteUI;
                     const role = true;
                     const location_custom: LocationInBookTour[] = array.current;
-                    navigation.navigate('Pay', {
+                    navigation.replace('Pay', {
                       user_id: user_id,
                       tour_id: tour_id,
                       discount: discount,

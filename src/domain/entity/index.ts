@@ -7,3 +7,4 @@ export * from './TourAndFavorite';
 export * from './TourAndLocation';
 export * from './Review';
 export * from './Province';
+export * from './BookingTour';

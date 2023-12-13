@@ -35,6 +35,7 @@ import {
   AppContext,
   RootState,
   addBookingTour,
+  getBookingTourByUserId,
   useAppDispatch,
 } from '@shared-state';
 import {useSelector} from 'react-redux';
@@ -72,7 +73,7 @@ const _Pay: React.FC<PropsType> = props => {
   const [modalVisiblePay, setModalVisiblePay] = useState<boolean>(false);
   const handleModal = () => {
     setModalVisiblePay(false);
-    navigation.navigate('HomeFull');
+    navigation.replace('HistoryDetail');
   };
 
   const [imagePay, setImagePay] = useState<ImageSourcePropType>(MOMO);
@@ -355,7 +356,7 @@ const _Pay: React.FC<PropsType> = props => {
             imageIconLeft={FULL_NAME}
             imageIconRight={ORDER_BT}
             onPress={() => {
-              // setModalVisiblePay(true);
+              setModalVisiblePay(true);
               const data = {
                 user_id: user_id,
                 tour_id: tour_id,
@@ -392,7 +393,7 @@ const _Pay: React.FC<PropsType> = props => {
           onPress={handleModal}
           text="Bạn đã thanh toán thành công"
           textBold="thành công"
-          titleButton="Tiếp tục khám phá"
+          titleButton="Xem danh sách tour đã đặt"
         />
       </SafeAreaView>
     </BackgroundApp>
