@@ -54,11 +54,10 @@ const RatingItem = ({item, onPress}: RatingItemProps) => {
     </TouchableOpacity>
   );
 };
-type PropsType = NativeStackScreenProps<ProfileStackParamList, 'AddReview'>;
+type PropsType = NativeStackScreenProps<ProfileStackParamList, 'AllReview'>;
 const _AllReviews: React.FC<PropsType> = props => {
   const {navigation} = props;
-  const tour_id = props.route.params?.tour_id;
-  console.log(tour_id);
+  
   const [ratingdata, setRatingData] = React.useState<ItemRating[]>([
     {
       id: '1',

@@ -6,6 +6,7 @@ import {
   Pressable,
   Dimensions,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import {
@@ -38,6 +39,9 @@ import {
   getToursOutstanding,
   findTourByNames,
   getBookingTourByUserId,
+  dataUser,
+  deleteFavorite,
+  addFavorite,
 } from '@shared-state';
 import {Event, Tour, Location, TourAndFavorite} from '@domain';
 
@@ -82,10 +86,14 @@ const ItemTourFavorite = ({
   item,
   onPress,
   index,
+  onPressFavorite,
+  user_id,
 }: {
   item: Tour;
   onPress: () => void;
   index: number;
+  onPressFavorite: () => void;
+  user_id: string | undefined;
 }) => {
   return (
     <Pressable
@@ -113,18 +121,22 @@ const ItemTourFavorite = ({
             borderRadius: 20,
           }}
         />
-
-        <Image
-          source={HEART}
+        <TouchableOpacity
           style={{
-            width: 30,
-            height: 30,
-            resizeMode: 'stretch',
             position: 'absolute',
             top: 15,
             left: 15,
           }}
-        />
+          onPress={onPressFavorite}>
+          <Image
+            source={HEART}
+            style={{
+              width: 30,
+              height: 30,
+              resizeMode: 'stretch',
+            }}
+          />
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -257,10 +269,14 @@ export const ItemTourOutstanding = ({
   item,
   index,
   onPress,
+  user_id,
+  onPressFavorite,
 }: {
   item: TourAndFavorite;
   index: number;
   onPress: () => void;
+  user_id: string | undefined;
+  onPressFavorite: () => void;
 }) => {
   return (
     <Pressable
@@ -286,17 +302,21 @@ export const ItemTourOutstanding = ({
             borderRadius: 20,
           }}
         />
-        <Image
-          source={item.isFavorite ? HEART : HEART_INACTIVE_2}
-          style={{
-            width: 30,
-            height: 30,
-            resizeMode: 'stretch',
-            position: 'absolute',
-            top: 10,
-            right: 10,
-          }}
-        />
+        <TouchableOpacity
+          style={{position: 'absolute', top: 10, right: 10}}
+          onPress={() => {
+            onPressFavorite();
+          }}>
+          <Image
+            source={item.isFavorite ? HEART : HEART_INACTIVE_2}
+            style={{
+              width: 30,
+              height: 30,
+              resizeMode: 'stretch',
+            }}
+          />
+        </TouchableOpacity>
+
         <View
           style={{
             position: 'absolute',
@@ -404,7 +424,15 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item, index}: {item: Tour; index: number}) => {
+      ({
+        item,
+        index,
+        user_id,
+      }: {
+        item: Tour;
+        index: number;
+        user_id: string | undefined;
+      }) => {
         return (
           <ItemTourFavorite
             item={item}
@@ -416,6 +444,15 @@ const _HomeFull: React.FC<PropsType> = props => {
               });
             }}
             index={index}
+            user_id={user_id}
+            onPressFavorite={() => {
+              const data = {
+                user_id: user_id,
+                tour_id: item._id,
+              };
+              dispatch(deleteFavorite(data));
+              dispatch(getDataFavorite(user_id));
+            }}
           />
         );
       },
@@ -442,7 +479,15 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item, index}: {item: TourAndFavorite; index: number}) => {
+      ({
+        item,
+        index,
+        user_id,
+      }: {
+        item: TourAndFavorite;
+        index: number;
+        user_id: string | undefined;
+      }) => {
         return (
           <ItemTourOutstanding
             item={item}
@@ -453,6 +498,22 @@ const _HomeFull: React.FC<PropsType> = props => {
                 tour_id: item._id,
                 isFavorite: item.isFavorite,
               });
+            }}
+            user_id={dataUser?._id}
+            onPressFavorite={() => {
+              const data = {
+                user_id: user_id,
+                tour_id: item._id,
+              };
+              if (item.isFavorite) {
+                dispatch(deleteFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(user_id));
+                });
+              } else {
+                dispatch(addFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(user_id));
+                });
+              }
             }}
           />
         );
@@ -529,7 +590,7 @@ const _HomeFull: React.FC<PropsType> = props => {
     if (dataFavoriteNoId.length > 0) {
       setIsFavorite(true);
     }
-  }, [dataFavoriteNoId]);
+  }, [dataFavoriteNoId, dataFavorite]);
 
   const dataLocations = useSelector(
     (state: RootState) => state.location.dataLocations,
@@ -712,6 +773,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                         renderItemTourFavorite({
                           item,
                           index,
+                          user_id: dataUser?._id,
                         }),
                       )}
                     </View>
@@ -803,12 +865,20 @@ const _HomeFull: React.FC<PropsType> = props => {
               <View style={_styles.containerFlatlist}>
                 <View>
                   {column1Data.map((item, index) =>
-                    renderItemTourOutstanding({item: item, index: index}),
+                    renderItemTourOutstanding({
+                      item: item,
+                      index: index,
+                      user_id: dataUser?._id,
+                    }),
                   )}
                 </View>
                 <View>
                   {column2Data.map((item, index) =>
-                    renderItemTourOutstanding({item: item, index: index}),
+                    renderItemTourOutstanding({
+                      item: item,
+                      index: index,
+                      user_id: dataUser?._id,
+                    }),
                   )}
                 </View>
               </View>

@@ -325,7 +325,7 @@ const _DetailTour: React.FC<PropsType> = props => {
             borderRadius: 100,
           }}>
           <Image
-            source={{uri: item.user_id.avatar}}
+            source={{uri: item.user_id?.avatar}}
             style={{
               width: 50,
               height: 50,
@@ -345,7 +345,7 @@ const _DetailTour: React.FC<PropsType> = props => {
               paddingTop: 10,
               marginBottom: 5,
             }}>
-            {item.user_id.name}
+            {item.user_id?.name}
           </Text>
           <Text
             style={{
