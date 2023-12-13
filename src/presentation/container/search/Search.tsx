@@ -7,6 +7,7 @@ import {
   TextInput,
   FlatList,
   KeyboardAvoidingView,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
@@ -31,8 +32,11 @@ import {Tour, TourAndFavorite} from '@domain';
 import {useSelector} from 'react-redux';
 import {
   RootState,
+  addFavorite,
+  deleteFavorite,
   findTourByNames,
   findTourByScreenSearch,
+  getDataFavorite,
   useAppDispatch,
 } from '@shared-state';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -41,10 +45,16 @@ type PropsType = NativeStackScreenProps<SearchStackParamList, 'Search'>;
 
 const ItemTourFavorite = ({
   item,
+  index,
   onPress,
+  user_id,
+  onPressFavorite,
 }: {
   item: TourAndFavorite;
+  index: number;
   onPress: () => void;
+  user_id?: string | undefined;
+  onPressFavorite: () => void;
 }) => {
   return (
     <Pressable
@@ -74,17 +84,20 @@ const ItemTourFavorite = ({
           }}
         />
 
-        <Image
-          source={item.isFavorite ? HEART : HEART_INACTIVE_2}
-          style={{
-            width: 30,
-            height: 30,
-            resizeMode: 'stretch',
-            position: 'absolute',
-            top: 15,
-            left: 15,
-          }}
-        />
+        <TouchableOpacity
+          style={{position: 'absolute', top: 15, right: 15}}
+          onPress={() => {
+            onPressFavorite();
+          }}>
+          <Image
+            source={item.isFavorite ? HEART : HEART_INACTIVE_2}
+            style={{
+              width: 30,
+              height: 30,
+              resizeMode: 'stretch',
+            }}
+          />
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -144,6 +157,8 @@ const _Search: React.FC<PropsType> = props => {
   const eventRight = () => {
     setModalVisible(true);
   };
+
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
   const eventLeft = () => {};
   const eventBack = () => {};
   const [textSearch, setTextSearch] = useState('');
@@ -168,23 +183,39 @@ const _Search: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item}: {item: TourAndFavorite}) => {
+      ({item, index}: {item: TourAndFavorite; index: number}) => {
         return (
           <ItemTourFavorite
             item={item}
             key={item._id}
+            index={index}
             onPress={() =>
               navigation.navigate('DetailTour', {
                 tour_id: item._id,
                 isFavorite: item.isFavorite,
               })
             }
+            onPressFavorite={() => {
+              const data = {
+                user_id: dataUser?._id,
+                tour_id: item._id,
+              };
+
+              if (item.isFavorite) {
+                dispatch(deleteFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              } else {
+                dispatch(addFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              }
+            }}
           />
         );
       },
     [],
   );
-
   const dataSearchStore = useSelector(
     (state: RootState) => state.tour.dataSearch,
   );

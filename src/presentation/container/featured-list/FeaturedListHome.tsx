@@ -1,4 +1,12 @@
-import {StyleSheet, Text, View, Image, Animated, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Animated,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BackgroundApp, Header, ViewSwitcher} from '@components';
@@ -6,6 +14,7 @@ import {
   BACKGROUND_WHITE,
   HEART,
   HEART_INACTIVE,
+  HEART_INACTIVE_2,
   ICON_BACK,
   IMG_FL_1,
   IMG_FL_2,
@@ -20,7 +29,13 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeStackParamList, SearchStackParamList} from '@navigation';
 import {useSelector} from 'react-redux';
 import {Tour, TourAndFavorite} from '@domain';
-import {RootState} from '@shared-state';
+import {
+  RootState,
+  addFavorite,
+  deleteFavorite,
+  getDataFavorite,
+  useAppDispatch,
+} from '@shared-state';
 
 type PropsType = NativeStackScreenProps<
   HomeStackParamList,
@@ -30,6 +45,7 @@ type PropsType = NativeStackScreenProps<
 
 const _FeaturedListHome: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dispatch = useAppDispatch();
   const [searchName, setSearchName] = useState('');
   const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
   const [isLayout, setIsLayout] = useState(false);
@@ -61,14 +77,22 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
     listViewType === 'grid' ? setColumn(2) : setColumn(1);
   }, [listViewType]);
 
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
+
   const [hideElement, setHideElement] = useState(false);
 
   const ItemTourFavorite = ({
     item,
+    index,
     onPress,
+    user_id,
+    onPressFavorite,
   }: {
-    item: Tour;
+    item: TourAndFavorite;
+    index: number;
     onPress: () => void;
+    user_id?: string | undefined;
+    onPressFavorite: () => void;
   }) => {
     return (
       <Pressable
@@ -98,17 +122,20 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
             }}
           />
 
-          <Image
-            source={HEART}
-            style={{
-              width: 30,
-              height: 30,
-              resizeMode: 'stretch',
-              position: 'absolute',
-              top: 15,
-              left: 15,
-            }}
-          />
+          <TouchableOpacity
+            style={{position: 'absolute', top: 15, right: 15}}
+            onPress={() => {
+              onPressFavorite();
+            }}>
+            <Image
+              source={item.isFavorite ? HEART : HEART_INACTIVE_2}
+              style={{
+                width: 30,
+                height: 30,
+                resizeMode: 'stretch',
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -170,7 +197,28 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
             item={item}
             key={item._id}
             index={index}
-            onPress={() => navigation.navigate('DetailTour')}
+            onPress={() =>
+              navigation.navigate('DetailTour', {
+                tour_id: item._id,
+                isFavorite: item.isFavorite,
+              })
+            }
+            onPressFavorite={() => {
+              const data = {
+                user_id: dataUser?._id,
+                tour_id: item._id,
+              };
+
+              if (item.isFavorite) {
+                dispatch(deleteFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              } else {
+                dispatch(addFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              }
+            }}
           />
         );
       },
@@ -179,12 +227,34 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
+      ({item, index}: {item: TourAndFavorite; index: number}) => {
         return (
           <ItemTourFavorite
             item={item}
             key={item._id}
-            onPress={() => navigation.navigate('DetailTour')}
+            index={index}
+            onPress={() =>
+              navigation.navigate('DetailTour', {
+                tour_id: item._id,
+                isFavorite: item.isFavorite,
+              })
+            }
+            onPressFavorite={() => {
+              const data = {
+                user_id: dataUser?._id,
+                tour_id: item._id,
+              };
+
+              if (item.isFavorite) {
+                dispatch(deleteFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              } else {
+                dispatch(addFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              }
+            }}
           />
         );
       },
@@ -241,8 +311,16 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
         <View style={_styles.containerListFeatured}>
           <Animated.FlatList
             data={dataTourAndFavorite}
-            renderItem={
-              isLayout ? renderItemTourOutstanding : renderItemTourFavorite
+            renderItem={({item, index}) =>
+              isLayout
+                ? renderItemTourOutstanding({
+                    item,
+                    index,
+                  })
+                : renderItemTourFavorite({
+                    item,
+                    index,
+                  })
             }
             keyExtractor={item => item._id.toString()}
             numColumns={column}

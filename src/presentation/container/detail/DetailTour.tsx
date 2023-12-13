@@ -29,7 +29,10 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeStackParamList, SearchStackParamList} from '@navigation';
 import {
   RootState,
+  addFavorite,
+  deleteFavorite,
   getAllReviews,
+  getDataFavorite,
   getLocationsByProvince,
   getQuantityBookingTour,
   getTourById,
@@ -47,9 +50,14 @@ const _DetailTour: React.FC<PropsType> = props => {
   const dispatch = useAppDispatch();
   const tour_id = props.route.params?.tour_id;
   const isFavorite = props.route.params?.isFavorite;
+
+  const [favoriteAddOrDelete, setFavoriteAddOrDelete] = React.useState<
+    boolean | undefined
+  >(isFavorite);
   const [titleButtonShowReview, setTitleButtonShowReview] =
     React.useState<string>('Xem tất cả bình luận');
 
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
   useEffect(() => {
     dispatch(getTourById(tour_id));
   }, []);
@@ -437,9 +445,26 @@ const _DetailTour: React.FC<PropsType> = props => {
 
               <Header
                 iconLeft={ICON_BACK}
-                iconRight={isFavorite ? HEART : HEART_INACTIVE_2}
+                iconRight={favoriteAddOrDelete ? HEART : HEART_INACTIVE_2}
                 eventLeft={() => navigation.goBack()}
-                eventRight={() => console.log('EventRight')}
+                eventRight={() => {
+                  const data = {
+                    user_id: dataUser?._id,
+                    tour_id: tour_id,
+                  };
+
+                  if (favoriteAddOrDelete) {
+                    setFavoriteAddOrDelete(false);
+                    dispatch(deleteFavorite(data)).then(() => {
+                      dispatch(getDataFavorite(dataUser?._id));
+                    });
+                  } else {
+                    setFavoriteAddOrDelete(true);
+                    dispatch(addFavorite(data)).then(() => {
+                      dispatch(getDataFavorite(dataUser?._id));
+                    });
+                  }
+                }}
                 isCheck={true}
                 styleView={_styles.viewHeder}
               />

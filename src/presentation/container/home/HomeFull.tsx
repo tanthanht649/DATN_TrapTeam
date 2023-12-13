@@ -275,7 +275,7 @@ export const ItemTourOutstanding = ({
   item: TourAndFavorite;
   index: number;
   onPress: () => void;
-  user_id: string | undefined;
+  user_id?: string | undefined;
   onPressFavorite: () => void;
 }) => {
   return (

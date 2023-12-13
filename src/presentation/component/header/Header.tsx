@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   TextProps,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
@@ -77,9 +78,9 @@ const _Header: React.FC<HeaderProps> = ({
   const renderIconRight = () => {
     if (isCheck && iconRight) {
       return (
-        <Pressable onPress={eventRight}>
+        <TouchableOpacity onPress={eventRight}>
           <Image source={iconRight} style={[_styles.icon, styleIconRight]} />
-        </Pressable>
+        </TouchableOpacity>
       );
     } else if (!isCheck && heartIcon && iconRight) {
       return (
