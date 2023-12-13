@@ -7,12 +7,10 @@ import {
   Text,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
-  WelcomeTeamStackParamList,
-  BlogStack,
   BlogStackParamList,
 } from '@navigation';
 import {BackgroundApp, Header} from '@components';
@@ -26,59 +24,55 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
+import { RootState, getAllBlogs, useAppDispatch } from '@shared-state';
+import { useSelector } from 'react-redux';
+import { Blog } from '@domain';
 
-type ItemProps = {
-  id: string;
-  image: ImageSourcePropType;
-  title: string;
-  time: string;
-  name: string;
-  avatar: ImageSourcePropType;
-};
-const DATA = [
-  {
-    id: '1',
-    image: IMAGE_FEATURED_LIST,
-    title: 'Đây là cảnh đẹp',
-    time: '4',
-    name: 'Thuy Ân',
-    avatar: IMAGE_FEATURED_LIST,
-  },
-  {
-    id: '2',
-    image: IMAGE_FEATURED_LIST,
-    title: 'Đây là cảnh đẹp',
-    time: '4',
-    name: 'Thuy Ân',
-    avatar: IMAGE_FEATURED_LIST,
-  },
-  {
-    id: '3',
-    image: IMAGE_FEATURED_LIST,
-    title: 'Đây là cảnh đẹp',
-    time: '4',
-    name: 'Thuy Ân',
-    avatar: IMAGE_FEATURED_LIST,
-  },
-];
 
-const Item = ({id, title, avatar, image, name, time}: ItemProps) => (
+
+
+
+const Item = ({item}: {item:Blog}) => (
   <View style={_styles.item}>
     <View style={_styles.row}>
-      <Image style={_styles.avatar} source={avatar}></Image>
+      <Image style={_styles.avatar} source={{uri:item.user_id.avatar}}></Image>
       <View>
-        <Text style={_styles.name}>{name}</Text>
-        <Text style={_styles.time}>{time} giờ trước</Text>
+        <Text style={_styles.name}>{item.user_id.name}</Text>
+        <Text style={_styles.time}>{item.status} giờ trước</Text>
       </View>
     </View>
-    <Text style={_styles.title}>{title}</Text>
-    <Image style={_styles.image} source={image}></Image>
+    <Text style={_styles.title}>{item.content}</Text>
+    <Image style={_styles.image} source={{uri:item.image}}></Image>
     <Image style={_styles.line} source={LINE_BLOG}></Image>
   </View>
 );
+
 type PropsType = NativeStackScreenProps<BlogStackParamList, 'Blogs'>;
 const _Blog: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dispatch = useAppDispatch();
+  
+  useEffect(() => {
+    dispatch(getAllBlogs());
+  }, []);
+
+  const dataBlogs = useSelector(
+    (state: RootState) => state.blog.dataBlogs,
+  );
+  console.log(dataBlogs.length);
+  const renderItemBlog = React.useMemo(
+    () =>
+      ({item}: {item: Blog}) => {
+        return (
+          <Item
+            item={item}
+            key={item._id}
+          />
+        );
+      },
+    [],
+  );
+  
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView style={_styles.container}>
@@ -99,18 +93,9 @@ const _Blog: React.FC<PropsType> = props => {
         />
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={DATA}
-          renderItem={({item}) => (
-            <Item
-              title={item.title}
-              name={item.name}
-              avatar={item.avatar}
-              image={item.image}
-              time={item.time}
-              id={item.id}
-            />
-          )}
-          keyExtractor={item => item.id}
+          data={dataBlogs}
+          renderItem={renderItemBlog}
+          keyExtractor={item => item._id}
         />
       </SafeAreaView>
     </BackgroundApp>

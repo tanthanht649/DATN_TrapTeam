@@ -1,5 +1,6 @@
 export * from './userReducer';
 export * from './eventReducer';
+export * from './blogReducer';
 export * from './favoriteReducer';
 export * from './locationReducer';
 export * from './tourReducer';
