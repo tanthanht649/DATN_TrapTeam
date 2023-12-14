@@ -70,9 +70,6 @@ const _Blog: React.FC<PropsType> = props => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getAllBlogs());
-  }, []);
-  useEffect(() => {
-    dispatch(getAllBlogs());
     const interval = setInterval(() => {
       dispatch(getAllBlogs());
       }, 1000); // Tải lại dữ liệu sau mỗi 1 phút (60000 milliseconds)

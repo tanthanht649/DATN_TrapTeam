@@ -5,13 +5,16 @@ import {CONSTANTS} from '@core';
 export interface  BlogState {
   loadingBlog: boolean;
   dataBlogs: Blog[];
+  dataBlogUser:Blog[]
 }
 
 export const dataBlogs: Blog[] = [];
 
+export const dataBlogUser: Blog[] = [];
 const initialState: BlogState = {
   loadingBlog: false,
   dataBlogs: dataBlogs,
+  dataBlogUser: dataBlogUser,
 };
 
 // lấy danh sách bài viết
@@ -74,6 +77,33 @@ export const addBlog = createAsyncThunk(
   },
 );
 
+// lấy danh sách bài viết  của user
+export const getBlogUser = createAsyncThunk(
+  'blog/getBlogUser',
+  async (user_id: string | undefined) => {
+    const fetchData = async () => {
+      let url = `${CONSTANTS.IP}api/blog/getAllBlogsByUserId?user_id=${user_id}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const res = await response.json();
+      return res;
+    };
+    const res = await fetchData();
+
+    if (res.result) {
+      return res.blogs.reverse();
+    }
+  },
+);
+
+
 const blogSlice = createSlice({
   name: 'blog',
   initialState,
@@ -103,6 +133,16 @@ const blogSlice = createSlice({
     builder.addCase(addBlog.rejected, state => {
       state.loadingBlog = false;
     });
+    builder.addCase(getBlogUser.pending, state => {
+      state.loadingBlog = true;
+    })
+    builder.addCase(getBlogUser.fulfilled, (state, action) => {
+      state.loadingBlog = false;
+      state.dataBlogUser = action.payload;
+    })
+    builder.addCase(getBlogUser.rejected, state => {
+      state.loadingBlog= false;
+    })
   },
 });
 

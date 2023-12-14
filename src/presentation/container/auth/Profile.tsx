@@ -403,7 +403,7 @@ const _Profile: React.FC<PropsType> = props => {
             </Pressable>
             <Pressable
               onPress={() => {
-                navigation.navigate('CreateBlog');
+                navigation.navigate('BlogUser');
               }}
               style={_styles.border}>
               <Image

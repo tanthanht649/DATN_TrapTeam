@@ -7,9 +7,12 @@ type BlogsProps = {};
 type CreateBlogProps = {
 };
 
+
 export type BlogStackParamList = {
   Blogs: BlogsProps | undefined;
   CreateBlog: CreateBlogProps | undefined;
+
+
 };
 
 const Stack = createNativeStackNavigator<BlogStackParamList>();
