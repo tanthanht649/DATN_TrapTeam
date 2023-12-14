@@ -4,3 +4,4 @@ export * from './Favorite';
 export * from './Tour';
 export * from './Location';
 export * from './TourAndFavorite';
+export * from './TourAndLocation';

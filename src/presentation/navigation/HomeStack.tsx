@@ -22,7 +22,10 @@ type FeaturedListHomeProps = {};
 type FeaturedListDetailProps = {};
 type FavoriteEmptyProps = {};
 type SearchResultProps = {};
-type DetailTourProps = {};
+type DetailTourProps = {
+  tour_id: string;
+  isFavorite: boolean;
+};
 type BookTourProps = {};
 type PayProps = {};
 
