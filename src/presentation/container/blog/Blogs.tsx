@@ -7,51 +7,64 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { useEffect } from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   BlogStackParamList,
 } from '@navigation';
-import {BackgroundApp, Header} from '@components';
+import { BackgroundApp, Header } from '@components';
 import {
   ADD_BLOG,
   BACKGROUND_WHITE,
-  ICON_BACK,
-  IMAGE_FEATURED_LIST,
   LINE_BLOG,
   LOGO_APP,
   fontFamily,
 } from '@assets';
-import {Colors, DimensionsStyle} from '@resources';
+import { Colors, DimensionsStyle } from '@resources';
 import { RootState, getAllBlogs, useAppDispatch } from '@shared-state';
 import { useSelector } from 'react-redux';
 import { Blog } from '@domain';
+import moment from 'moment';
 
+const Item = ({ item }: { item: Blog }) => {
+  const [timeAgo, setTimeAgo] = useState('');
 
+  useEffect(() => {
+    const calculateTimeAgo = () => {
+      const currentDate = moment();
+      const createdAt = moment(item.created_at);
+      const daysAgo = currentDate.diff(createdAt, 'days');
 
+      setTimeAgo(`${daysAgo + 1} ngày trước`);
+    };
 
+    calculateTimeAgo();
+  }, [item.created_at]);
 
-const Item = ({item}: {item:Blog}) => (
-  <View style={_styles.item}>
-    <View style={_styles.row}>
-      <Image style={_styles.avatar} source={{uri:item.user_id.avatar}}></Image>
-      <View>
-        <Text style={_styles.name}>{item.user_id.name}</Text>
-        <Text style={_styles.time}>{item.status} giờ trước</Text>
+  return (
+    <View style={_styles.item}>
+      <View style={_styles.row}>
+        <Image style={_styles.avatar} source={{ uri: item.user_id.avatar }}></Image>
+        <View>
+          <Text style={_styles.name}>{item.user_id.name}</Text>
+          <Text style={_styles.time}>{timeAgo}</Text>
+        </View>
       </View>
+      <Text style={_styles.title}>{item.content}</Text>
+      <Image style={_styles.image} source={{ uri: item.image }}></Image>
+      <Image style={_styles.line} source={LINE_BLOG}></Image>
     </View>
-    <Text style={_styles.title}>{item.content}</Text>
-    <Image style={_styles.image} source={{uri:item.image}}></Image>
-    <Image style={_styles.line} source={LINE_BLOG}></Image>
-  </View>
-);
+  );
+};
+
+export default Item;
 
 type PropsType = NativeStackScreenProps<BlogStackParamList, 'Blogs'>;
 const _Blog: React.FC<PropsType> = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const dispatch = useAppDispatch();
-  
+
   useEffect(() => {
     dispatch(getAllBlogs());
   }, []);
@@ -62,7 +75,7 @@ const _Blog: React.FC<PropsType> = props => {
   console.log(dataBlogs.length);
   const renderItemBlog = React.useMemo(
     () =>
-      ({item}: {item: Blog}) => {
+      ({ item }: { item: Blog }) => {
         return (
           <Item
             item={item}
@@ -72,7 +85,7 @@ const _Blog: React.FC<PropsType> = props => {
       },
     [],
   );
-  
+
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView style={_styles.container}>
@@ -87,9 +100,9 @@ const _Blog: React.FC<PropsType> = props => {
             height: 45,
             resizeMode: 'stretch',
           }}
-          styleIconRight={{marginRight: -DimensionsStyle.width * 0.06}}
+          styleIconRight={{ marginRight: -DimensionsStyle.width * 0.06 }}
           eventRight={() => console.log(navigation.navigate('CreateBlog'))}
-          styleView={{marginTop: 10}}
+          styleView={{ marginTop: 10 }}
         />
         <FlatList
           showsVerticalScrollIndicator={false}
