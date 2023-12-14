@@ -35,8 +35,12 @@ const Item = ({ item }: { item: Blog }) => {
       const currentDate = moment();
       const createdAt = moment(item.created_at);
       const daysAgo = currentDate.diff(createdAt, 'days');
-
-      setTimeAgo(`${daysAgo + 1} ngày trước`);
+      if(daysAgo < 1){
+        setTimeAgo(`Cập nhập vào hôm nay`);
+      }else{
+        setTimeAgo(`${daysAgo} ngày trước`);
+      }
+      
     };
 
     calculateTimeAgo();
@@ -64,15 +68,22 @@ type PropsType = NativeStackScreenProps<BlogStackParamList, 'Blogs'>;
 const _Blog: React.FC<PropsType> = props => {
   const { navigation } = props;
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     dispatch(getAllBlogs());
   }, []);
+  useEffect(() => {
+    dispatch(getAllBlogs());
+    const interval = setInterval(() => {
+      dispatch(getAllBlogs());
+      }, 1000); // Tải lại dữ liệu sau mỗi 1 phút (60000 milliseconds)
+      return () => {
+        clearInterval(interval); // Hủy cơ chế tải lại định kỳ khi component bị unmount
+      };
+},[] );
 
   const dataBlogs = useSelector(
     (state: RootState) => state.blog.dataBlogs,
   );
-  console.log(dataBlogs.length);
   const renderItemBlog = React.useMemo(
     () =>
       ({ item }: { item: Blog }) => {

@@ -31,13 +31,48 @@ export const getAllBlogs = createAsyncThunk('blog/getBlog', async () => {
     return res;
   };
   const res = await fetchData();
-
   if (res.result) {
-    return res.blogs;
+    return res.blogs.reverse();
   } else {
     return [];
   }
 });
+
+interface DataAddBlog {
+  user_id: string | undefined;
+  content: string | undefined;
+  image: string | undefined;
+}
+
+// tạo blog mới của user
+export const addBlog = createAsyncThunk(
+  'blog/addBlog',
+  async (data: DataAddBlog) => {
+    const fetchData = async () => {
+      let url = `${CONSTANTS.IP}api/blog/createBlog`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const res = await response.json();
+      return res;
+    };
+    const res = await fetchData();
+
+    if (res.result) {
+      console.log('resAddBlog', res);
+      return res;
+    } else {
+      return [];
+    }
+  },
+);
 
 const blogSlice = createSlice({
   name: 'blog',
@@ -57,6 +92,15 @@ const blogSlice = createSlice({
       state.dataBlogs = action.payload;
     });
     builder.addCase(getAllBlogs.rejected, state => {
+      state.loadingBlog = false;
+    });
+    builder.addCase(addBlog.pending, state => {
+      state.loadingBlog = true;
+    });
+    builder.addCase(addBlog.fulfilled, (state, action) => {
+      state.loadingBlog = false;
+    });
+    builder.addCase(addBlog.rejected, state => {
       state.loadingBlog = false;
     });
   },
