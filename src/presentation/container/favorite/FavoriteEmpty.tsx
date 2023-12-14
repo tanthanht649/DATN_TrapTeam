@@ -33,6 +33,9 @@ import {
 import {Colors} from '@resources';
 import StaggeredList from '@mindinventory/react-native-stagger-view';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import { useSelector } from 'react-redux';
+import { RootState, deleteFavorite, getDataFavorite, useAppDispatch } from '@shared-state';
+import { Favorite } from '@domain';
 
 type PropsType = NativeStackScreenProps<
   ProfileStackParamList,
@@ -50,6 +53,10 @@ export interface Item {
 
 const _FavoriteEmpty: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dataFavorite = useSelector((state: RootState) => state.favorite.dataFavorites);
+  console.log('dataFavorite: ', dataFavorite.length);
+  const dispatch = useAppDispatch();
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
   const [listViewType, setListViewType] = useState<'grid' | 'list'>('grid');
   const [data, setData] = useState<Item[]>([
     {
@@ -74,33 +81,37 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
       location: 'Vũng Tàu, Việt Nam',
     },
   ]);
-  const onDelete = (itemId: number) => {
-    console.log('Id: ' + itemId);
-    const updatedData = data.filter(item => item.id !== itemId);
-    setData(updatedData);
+  const onDelete = (user_id : string | undefined, tour_id: string | undefined) => {
+    const data = {
+      user_id: user_id,
+      tour_id: tour_id,
+    }
+    dispatch(deleteFavorite(data)).then(()  => {
+      dispatch(getDataFavorite(user_id))
+    })
   };
-  const renderChildren = ({item}: ListRenderItemInfo<Item>) => {
+  const renderChildren = ({item}: ListRenderItemInfo<Favorite>) => {
     return (
       <Pressable
         style={_styles.getChildrenStyle}
-        key={item.id}
+        key={item.tour_id._id}
         onPress={() => {
-          navigation.navigate('DetailTour');
+          navigation.navigate('DetailTour', {tour_id: item.tour_id._id, isFavorite: true});
         }}>
         <Image
           onError={() => {}}
           style={_styles.img}
-          source={item.image}
+          source={{uri:item.tour_id?.image}}
           resizeMode="cover"
         />
-        <Pressable
-          onPress={() => onDelete(item.id)}
+        <TouchableOpacity
+          onPress={() => onDelete(item.user_id, item.tour_id?._id)}
           style={_styles.styleHeartView}>
           <Image source={HEART_INACTIVE} style={_styles.styleHeart} />
-        </Pressable>
+        </TouchableOpacity>
         <View style={_styles.stylePriceView}>
           <Text style={_styles.stylePrice}>
-            {item.price.toLocaleString('vi-VN')} VNĐ
+            {item.tour_id?.price.toLocaleString('vi-VN')} VNĐ
           </Text>
         </View>
         <View style={_styles.styleView}>
@@ -108,13 +119,13 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
             numberOfLines={2}
             ellipsizeMode="tail"
             style={_styles.styleName}>
-            {item.name}
+            {item.tour_id?.name}
           </Text>
           <View style={_styles.styleLine}>
             <View style={_styles.styleStarView}>
               <Image source={LOCATION} style={_styles.styleStar} />
               <Text numberOfLines={1} style={_styles.styleLocationText}>
-                {item.location}
+                {item.tour_id?.province_id.name}
               </Text>
             </View>
           </View>
@@ -122,20 +133,20 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
       </Pressable>
     );
   };
-  const renderItem = ({item}: {item: Item}) => {
+  const renderItem = ({item}: {item: Favorite}) => {
     return (
       <Pressable
         style={_styles.itemContainer}
         onPress={() => {
-          navigation.navigate('DetailTour');
+          navigation.navigate('DetailTour', {tour_id: item.tour_id._id, isFavorite: true});
         }}>
         <Image
-          source={item.image}
+          source={{uri: item.tour_id?.image}}
           style={_styles.itemImage}
           resizeMode="cover"
         />
         <TouchableOpacity
-          onPress={() => onDelete(item.id)}
+          onPress={() => onDelete(item.user_id, item.tour_id?._id)}
           style={_styles.heartButton}>
           <Image source={HEART_INACTIVE} style={_styles.styleHeart} />
         </TouchableOpacity>
@@ -145,7 +156,7 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
               numberOfLines={2}
               ellipsizeMode="tail"
               style={_styles.styleName}>
-              {item.name}
+              {item.tour_id?.name}
             </Text>
             <View style={_styles.locationContainer}>
               <Image source={LOCATION} style={_styles.styleStar} />
@@ -153,24 +164,25 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 style={[_styles.styleLocationText, {paddingRight: 35}]}>
-                {item.location}
+                {item.tour_id?.province_id.name}
               </Text>
             </View>
           </View>
           <View style={_styles.priceContainer}>
             <Text style={_styles.price}>
-              {item.price.toLocaleString('vi-VN')} VNĐ
+              {item.tour_id?.price.toLocaleString('vi-VN')} VNĐ
             </Text>
           </View>
         </View>
       </Pressable>
     );
   };
-  const renderHiddenItem = ({item}: ListRenderItemInfo<Item>) => (
+  const renderHiddenItem = ({item}: ListRenderItemInfo<Favorite>) => (
     <View style={_styles.hiddenItem}>
       <TouchableOpacity
         style={_styles.deleteButton}
-        onPress={onDelete.bind(this, item.id)}>
+        onPress={onDelete.bind(this, item.user_id, item.tour_id?._id)}
+        >
         <Image source={TRASH_2} style={_styles.deleteIcon} />
       </TouchableOpacity>
     </View>
@@ -196,10 +208,10 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
   );
   const renderListView = () => (
     <SwipeListView
-      data={data}
+      data={dataFavorite}
       renderItem={renderItem}
       renderHiddenItem={renderHiddenItem}
-      keyExtractor={item => item.id.toString()}
+      keyExtractor={item => item.tour_id?._id}
       rightOpenValue={-90} // Điều chỉnh độ rộng của mục ẩn khi cần thiết
       showsVerticalScrollIndicator={false}
     />
@@ -207,8 +219,8 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
 
   const renderStaggeredList = () => (
     <View style={_styles.nextView1}>
-      <StaggeredList<Item>
-        data={data}
+      <StaggeredList<Favorite>
+        data={dataFavorite}
         animationType="FADE_IN_FAST"
         contentContainerStyle={_styles.contentContainer}
         showsVerticalScrollIndicator={false}
@@ -222,7 +234,7 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
     </View>
   );
   const renderContent = () => {
-    if (data.length === 0) {
+    if (dataFavorite.length === 0) {
       return renderNull();
     }
 
@@ -248,7 +260,7 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
         styleIconRight={{display: 'none'}}
       />
       <ViewSwitcher
-        quantityEstates={data.length}
+        quantityEstates={dataFavorite.length}
         onTabChange={setListViewType}
       />
       {renderContent()}
