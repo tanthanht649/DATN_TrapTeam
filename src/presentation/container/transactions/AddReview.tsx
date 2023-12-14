@@ -7,6 +7,7 @@ import {
   Dimensions,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {
@@ -41,15 +42,25 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ProfileStackParamList, WelcomeTeamStackParamList} from '@navigation';
+import {useSelector} from 'react-redux';
+import {RootState, addReview, useAppDispatch} from '@shared-state';
 
 type PropsType = NativeStackScreenProps<ProfileStackParamList, 'AddReview'>;
 
 const _AddReview: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dispatch = useAppDispatch();
+  const tour_id = props.route.params?.tour_id;
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
+  const loadingReview = useSelector(
+    (state: RootState) => state.review.loadingReview,
+  );
+
   const [textNote, setTextNote] = React.useState('');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const handleModal = () => {
     setModalVisible(false);
+    navigation.goBack();
   };
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -80,7 +91,6 @@ const _AddReview: React.FC<PropsType> = props => {
             marginTop: '5%',
             width: '100%',
           }}
-          numberOfLines={2}
         />
 
         <Text style={_styles.text}>
@@ -109,9 +119,32 @@ const _AddReview: React.FC<PropsType> = props => {
           }}
         />
         <Button
-          title="Đăng"
+          title="Thêm"
           onPress={() => {
-            setModalVisible(true);
+            if (textNote === '') {
+              Alert.alert(
+                'Thông báo',
+                'Bạn chưa nhập nội dung đánh giá',
+                [
+                  {
+                    text: 'OK',
+                    onPress: () => console.log('OK Pressed'),
+                    style: 'cancel',
+                  },
+                ],
+                {cancelable: false},
+              );
+            }
+
+            const data = {
+              user_id: dataUser?._id,
+              tour_id: tour_id,
+              content: textNote,
+            };
+            dispatch(addReview(data));
+            if (!loadingReview) {
+              setModalVisible(true);
+            }
           }}
           viewStyle={{width: 250, position: 'absolute', bottom: 0}}
           imageIconLeft={EMAIL}
@@ -123,7 +156,7 @@ const _AddReview: React.FC<PropsType> = props => {
         onPress={handleModal}
         text="Bài đánh giá của bạn đăng tải thành công"
         textBold="thành công"
-        titleButton="Xem bài viết"
+        titleButton="Tiếp tục khám phá"
         content="Cảm ơn bạn đã chia sẻ ý kiến của mình"
       />
     </BackgroundApp>

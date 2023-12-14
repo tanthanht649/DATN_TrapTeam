@@ -11,6 +11,7 @@ import {
   EditProfile,
   AddReview,
 } from '@containers';
+import { BlogUser } from '../container/blog/BlogUser';
 
 type ProfileProps = {};
 type FavoriteEmptyProps = {};
@@ -20,7 +21,10 @@ type CreateBlogProps = {};
 type BlogsProps = {};
 type VersionProps = {};
 type EditProfileProps = {};
-type AddReviewProps = {};
+type AddReviewProps = {
+  tour_id: string;
+};
+type BlogUserProps = {};
 
 export type ProfileStackParamList = {
   Profile: ProfileProps | undefined;
@@ -32,6 +36,7 @@ export type ProfileStackParamList = {
   Version: VersionProps | undefined;
   EditProfile: EditProfileProps | undefined;
   AddReview: AddReviewProps | undefined;
+  BlogUser: BlogUserProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
@@ -53,6 +58,7 @@ const _ProfileStack = () => {
       <Stack.Screen name="Version" component={Version} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="AddReview" component={AddReview} />
+      <Stack.Screen name="BlogUser" component={BlogUser} />
     </Stack.Navigator>
   );
 };

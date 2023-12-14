@@ -14,7 +14,6 @@ const initialState: EventState = {
   dataEvents: dataEvent,
 };
 
-
 // lấy danh sách sự kiện
 export const getAllEvents = createAsyncThunk('event/getEvent', async () => {
   const fetchData = async () => {
@@ -43,7 +42,12 @@ export const getAllEvents = createAsyncThunk('event/getEvent', async () => {
 const eventSlice = createSlice({
   name: 'event',
   initialState,
-  reducers: {},
+  reducers: {
+    logoutEvent: state => {
+      // Reset state về giá trị ban đầu
+      return initialState;
+    },
+  },
   extraReducers: builder => {
     builder.addCase(getAllEvents.pending, state => {
       state.loadingEvent = true;
@@ -58,4 +62,5 @@ const eventSlice = createSlice({
   },
 });
 
+export const {logoutEvent} = eventSlice.actions;
 export const eventReducer = eventSlice.reducer;

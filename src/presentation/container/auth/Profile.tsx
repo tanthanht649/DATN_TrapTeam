@@ -42,9 +42,13 @@ import {Colors, DimensionsStyle} from '@resources';
 import {
   AppContext,
   RootState,
-  logout,
-  signOut,
+  logoutUser,
+  logoutTour,
+  logoutLocation,
+  logoutFavorite,
+  logoutEvent,
   useAppDispatch,
+  logoutProvince,
 } from '@shared-state';
 import {useSelector} from 'react-redux';
 import {store} from '@shared-state';
@@ -76,10 +80,6 @@ const _Profile: React.FC<PropsType> = props => {
     if (dataUser && dataUser.avatar) {
       setImageAvatar(dataUser?.avatar);
     }
-  }, [dataUser]);
-
-  useEffect(() => {
-    console.log('dataUser', dataUser);
   }, [dataUser]);
 
   const [data, setData] = React.useState<Item[]>([
@@ -403,7 +403,7 @@ const _Profile: React.FC<PropsType> = props => {
             </Pressable>
             <Pressable
               onPress={() => {
-                navigation.navigate('CreateBlog');
+                navigation.navigate('BlogUser');
               }}
               style={_styles.border}>
               <Image
@@ -475,7 +475,12 @@ const _Profile: React.FC<PropsType> = props => {
           </Pressable>
           <Pressable
             onPress={() => {
-              store.dispatch(logout());
+              store.dispatch(logoutUser());
+              store.dispatch(logoutTour());
+              store.dispatch(logoutLocation());
+              store.dispatch(logoutFavorite());
+              store.dispatch(logoutEvent());
+              store.dispatch(logoutProvince());
               onGoogleSignOutPress();
               setLoggedIn(false);
             }}

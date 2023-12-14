@@ -5,7 +5,11 @@ import {
   eventReducer,
   favoriteReducer,
   locationReducer,
-  tourReducer
+  tourReducer,
+  reviewReducer,
+  provinceReducer,
+  bookingTourReducer,
+  blogReducer
 } from './reducers';
 
 export const store = configureStore({
@@ -15,6 +19,10 @@ export const store = configureStore({
     favorite: favoriteReducer,
     location: locationReducer,
     tour: tourReducer,
+    review: reviewReducer,
+    province: provinceReducer,
+    bookingTour: bookingTourReducer,
+    blog: blogReducer
   },
 });
 

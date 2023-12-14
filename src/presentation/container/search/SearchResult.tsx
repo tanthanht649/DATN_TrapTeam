@@ -7,6 +7,7 @@ import {
   Pressable,
   Image,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
@@ -21,6 +22,7 @@ import {
   BACKGROUND_WHITE,
   CLOSE_ITEM,
   HEART,
+  HEART_INACTIVE_2,
   ICON_BACK,
   ICON_FILTER,
   LOCATION,
@@ -28,14 +30,22 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {Tour} from '../home';
 import {ItemTourOutstanding} from '../home';
-import {DATATOUROUTSTANDING, DATATOUR} from '../home';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {SearchStackParamList} from '@navigation';
+import {HomeStackParamList, SearchStackParamList} from '@navigation';
+import {Tour, TourAndFavorite} from '@domain';
+import {useSelector} from 'react-redux';
+import {
+  RootState,
+  addFavorite,
+  deleteFavorite,
+  getDataFavorite,
+  useAppDispatch,
+} from '@shared-state';
 
-type PropsType = NativeStackScreenProps<SearchStackParamList, 'SearchResult'>;
+type PropsType = NativeStackScreenProps<SearchStackParamList, 'SearchResult'> &
+  NativeStackScreenProps<HomeStackParamList, 'SearchResult'>;
 
 const ItemFind = ({item}: {item: string}) => {
   return (
@@ -72,26 +82,70 @@ const ItemFind = ({item}: {item: string}) => {
 
 const _SearchResult: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dispatch = useAppDispatch();
+
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
+  const isFilter = props.route.params?.isFilter;
+  const locationProvinces = props.route.params?.locationProvinces;
+  const is_popular = props.route.params?.is_popular;
+  const minPrice = props.route.params?.minPrice;
+  const maxPrice = props.route.params?.maxPrice;
+  const dayFind = props.route.params?.dayFind;
+
   const [textSearch, setTextSearch] = useState('');
   const [isFound, setIsFound] = useState(true);
   const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
-
   const [isLayout, setIsLayout] = useState(false);
   const [column, setColumn] = useState(2);
 
-  // 'Phổ biến', 'Hà Nội', '200.000 - 500.000'
+  const dataSearchName = useSelector(
+    (state: RootState) => state.tour.dataSearchName,
+  );
 
-  const DATAFIND: string[] = ['Phổ biến', 'Hà Nội', '200.000 - 500.000'];
+  useEffect(() => {
+    if (dataSearchName.length === 0) {
+      setIsFound(false);
+    } else {
+      setIsFound(true);
+    }
+  }, [dataSearchName]);
+
+  const dataFavoriteNoId = useSelector(
+    (state: RootState) => state.favorite.dataFavoriteNoId,
+  );
+
+  const [dataTourAndFavorite, setDataTourAndFavorite] = useState<
+    TourAndFavorite[]
+  >([]);
+
+  useEffect(() => {
+    const tourAndFavorite = dataSearchName.map((item: Tour) => {
+      const isFavorite = dataFavoriteNoId.some(
+        (check: Tour) => check._id === item._id,
+      );
+      return {...item, isFavorite: isFavorite};
+    });
+
+    setDataTourAndFavorite(tourAndFavorite);
+  }, [dataFavoriteNoId, dataSearchName]);
+
+  const price =
+    Number(minPrice).toLocaleString('vi-VN') +
+    ' - ' +
+    Number(maxPrice).toLocaleString('vi-VN');
+  const is_popular_text = is_popular ? 'Phổ biến' : 'Không nổi bật';
+
+  const DATAFIND: string[] = [is_popular_text, locationProvinces + '', price];
 
   const [marginBottom, setMarginBottom] = useState(0);
+
   useEffect(() => {
-    if (DATAFIND.length > 0) {
+    if (isFilter) {
       setMarginBottom(130);
-    } else if ((DATAFIND.length = 0)) {
-      console.log('DATAFIND.length', DATAFIND.length);
+    } else {
       setMarginBottom(40);
     }
-  }, [DATAFIND]);
+  }, [isFilter]);
 
   const renderItemFind = React.useMemo(
     () =>
@@ -108,10 +162,16 @@ const _SearchResult: React.FC<PropsType> = props => {
 
   const ItemTourFavorite = ({
     item,
+    index,
     onPress,
+    user_id,
+    onPressFavorite,
   }: {
-    item: Tour;
+    item: TourAndFavorite;
+    index: number;
     onPress: () => void;
+    user_id?: string | undefined;
+    onPressFavorite: () => void;
   }) => {
     return (
       <Pressable
@@ -141,17 +201,20 @@ const _SearchResult: React.FC<PropsType> = props => {
             }}
           />
 
-          <Image
-            source={HEART}
-            style={{
-              width: 30,
-              height: 30,
-              resizeMode: 'stretch',
-              position: 'absolute',
-              top: 15,
-              left: 15,
-            }}
-          />
+          <TouchableOpacity
+            style={{position: 'absolute', top: 15, right: 15}}
+            onPress={() => {
+              onPressFavorite();
+            }}>
+            <Image
+              source={item.isFavorite ? HEART : HEART_INACTIVE_2}
+              style={{
+                width: 30,
+                height: 30,
+                resizeMode: 'stretch',
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -207,14 +270,33 @@ const _SearchResult: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item, index}: {item: Tour; index: number}) => {
+      ({item, index}: {item: TourAndFavorite; index: number}) => {
         return (
           <ItemTourOutstanding
             item={item}
-            key={item.id}
+            key={item._id}
             index={index}
-            onPress={() => {
-              navigation.navigate('DetailTour');
+            onPress={() =>
+              navigation.navigate('DetailTour', {
+                tour_id: item._id,
+                isFavorite: item.isFavorite,
+              })
+            }
+            onPressFavorite={() => {
+              const data = {
+                user_id: dataUser?._id,
+                tour_id: item._id,
+              };
+
+              if (item.isFavorite) {
+                dispatch(deleteFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              } else {
+                dispatch(addFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              }
             }}
           />
         );
@@ -224,12 +306,34 @@ const _SearchResult: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
+      ({item, index}: {item: TourAndFavorite; index: number}) => {
         return (
           <ItemTourFavorite
             item={item}
-            key={item.id}
-            onPress={() => navigation.navigate('DetailTour')}
+            key={item._id}
+            index={index}
+            onPress={() =>
+              navigation.navigate('DetailTour', {
+                tour_id: item._id,
+                isFavorite: item.isFavorite,
+              })
+            }
+            onPressFavorite={() => {
+              const data = {
+                user_id: dataUser?._id,
+                tour_id: item._id,
+              };
+
+              if (item.isFavorite) {
+                dispatch(deleteFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              } else {
+                dispatch(addFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              }
+            }}
           />
         );
       },
@@ -237,7 +341,6 @@ const _SearchResult: React.FC<PropsType> = props => {
   );
 
   const eventRight = () => {};
-  const eventLeft = () => {};
   const eventBack = () => {
     navigation.goBack();
   };
@@ -247,7 +350,6 @@ const _SearchResult: React.FC<PropsType> = props => {
       <SafeAreaView style={_styles.container}>
         <Header
           iconLeft={ICON_BACK}
-          iconRight={ICON_FILTER}
           eventLeft={eventBack}
           eventRight={eventRight}
           textCenter="Kết quả tìm kiếm"
@@ -265,8 +367,7 @@ const _SearchResult: React.FC<PropsType> = props => {
                 onTabChange={setListViewType}
               />
             </View>
-
-            {DATAFIND.length > 0 ? (
+            {isFilter ? (
               <View>
                 <FlatList
                   data={DATAFIND}
@@ -278,19 +379,16 @@ const _SearchResult: React.FC<PropsType> = props => {
                 />
               </View>
             ) : null}
+
             <View style={_styles.containerListFeatured}>
               <FlatList
-                data={DATATOUROUTSTANDING}
+                data={dataTourAndFavorite}
                 renderItem={
                   isLayout ? renderItemTourOutstanding : renderItemTourFavorite
                 }
-                keyExtractor={item => item.id.toString()}
+                keyExtractor={item => item._id.toString()}
                 numColumns={column}
                 key={column}
-                style={{
-                  height: DimensionsStyle.height * 1,
-                  marginBottom: marginBottom,
-                }}
                 showsVerticalScrollIndicator={false}
               />
             </View>
@@ -375,6 +473,7 @@ const _styles = StyleSheet.create({
   containerListFeatured: {
     marginHorizontal: 20,
     alignSelf: 'center',
+    flex: 1,
   },
 
   iconRight: {

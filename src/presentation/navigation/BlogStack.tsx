@@ -4,11 +4,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import {Blogs, CreateBlog, Profile} from '@containers';
 
 type BlogsProps = {};
-type CreateBlogProps = {};
+type CreateBlogProps = {
+};
+
 
 export type BlogStackParamList = {
   Blogs: BlogsProps | undefined;
   CreateBlog: CreateBlogProps | undefined;
+
+
 };
 
 const Stack = createNativeStackNavigator<BlogStackParamList>();

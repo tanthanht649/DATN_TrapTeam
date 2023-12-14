@@ -19,14 +19,5 @@ export interface TourAndLocation {
   created_at: Date;
   is_popular: boolean;
   schedules: Array<string>;
-  locations: [
-    {
-      _id: string;
-      province_id: string;
-      name: string;
-      image: string;
-      description: string;
-      is_popular: Boolean;
-    },
-  ];
+  locations: Location[];
 }

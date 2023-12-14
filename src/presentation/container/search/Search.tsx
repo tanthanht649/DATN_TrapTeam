@@ -6,8 +6,10 @@ import {
   Image,
   TextInput,
   FlatList,
+  KeyboardAvoidingView,
+  TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaInsetsContext,
   SafeAreaView,
@@ -16,6 +18,7 @@ import {BackgroundApp, Header, Input, ModalFilter} from '@components';
 import {
   BACKGROUND_WHITE,
   HEART,
+  HEART_INACTIVE_2,
   ICON_BACK,
   ICON_FILTER,
   LOCATION,
@@ -23,18 +26,35 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {Tour, DATATOUR} from '../home';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {SearchStackParamList} from '@navigation';
+import {HomeStackParamList, SearchStackParamList} from '@navigation';
+import {Tour, TourAndFavorite} from '@domain';
+import {useSelector} from 'react-redux';
+import {
+  RootState,
+  addFavorite,
+  deleteFavorite,
+  findTourByNames,
+  findTourByScreenSearch,
+  getDataFavorite,
+  useAppDispatch,
+} from '@shared-state';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 type PropsType = NativeStackScreenProps<SearchStackParamList, 'Search'>;
 
 const ItemTourFavorite = ({
   item,
+  index,
   onPress,
+  user_id,
+  onPressFavorite,
 }: {
-  item: Tour;
+  item: TourAndFavorite;
+  index: number;
   onPress: () => void;
+  user_id?: string | undefined;
+  onPressFavorite: () => void;
 }) => {
   return (
     <Pressable
@@ -64,17 +84,20 @@ const ItemTourFavorite = ({
           }}
         />
 
-        <Image
-          source={HEART}
-          style={{
-            width: 30,
-            height: 30,
-            resizeMode: 'stretch',
-            position: 'absolute',
-            top: 15,
-            left: 15,
-          }}
-        />
+        <TouchableOpacity
+          style={{position: 'absolute', top: 15, right: 15}}
+          onPress={() => {
+            onPressFavorite();
+          }}>
+          <Image
+            source={item.isFavorite ? HEART : HEART_INACTIVE_2}
+            style={{
+              width: 30,
+              height: 30,
+              resizeMode: 'stretch',
+            }}
+          />
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -130,31 +153,118 @@ const ItemTourFavorite = ({
 
 const _Search: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dispatch = useAppDispatch();
   const eventRight = () => {
     setModalVisible(true);
   };
+
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
   const eventLeft = () => {};
   const eventBack = () => {};
   const [textSearch, setTextSearch] = useState('');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const handleModal = () => {
+  const handleModal = (
+    locationProvinces: string,
+    is_popular: boolean,
+    minPrice: string,
+    maxPrice: string,
+    dayFind: string,
+  ) => {
     setModalVisible(false);
-    navigation.navigate('SearchResult');
+    navigation.navigate('SearchResult', {
+      isFilter: true,
+      locationProvinces,
+      is_popular,
+      minPrice,
+      maxPrice,
+      dayFind,
+    });
   };
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item}: {item: Tour}) => {
+      ({item, index}: {item: TourAndFavorite; index: number}) => {
         return (
           <ItemTourFavorite
             item={item}
-            key={item.id}
-            onPress={() => navigation.navigate('DetailTour')}
+            key={item._id}
+            index={index}
+            onPress={() =>
+              navigation.navigate('DetailTour', {
+                tour_id: item._id,
+                isFavorite: item.isFavorite,
+              })
+            }
+            onPressFavorite={() => {
+              const data = {
+                user_id: dataUser?._id,
+                tour_id: item._id,
+              };
+
+              if (item.isFavorite) {
+                dispatch(deleteFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              } else {
+                dispatch(addFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(dataUser?._id));
+                });
+              }
+            }}
           />
         );
       },
     [],
   );
+  const dataSearchStore = useSelector(
+    (state: RootState) => state.tour.dataSearch,
+  );
+
+  const dataFavoriteNoId = useSelector(
+    (state: RootState) => state.favorite.dataFavoriteNoId,
+  );
+
+  const dataToursOutstanding = useSelector(
+    (state: RootState) => state.tour.dataToursOutstanding,
+  );
+
+  const [dataSearch, setDataSearch] = useState<Tour[]>(dataToursOutstanding);
+
+  const [dataTourAndFavorite, setDataTourAndFavorite] = useState<
+    TourAndFavorite[]
+  >([]);
+
+  useEffect(() => {
+    const tourAndFavorite = dataSearch.map((item: Tour) => {
+      const isFavorite = dataFavoriteNoId.some(
+        (check: Tour) => check._id === item._id,
+      );
+      return {...item, isFavorite: isFavorite};
+    });
+
+    setDataTourAndFavorite(tourAndFavorite);
+  }, [dataFavoriteNoId, dataSearch]);
+
+  let timeoutId: any = null;
+  const handleSearch = (text: string) => {
+    setTextSearch(text);
+
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => {
+      dispatch(findTourByScreenSearch(text));
+    }, 3000);
+  };
+
+  useEffect(() => {
+    if (textSearch === '') {
+      setDataSearch(dataToursOutstanding);
+    } else {
+      setDataSearch(dataSearchStore);
+    }
+  }, [dataSearchStore]);
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -167,7 +277,7 @@ const _Search: React.FC<PropsType> = props => {
             <TextInput
               style={_styles.textInput}
               onChangeText={text => {
-                setTextSearch(text);
+                handleSearch(text);
               }}
               placeholder="Tìm kiếm"
             />
@@ -178,18 +288,16 @@ const _Search: React.FC<PropsType> = props => {
         </View>
         <View style={_styles.title}>
           <Text style={_styles.textTitle}>Gợi ý</Text>
-          <Pressable onPress={() => navigation.navigate('FeaturedListHome')}>
+          <Pressable style={{display: 'none'}}>
             <Text style={_styles.textSeeAll}>Xem tất cả</Text>
           </Pressable>
         </View>
-
         <FlatList
-          data={DATATOUR}
+          data={dataTourAndFavorite}
           renderItem={renderItemTourFavorite}
-          keyExtractor={item => item.id.toString()}
-          showsHorizontalScrollIndicator={false}
+          keyExtractor={item => item._id.toString()}
+          showsVerticalScrollIndicator={false}
         />
-
         <ModalFilter
           visible={modalVisible}
           onPress={handleModal}

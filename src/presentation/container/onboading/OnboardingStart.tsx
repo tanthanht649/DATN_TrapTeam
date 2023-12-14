@@ -24,40 +24,13 @@ interface Point {
   favorite?: boolean;
 }
 
-const points: Point[] = [
-  {id: 1, point: 8, name: 'An'},
-  {id: 2, point: 6, name: 'Bình'},
-  {id: 1, point: 8, name: 'Phú'},
-  {id: 4, point: 3, name: 'An'},
-];
-
-interface Check {
-  id: number;
-  point: number;
-}
-
-const checkArray: Check[] = [
-  {id: 1, point: 3},
-  {id: 2, point: 5},
-  {id: 3, point: 8},
-];
-
 const _OnboardingStart: React.FC<PropsType> = props => {
   const {navigation} = props;
   const dataUser = useSelector((state: RootState) => state.user.dataUsers);
-  console.log('dataUser', dataUser);
+  const dataFavorite = useSelector(
+    (state: RootState) => state.favorite.dataFavorites,
+  );
   const [data, setData] = React.useState<Point[]>([]);
-
-  useEffect(() => {
-    const updatedPoints = points.map((point: Point) => {
-      const isFavorite = checkArray.some(
-        (check: Check) => check.point === point.point,
-      );
-      return {...point, favorite: isFavorite};
-    });
-
-    setData(updatedPoints);
-  }, [points, checkArray]);
 
   return (
     <BackgroundApp source={SPLASH_SCREEN}>

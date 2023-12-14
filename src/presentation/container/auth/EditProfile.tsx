@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ProfileStackParamList, WelcomeTeamStackParamList} from '@navigation';
-import {BackgroundApp, Button, Header, Input} from '@components';
+import {BackgroundApp, Button, Header, Input, Loading} from '@components';
 import {
   BACKGROUND_WHITE,
   CALL,
@@ -29,6 +29,7 @@ const _EditProfile: React.FC<PropsType> = props => {
     'https://www.bing.com/th?id=OIP.fN9gx82LKxSZVpTc18meBgHaEo&w=149&h=100&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2',
   );
 
+  const [loadingImage, setLoadingImage] = useState(false);
   const [idUser, setIdUser] = useState<string>('a');
 
   useEffect(() => {
@@ -38,6 +39,7 @@ const _EditProfile: React.FC<PropsType> = props => {
   }, [dataUser]);
 
   const handleChoosePhoto = useCallback(async () => {
+    setLoadingImage(true);
     const options: any = {
       saveToPhotos: true,
       mediaType: 'photo',
@@ -72,6 +74,7 @@ const _EditProfile: React.FC<PropsType> = props => {
             body: formData,
           });
           const res = await response.json();
+          setLoadingImage(false);
           return res;
         };
         const res = await fetchData();
@@ -113,7 +116,14 @@ const _EditProfile: React.FC<PropsType> = props => {
           styleIconLeft={{marginLeft: -DimensionsStyle.width * 0.06}}
         />
         <View style={_styles.avatar}>
-          <Image style={_styles.image} source={{uri: imageAvatar}}></Image>
+          {loadingImage ? (
+            <View style={_styles.image}>
+              <Loading height={100} />
+            </View>
+          ) : (
+            <Image style={_styles.image} source={{uri: imageAvatar}} />
+          )}
+
           <Pressable onPress={handleChoosePhoto}>
             <Image style={_styles.edit} source={CAMERA_PROFILE}></Image>
           </Pressable>

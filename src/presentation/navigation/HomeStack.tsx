@@ -10,6 +10,7 @@ import {
   DetailTour,
   BookTour,
   Pay,
+  HistoryDetail,
 } from '@containers';
 
 type HomeFullProps = {};
@@ -19,15 +20,37 @@ type ListTourBannerProps = {
   title: string;
 };
 type FeaturedListHomeProps = {};
-type FeaturedListDetailProps = {};
+type FeaturedListDetailProps = {
+  location_id: string;
+};
 type FavoriteEmptyProps = {};
-type SearchResultProps = {};
+type SearchResultProps = {
+  isFilter: boolean;
+  locationProvinces?: string;
+  is_popular?: boolean;
+  minPrice?: string;
+  maxPrice?: string;
+  dayFind?: string;
+};
 type DetailTourProps = {
   tour_id: string;
   isFavorite: boolean;
 };
 type BookTourProps = {};
-type PayProps = {};
+
+type PayProps = {
+  user_id: string;
+  tour_id: string;
+  discount: number;
+  adult_account: number;
+  child_account: number;
+  price: number;
+  note: string;
+  role: boolean;
+  location_custom: [{_id: string; name: string}];
+};
+
+type HistoryDetailProps = {};
 
 export type HomeStackParamList = {
   HomeFull: HomeFullProps | undefined;
@@ -39,6 +62,7 @@ export type HomeStackParamList = {
   DetailTour: DetailTourProps | undefined;
   BookTour: BookTourProps | undefined;
   Pay: PayProps | undefined;
+  HistoryDetail: HistoryDetailProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -60,6 +84,7 @@ const _HomeStack = () => {
       <Stack.Screen name="DetailTour" component={DetailTour} />
       <Stack.Screen name="BookTour" component={BookTour} />
       <Stack.Screen name="Pay" component={Pay} />
+      <Stack.Screen name="HistoryDetail" component={HistoryDetail} />
     </Stack.Navigator>
   );
 };

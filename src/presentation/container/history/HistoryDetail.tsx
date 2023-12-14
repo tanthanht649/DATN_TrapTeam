@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   BACKGROUND_HOME,
   BACKGROUND_WHITE,
@@ -40,127 +40,45 @@ import {
   Button,
   TextPlus,
   Input,
+  Loading,
 } from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ProfileStackParamList, WelcomeTeamStackParamList} from '@navigation';
+import {HomeStackParamList, ProfileStackParamList} from '@navigation';
+import {useSelector} from 'react-redux';
+import {RootState, getBookingTourByUserId, useAppDispatch} from '@shared-state';
+import {BookingTour} from '@domain';
+import moment from 'moment';
+type PropsType = NativeStackScreenProps<
+  ProfileStackParamList,
+  'HistoryDetail'
+> &
+  NativeStackScreenProps<HomeStackParamList, 'HistoryDetail'>;
 
-type PropsType = NativeStackScreenProps<ProfileStackParamList, 'HistoryDetail'>;
+const daysDifference = (endDate: any, startDate: any) => {
+  const startDay = new Date(startDate);
+  const endDay = new Date(endDate);
+  const timeDifference = Number(endDay) - Number(startDay);
+  const millisecondsPerDay = 24 * 60 * 60 * 1000; // Số mili giây trong một ngày
+  const daysDifference = Math.round(timeDifference / millisecondsPerDay);
+  return daysDifference;
+};
 
-interface Item {
-  id: number;
-  title: string;
-  location: string;
-  people: string;
-  time: string;
-  date: string;
-  image: any;
-  money: string;
-}
-const DATA: Item[] = [
-  {
-    id: 1,
-    title: 'Sun World Fansipan Legend',
-    location: 'Lào Cai, Việt Nam',
-    people: '10 người',
-    time: '2 ngày 1 đêm',
-    date: '04/12/2023 - 06/12/2023',
-    image: require('../../../../assets/images/sapa.png'),
-    money: '30,000,000 VND',
-  },
-  {
-    id: 2,
-    title: 'Sun World Fansipan Legend',
-    location: 'Lào Cai, Việt Nam',
-    people: '10 người',
-    time: '2 ngày 1 đêm',
-    date: '04/12/2023 - 06/12/2023',
-    image: require('../../../../assets/images/sapa.png'),
-    money: '30,000,000 VND',
-  },
-  {
-    id: 3,
-    title: 'Sun World Fansipan Legend',
-    location: 'Lào Cai, Việt Nam',
-    people: '10 người',
-    time: '2 ngày 1 đêm',
-    date: '04/12/2023 - 06/12/2023',
-    image: require('../../../../assets/images/sapa.png'),
-    money: '30,000,000 VND',
-  },
-  {
-    id: 4,
-    title: 'Sun World Fansipan Legend',
-    location: 'Lào Cai, Việt Nam',
-    people: '10 người',
-    time: '2 ngày 1 đêm',
-    date: '04/12/2023 - 06/12/2023',
-    image: require('../../../../assets/images/sapa.png'),
-    money: '30,000,000 VND',
-  },
-  {
-    id: 5,
-    title: 'Sun World Fansipan Legend',
-    location: 'Lào Cai, Việt Nam',
-    people: '10 người',
-    time: '2 ngày 1 đêm',
-    date: '04/12/2023 - 06/12/2023',
-    image: require('../../../../assets/images/sapa.png'),
-    money: '30,000,000 VND',
-  },
-  {
-    id: 6,
-    title: 'Sun World Fansipan Legend',
-    location: 'Lào Cai, Việt Nam',
-    people: '10 người',
-    time: '2 ngày 1 đêm',
-    date: '04/12/2023 - 06/12/2023',
-    image: require('../../../../assets/images/sapa.png'),
-    money: '30,000,000 VND',
-  },
-  {
-    id: 7,
-    title: 'Sun World Fansipan Legend',
-    location: 'Lào Cai, Việt Nam',
-    people: '10 người',
-    time: '2 ngày 1 đêm',
-    date: '04/12/2023 - 06/12/2023',
-    image: require('../../../../assets/images/sapa.png'),
-    money: '30,000,000 VND',
-  },
-  {
-    id: 8,
-    title: 'Sun World Fansipan Legend',
-    location: 'Lào Cai, Việt Nam',
-    people: '10 người',
-    time: '2 ngày 1 đêm',
-    date: '04/12/2023 - 06/12/2023',
-    image: require('../../../../assets/images/sapa.png'),
-    money: '30,000,000 VND',
-  },
-  {
-    id: 9,
-    title: 'Sun World Fansipan Legend',
-    location: 'Lào Cai, Việt Nam',
-    people: '10 người',
-    time: '2 ngày 1 đêm',
-    date: '04/12/2023 - 06/12/2023',
-    image: require('../../../../assets/images/sapa.png'),
-    money: '30,000,000 VND',
-  },
-  {
-    id: 10,
-    title: 'Sun World Fansipan Legend',
-    location: 'Lào Cai, Việt Nam',
-    people: '10 người',
-    time: '2 ngày 1 đêm',
-    date: '04/12/2023 - 06/12/2023',
-    image: require('../../../../assets/images/sapa.png'),
-    money: '30,000,000 VND',
-  },
-];
+const currentDate = new Date();
 
-const ItemHistory = ({item, onPress}: {item: Item; onPress: () => void}) => {
+const isDateAfter = (date1: Date, date2: Date) => {
+  return date1.getTime() > date2.getTime();
+};
+
+const ItemHistory = ({
+  item,
+  onPress,
+}: {
+  item: BookingTour;
+  onPress: () => void;
+}) => {
+  const compareDate = new Date(item.tour_id.end_date);
+  const isAfter = isDateAfter(currentDate, compareDate);
   return (
     <View
       style={{
@@ -188,15 +106,16 @@ const ItemHistory = ({item, onPress}: {item: Item; onPress: () => void}) => {
             width: '50%',
           }}>
           <Text
+            numberOfLines={3}
             style={{
-              width: '80%',
+              width: '100%',
               fontSize: 14,
               fontFamily: fontFamily.Bold,
               color: Colors.BLUE_TEXT_HOME,
               lineHeight: 18,
               marginBottom: 5,
             }}>
-            {item.title}
+            {item.tour_id?.name}
           </Text>
           <View
             style={{
@@ -217,7 +136,7 @@ const ItemHistory = ({item, onPress}: {item: Item; onPress: () => void}) => {
                 fontSize: 13,
                 fontFamily: fontFamily.Medium,
               }}>
-              {item.location}
+              {item.tour_id.province_id.name}
             </Text>
           </View>
           <View
@@ -239,7 +158,7 @@ const ItemHistory = ({item, onPress}: {item: Item; onPress: () => void}) => {
                 fontSize: 13,
                 fontFamily: fontFamily.Medium,
               }}>
-              {item.people}
+              {item.adult_count + item.child_count} người
             </Text>
           </View>
           <View
@@ -261,7 +180,16 @@ const ItemHistory = ({item, onPress}: {item: Item; onPress: () => void}) => {
                 fontSize: 13,
                 fontFamily: fontFamily.Medium,
               }}>
-              {item.time}
+              {daysDifference(
+                item.tour_id.end_date,
+                item.tour_id.departure_date,
+              )}{' '}
+              ngày{' '}
+              {daysDifference(
+                item.tour_id.end_date,
+                item.tour_id.departure_date,
+              ) - 1}{' '}
+              đêm
             </Text>
           </View>
           <View
@@ -283,12 +211,21 @@ const ItemHistory = ({item, onPress}: {item: Item; onPress: () => void}) => {
                 fontSize: 13,
                 fontFamily: fontFamily.Medium,
               }}>
-              {item.date}
+              {moment(item.tour_id.departure_date).format('DD/MM/YYYY')} -{' '}
+              {moment(item.tour_id.end_date).format('DD/MM/YYYY')}
             </Text>
           </View>
         </View>
         <View style={{marginTop: 15}}>
-          <Image source={item.image} />
+          <Image
+            source={{uri: item.tour_id.image}}
+            style={{
+              width: DimensionsStyle.width * 0.33,
+              height: DimensionsStyle.width * 0.33,
+              resizeMode: 'stretch',
+              borderRadius: 10,
+            }}
+          />
         </View>
       </View>
       <View
@@ -325,7 +262,7 @@ const ItemHistory = ({item, onPress}: {item: Item; onPress: () => void}) => {
               lineHeight: 18,
               marginBottom: 5,
             }}>
-            {item.money}
+            {item.price.toLocaleString('vi-VN')} VNĐ
           </Text>
         </View>
         <View
@@ -336,10 +273,11 @@ const ItemHistory = ({item, onPress}: {item: Item; onPress: () => void}) => {
             title="Đánh giá"
             imageIconLeft={FULL_NAME}
             imageIconRight={FULL_NAME}
-            onPress={onPress}
+            onPress={isAfter ? onPress : () => {}}
             viewStyle={{
               width: '100%',
               height: 40,
+              backgroundColor: isAfter ? Colors.GREEN : Colors.GREY,
             }}
             textStyle={{fontSize: 12}}
           />
@@ -351,13 +289,34 @@ const ItemHistory = ({item, onPress}: {item: Item; onPress: () => void}) => {
 
 const _HistoryDetail: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dispatch = useAppDispatch();
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
 
-  const handleToAddReview = () => {
-    navigation.navigate('AddReview');
-  };
+  useEffect(() => {
+    if (dataUser) {
+      dispatch(getBookingTourByUserId(dataUser?._id));
+    }
+  }, [dataUser]);
 
-  const renderItemHistory = ({item}: {item: Item}) => {
-    return <ItemHistory item={item} onPress={handleToAddReview} />;
+  const loadingBookingTour = useSelector(
+    (state: RootState) => state.bookingTour.loadingBookingTour,
+  );
+
+  const listBookingTour = useSelector(
+    (state: RootState) => state.bookingTour.listBookingTour,
+  );
+
+  const renderItemHistory = ({item}: {item: BookingTour}) => {
+    return (
+      <ItemHistory
+        item={item}
+        onPress={() =>
+          navigation.navigate('AddReview', {
+            tour_id: item.tour_id._id,
+          })
+        }
+      />
+    );
   };
 
   return (
@@ -367,15 +326,19 @@ const _HistoryDetail: React.FC<PropsType> = props => {
         textCenter="Chi tiết lịch sử tour"
         eventLeft={() => navigation.goBack()}
       />
-      <FlatList
-        data={DATA}
-        renderItem={renderItemHistory}
-        keyExtractor={item => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-        style={{
-          marginTop: 20,
-        }}
-      />
+      {loadingBookingTour ? (
+        <Loading height={DimensionsStyle.height * 1} />
+      ) : (
+        <FlatList
+          data={listBookingTour}
+          renderItem={renderItemHistory}
+          keyExtractor={item => item._id.toString()}
+          showsVerticalScrollIndicator={false}
+          style={{
+            marginTop: 20,
+          }}
+        />
+      )}
     </BackgroundApp>
   );
 };

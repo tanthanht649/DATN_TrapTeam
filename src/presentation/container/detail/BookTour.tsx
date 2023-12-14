@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -8,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BackgroundApp, Button, Header} from '@components';
 import {
@@ -30,73 +31,84 @@ import {
 } from '@assets';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeStackParamList, SearchStackParamList} from '@navigation';
-import {Tour} from '../home';
 import {Colors, DimensionsStyle} from '@resources';
 import SelectDropdown from 'react-native-select-dropdown';
-import {AppContext} from '@shared-state';
+import {
+  AppContext,
+  RootState,
+  getQuantityBookingTour,
+  useAppDispatch,
+} from '@shared-state';
+import {useSelector} from 'react-redux';
 
-type PropsType = NativeStackScreenProps<HomeStackParamList, 'BookTour'>;
-
-interface Location {
-  id: number;
-  name: string;
-  image: any;
-  address: string;
-}
-
-const DATALOCATION: Location[] = [
-  {
-    id: 1,
-    name: 'Bà Nà Hills',
-    image: VHL,
-    address: 'Đà Nẵng, Việt Nam',
-  },
-  {
-    id: 2,
-    name: 'Hội An',
-    image: DT_1,
-    address: 'Quảng Nam, Việt Nam',
-  },
-  {
-    id: 3,
-    name: 'Cù Lao Chàm',
-    image: DT_1,
-    address: 'Quảng Nam, Việt Nam',
-  },
-  {
-    id: 4,
-    name: 'Cầu Rồng',
-    image: VHL_FL_1,
-    address: 'Đà Nẵng, Việt Nam',
-  },
-];
+type PropsType = NativeStackScreenProps<HomeStackParamList, 'BookTour'> &
+  NativeStackScreenProps<SearchStackParamList, 'BookTour'>;
 
 const _BookTour: React.FC<PropsType> = props => {
   const {navigation} = props;
-  const [adult, setAdult] = React.useState<number>(1);
-  const [child, setChild] = React.useState<number>(1);
+  const dispatch = useAppDispatch();
+  const [adult, setAdult] = React.useState<number>(0);
+  const [child, setChild] = React.useState<number>(0);
   const eventRight = () => {};
   const eventLeft = () => {};
   const eventBack = () => {
     navigation.goBack();
   };
+  const [noteUI, setNoteUI] = useState<string>('');
 
-  const itemTour: Tour = {
-    id: 1,
-    tourist_destinationId: 1,
-    provide: 'Vietnam Travel',
-    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    available_seats: 10,
-    duration: 1,
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    price: 4450000,
-    departure_date: '2021-10-10',
-    departure_location: 'Hà Nội, Việt Nam',
-    note: 'Không được hủy',
-    schedule: 'Hà Nội',
-    status: true,
-  };
+  const locationByProvince = useSelector(
+    (state: RootState) => state.location.locationByProvince,
+  );
+
+  const dataTourDetail = useSelector(
+    (state: RootState) => state.tour.tourDetail,
+  );
+
+  interface LocationInBookTour {
+    _id: string;
+    name: string;
+  }
+
+  const [dataLocationDefault, setDataLocationDefault] = React.useState<
+    LocationInBookTour[]
+  >([]);
+
+  const array = useRef<LocationInBookTour[]>([]);
+
+  useEffect(() => {
+    // tạo mảng mới từ dataDetail chỉ có 2 thuộc tính là _id và name
+    const dataLocation = dataTourDetail?.locations.map(item => {
+      return {
+        _id: item._id,
+        name: item.name,
+      };
+    });
+    setDataLocationDefault(dataLocation);
+
+    const dataLocation2 = dataTourDetail?.locations.map(item => {
+      return {
+        _id: item._id,
+        name: item.name,
+      };
+    });
+
+    array.current = dataLocation2;
+  }, []);
+
+  const [dataLocationOption, setDataLocationOption] = React.useState<
+    LocationInBookTour[]
+  >([]);
+
+  useEffect(() => {
+    // tạo mảng mới từ dataDetail chỉ có 2 thuộc tính là _id và name
+    const dataLocation = locationByProvince?.map(item => {
+      return {
+        _id: item._id,
+        name: item.name,
+      };
+    });
+    setDataLocationOption(dataLocation);
+  }, []);
 
   const renderDropdownIcon = () => {
     return (
@@ -110,10 +122,18 @@ const _BookTour: React.FC<PropsType> = props => {
     );
   };
 
-  const ItemLocation = ({item, data}: {item: Location; data: Location[]}) => {
+  const ItemLocation = ({
+    item,
+    data,
+    indexRender,
+  }: {
+    item: LocationInBookTour;
+    data: LocationInBookTour[];
+    indexRender: number;
+  }) => {
     return (
       <SelectDropdown
-        key={item.id}
+        key={item._id}
         showsVerticalScrollIndicator={false}
         renderDropdownIcon={renderDropdownIcon}
         dropdownIconPosition="right"
@@ -133,9 +153,9 @@ const _BookTour: React.FC<PropsType> = props => {
         selectedRowTextStyle={[_styles.textSelect, {color: Colors.WHITE}]}
         rowStyle={_styles.item}
         rowTextStyle={_styles.textSelect}
-        data={data}
-        onSelect={(selectedItem, index) => {
-          console.log(selectedItem, index);
+        data={dataLocationOption}
+        onSelect={selectedItem => {
+          array.current[indexRender] = selectedItem;
         }}
         buttonTextAfterSelection={(selectedItem, index) => {
           // Hiển thị giá trị của thuộc tính 'title' sau khi một mục được chọn
@@ -152,11 +172,20 @@ const _BookTour: React.FC<PropsType> = props => {
   const renderItemLocation = ({
     item,
     data,
+    indexRender,
   }: {
-    item: Location;
-    data: Location[];
+    item: LocationInBookTour;
+    data: LocationInBookTour[];
+    indexRender: number;
   }) => {
-    return <ItemLocation item={item} data={DATALOCATION} key={item.id} />;
+    return (
+      <ItemLocation
+        item={item}
+        data={data}
+        key={item._id}
+        indexRender={indexRender}
+      />
+    );
   };
 
   const [widthMomo, setWidthMomo] = React.useState<number>(52);
@@ -196,6 +225,47 @@ const _BookTour: React.FC<PropsType> = props => {
     setPay('ViettelPay');
   };
 
+  const compareArrays = (
+    dataLocationDefault: LocationInBookTour[],
+    dataLocationBookTourRef: React.MutableRefObject<LocationInBookTour[]>,
+  ) => {
+    let differences = 0;
+
+    const aIds = dataLocationDefault.map(item => item._id);
+    const bIds = dataLocationBookTourRef.current.map(item => item._id);
+
+    for (let i = 0; i < aIds.length; i++) {
+      if (!bIds.includes(aIds[i])) {
+        differences++;
+      }
+    }
+
+    return differences;
+  };
+
+  const hasDuplicates = (dataLocationBookTour: LocationInBookTour[]) => {
+    const uniqueValues = new Set(
+      dataLocationBookTour.map(item => JSON.stringify(item)),
+    );
+    return uniqueValues.size !== dataLocationBookTour.length;
+  };
+
+  const quantity = useSelector(
+    (state: RootState) => state.bookingTour.quantity,
+  );
+
+  const [quantityUI, setQuantityUI] = useState<number>(quantity);
+  const [priceUI, setPriceUI] = useState<number>(0);
+
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
+
+  const discountTour = (adult: number) => {
+    if (adult > 20) {
+      return dataTourDetail.price * (adult - 20) * 0.1;
+    } else {
+      return 0;
+    }
+  };
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView style={_styles.container}>
@@ -222,7 +292,7 @@ const _BookTour: React.FC<PropsType> = props => {
                 padding: 7,
               }}>
               <Image
-                source={{uri: itemTour.image}}
+                source={{uri: dataTourDetail.image}}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -258,7 +328,7 @@ const _BookTour: React.FC<PropsType> = props => {
                   lineHeight: 18,
                   color: Colors.BLUE_TEXT_HOME,
                 }}>
-                {itemTour.name}
+                {dataTourDetail?.name}
               </Text>
               <View
                 style={{
@@ -276,7 +346,7 @@ const _BookTour: React.FC<PropsType> = props => {
                     fontSize: 10,
                     fontFamily: fontFamily.Medium,
                   }}>
-                  {itemTour.departure_location}
+                  {dataTourDetail?.departure_location}
                 </Text>
               </View>
               <Text
@@ -288,7 +358,7 @@ const _BookTour: React.FC<PropsType> = props => {
                   left: 10,
                   fontSize: 17,
                 }}>
-                {itemTour.price.toLocaleString('vi-VN')} VNĐ
+                {dataTourDetail?.price.toLocaleString('vi-VN')} VNĐ
               </Text>
             </View>
           </View>
@@ -296,15 +366,32 @@ const _BookTour: React.FC<PropsType> = props => {
             style={{
               marginHorizontal: 20,
             }}>
-            <Text
-              style={[
-                _styles.text,
-                {
-                  marginVertical: 10,
-                },
-              ]}>
-              Yêu cầu
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    marginVertical: 10,
+                  },
+                ]}>
+                Yêu cầu
+              </Text>
+
+              <Text
+                style={{
+                  fontFamily: fontFamily.Medium,
+                  fontSize: 14,
+                  color: Colors.BLUE_TEXT,
+                }}>
+                Còn lại: {50 - quantityUI} chỗ
+              </Text>
+            </View>
+
             <View style={_styles.viewRequet}>
               <Text
                 style={[
@@ -317,7 +404,11 @@ const _BookTour: React.FC<PropsType> = props => {
                 <TouchableOpacity
                   style={_styles.buttonNumberic}
                   onPress={() => {
-                    adult > 1 ? setAdult(adult - 1) : setAdult(1);
+                    adult > 0 ? setAdult(adult - 1) : setAdult(0);
+                    adult > 0 ? setQuantityUI(quantityUI - 1) : null;
+                    adult > 0
+                      ? setPriceUI(priceUI - dataTourDetail.price)
+                      : null;
                   }}>
                   <Text
                     style={[
@@ -342,6 +433,8 @@ const _BookTour: React.FC<PropsType> = props => {
                   style={_styles.buttonNumberic}
                   onPress={() => {
                     setAdult(adult + 1);
+                    setQuantityUI(quantityUI + 1);
+                    setPriceUI(priceUI + dataTourDetail.price);
                   }}>
                   <Text style={[_styles.textNumberic]}>+</Text>
                 </TouchableOpacity>
@@ -359,7 +452,11 @@ const _BookTour: React.FC<PropsType> = props => {
                 <TouchableOpacity
                   style={_styles.buttonNumberic}
                   onPress={() => {
-                    child > 1 ? setChild(child - 1) : setChild(1);
+                    child > 0 ? setChild(child - 1) : setChild(0);
+                    child > 0 ? setQuantityUI(quantityUI - 1) : null;
+                    child > 0
+                      ? setPriceUI(priceUI - dataTourDetail.price * 0.6)
+                      : null;
                   }}>
                   <Text
                     style={[
@@ -384,6 +481,8 @@ const _BookTour: React.FC<PropsType> = props => {
                   style={_styles.buttonNumberic}
                   onPress={() => {
                     setChild(child + 1);
+                    setQuantityUI(quantityUI + 1);
+                    setPriceUI(priceUI + dataTourDetail.price * 0.6);
                   }}>
                   <Text style={[_styles.textNumberic]}>+</Text>
                 </TouchableOpacity>
@@ -400,7 +499,7 @@ const _BookTour: React.FC<PropsType> = props => {
                     color: Colors.GREY_BAREL,
                   },
                 ]}>
-                30.000.000
+                {priceUI.toLocaleString('vi-VN')}
               </Text>
               <Text
                 style={[
@@ -411,8 +510,12 @@ const _BookTour: React.FC<PropsType> = props => {
               </Text>
             </View>
             <Text style={[_styles.text]}>Địa điểm tham quan</Text>
-            {DATALOCATION.map((item, index) => {
-              return renderItemLocation({item, data: DATALOCATION});
+            {dataLocationDefault.map((item, index) => {
+              return renderItemLocation({
+                item,
+                data: dataLocationOption,
+                indexRender: index,
+              });
             })}
             <Text
               style={[
@@ -438,6 +541,8 @@ const _BookTour: React.FC<PropsType> = props => {
                 lineHeight: 18,
               }}
               multiline={true}
+              value={noteUI}
+              onChangeText={text => setNoteUI(text)}
             />
             <Text
               style={{
@@ -540,7 +645,120 @@ const _BookTour: React.FC<PropsType> = props => {
               imageIconLeft={FULL_NAME}
               imageIconRight={ORDER_BT}
               onPress={() => {
-                navigation.navigate('Pay');
+                if (adult == 0) {
+                  if (child > 0) {
+                    Alert.alert(
+                      'Thông báo',
+                      'Bạn phải chọn số người lớn',
+                      [
+                        {
+                          text: 'OK',
+                          onPress: () => console.log('OK Pressed'),
+                          style: 'cancel',
+                        },
+                      ],
+                      {cancelable: false},
+                    );
+                  }
+                }
+
+                if (adult == 0 && child == 0) {
+                  Alert.alert(
+                    'Thông báo',
+                    'Bạn phải chọn số lượng đặt',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Pressed'),
+                        style: 'cancel',
+                      },
+                    ],
+                    {cancelable: false},
+                  );
+                }
+
+                if (adult + child > 50 - quantity) {
+                  Alert.alert(
+                    'Thông báo',
+                    'Số lượng đặt không được vượt quá số lượng còn lại',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Pressed'),
+                        style: 'cancel',
+                      },
+                    ],
+                    {cancelable: false},
+                  );
+                }
+
+                const resulthasDuplicates = hasDuplicates(array.current);
+                if (resulthasDuplicates) {
+                  console.log('Có trùng');
+                  Alert.alert(
+                    'Thông báo',
+                    'Bạn không được chọn trùng địa điểm',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Pressed'),
+                        style: 'cancel',
+                      },
+                    ],
+                    {cancelable: false},
+                  );
+                } else {
+                  const resultcompareArrays = compareArrays(
+                    dataLocationDefault,
+                    array,
+                  );
+                  if (resultcompareArrays == 0) {
+                    console.log('Không có thay đổi');
+                    const user_id = dataUser?._id;
+                    const tour_id = dataTourDetail?._id;
+                    const discount: number = discountTour(adult);
+                    const adult_account = adult;
+                    const child_account = child;
+                    const price = priceUI - discount;
+                    const note = noteUI;
+                    const role = false;
+                    const location_custom: LocationInBookTour[] = array.current;
+                    navigation.replace('Pay', {
+                      user_id: user_id,
+                      tour_id: tour_id,
+                      discount: discount,
+                      adult_account: adult_account,
+                      child_account: child_account,
+                      price: price,
+                      note: note,
+                      role: role,
+                      location_custom: location_custom,
+                    });
+                  } else {
+                    console.log(`Có ${resultcompareArrays} thay đổi`);
+                    const user_id = dataUser?._id;
+                    const tour_id = dataTourDetail?._id;
+                    const discount: number = discountTour(adult);
+                    const adult_account = adult;
+                    const child_account = child;
+                    const price =
+                      priceUI - discount + resultcompareArrays * 300000;
+                    const note = noteUI;
+                    const role = true;
+                    const location_custom: LocationInBookTour[] = array.current;
+                    navigation.replace('Pay', {
+                      user_id: user_id,
+                      tour_id: tour_id,
+                      discount: discount,
+                      adult_account: adult_account,
+                      child_account: child_account,
+                      price: price,
+                      note: note,
+                      role: role,
+                      location_custom: location_custom,
+                    });
+                  }
+                }
               }}
               viewStyle={{
                 width: DimensionsStyle.width * 1 - 40,

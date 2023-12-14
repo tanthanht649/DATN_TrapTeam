@@ -1,17 +1,9 @@
-import {
-  FlatList,
-  Image,
-  ImageSourcePropType,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {BlogStackParamList} from '@navigation';
-import {BackgroundApp, Header} from '@components';
+import {BlogStackParamList, ProfileStackParamList} from '@navigation';
+import {BackgroundApp, Header, Loading} from '@components';
 import {
   ADD_BLOG,
   BACKGROUND_WHITE,
@@ -20,7 +12,12 @@ import {
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
-import {RootState, getAllBlogs, useAppDispatch} from '@shared-state';
+import {
+  RootState,
+  getAllBlogs,
+  getBlogUser,
+  useAppDispatch,
+} from '@shared-state';
 import {useSelector} from 'react-redux';
 import {Blog} from '@domain';
 import moment from 'moment';
@@ -39,6 +36,7 @@ const Item = ({item}: {item: Blog}) => {
         setTimeAgo(`${daysAgo} ngày trước`);
       }
     };
+
     calculateTimeAgo();
   }, [item.created_at]);
 
@@ -62,21 +60,23 @@ const Item = ({item}: {item: Blog}) => {
 
 export default Item;
 
-type PropsType = NativeStackScreenProps<BlogStackParamList, 'Blogs'>;
-const _Blog: React.FC<PropsType> = props => {
+type PropsType = NativeStackScreenProps<ProfileStackParamList, 'BlogUser'>;
+const _BlogUser: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const dataUser = useSelector((state: RootState) => state.user.dataUsers);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getAllBlogs());
+    dispatch(getBlogUser(dataUser?._id));
     const interval = setInterval(() => {
-      dispatch(getAllBlogs());
+      dispatch(getBlogUser(dataUser?._id));
     }, 60000); // Tải lại dữ liệu sau mỗi 1 phút (60000 milliseconds)
     return () => {
       clearInterval(interval); // Hủy cơ chế tải lại định kỳ khi component bị unmount
     };
   }, []);
 
-  const dataBlogs = useSelector((state: RootState) => state.blog.dataBlogs);
+  const loadingBlog = useSelector((state: RootState) => state.blog.loadingBlog);
+  const dataBlogs = useSelector((state: RootState) => state.blog.dataBlogUser);
   const renderItemBlog = React.useMemo(
     () =>
       ({item}: {item: Blog}) => {
@@ -103,12 +103,25 @@ const _Blog: React.FC<PropsType> = props => {
           eventRight={() => console.log(navigation.navigate('CreateBlog'))}
           styleView={{marginTop: 10}}
         />
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={dataBlogs}
-          renderItem={renderItemBlog}
-          keyExtractor={item => item._id}
-        />
+
+        {loadingBlog ? (
+          <View
+            style={{
+              height: DimensionsStyle.height * 0.8,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Loading height={DimensionsStyle.height * 1} />
+          </View>
+        ) : (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={dataBlogs}
+            renderItem={renderItemBlog}
+            keyExtractor={item => item._id}
+          />
+        )}
       </SafeAreaView>
     </BackgroundApp>
   );
@@ -170,4 +183,4 @@ const _styles = StyleSheet.create({
   },
 });
 
-export const Blogs = React.memo(_Blog);
+export const BlogUser = React.memo(_BlogUser);

@@ -10,7 +10,14 @@ import {
 } from '@containers';
 
 type SearchProps = {};
-type SearchResultProps = {};
+type SearchResultProps = {
+  isFilter: boolean;
+  locationProvinces?: string;
+  is_popular?: boolean;
+  minPrice?: string;
+  maxPrice?: string;
+  dayFind?: string;
+};
 type FeaturedListHomeProps = {};
 type DetailTourProps = {
   tour_id: string;

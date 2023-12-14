@@ -30,19 +30,42 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeStackParamList, SearchStackParamList} from '@navigation';
-import {Tour} from '../home';
 import {Colors, DimensionsStyle} from '@resources';
-import {AppContext} from '@shared-state';
+import {
+  AppContext,
+  RootState,
+  addBookingTour,
+  getBookingTourByUserId,
+  useAppDispatch,
+} from '@shared-state';
+import {useSelector} from 'react-redux';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'Pay'>;
 
 const _Pay: React.FC<PropsType> = props => {
   const {navigation} = props;
+  const {route} = props;
+  const user_id = route.params?.user_id;
+  const tour_id = route.params?.tour_id;
+  const discount = route.params?.discount;
+  const adult_account = route.params?.adult_account;
+  const child_account = route.params?.child_account;
+  const price = route.params?.price;
+  const note = route.params?.note;
+  const role = route.params?.role;
+  const location_custom = route.params?.location_custom;
+
   const eventRight = () => {};
   const eventLeft = () => {};
   const eventBack = () => {
     navigation.goBack();
   };
+
+  const dispatch = useAppDispatch();
+
+  const dataTourDetail = useSelector(
+    (state: RootState) => state.tour.tourDetail,
+  );
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const {pay} = React.useContext(AppContext);
@@ -50,7 +73,7 @@ const _Pay: React.FC<PropsType> = props => {
   const [modalVisiblePay, setModalVisiblePay] = useState<boolean>(false);
   const handleModal = () => {
     setModalVisiblePay(false);
-    navigation.navigate('HomeFull');
+    navigation.replace('HistoryDetail');
   };
 
   const [imagePay, setImagePay] = useState<ImageSourcePropType>(MOMO);
@@ -73,22 +96,6 @@ const _Pay: React.FC<PropsType> = props => {
     setModalVisible(false);
   };
 
-  const itemTour: Tour = {
-    id: 1,
-    tourist_destinationId: 1,
-    provide: 'Vietnam Travel',
-    name: 'Tour Tết 2024: Quy Nhơn – Phú Quốc',
-    description: 'Điểm đến: Hồ Hoàn Kiếm',
-    available_seats: 10,
-    duration: 1,
-    image: 'https://i.redd.it/x8m1euew4du21.jpg',
-    price: 4450000,
-    departure_date: '2021-10-10',
-    departure_location: 'Hà Nội, Việt Nam',
-    note: 'Không được hủy',
-    schedule: 'Hà Nội',
-    status: true,
-  };
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView>
@@ -115,7 +122,7 @@ const _Pay: React.FC<PropsType> = props => {
                 padding: 7,
               }}>
               <Image
-                source={{uri: itemTour.image}}
+                source={{uri: dataTourDetail.image}}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -151,7 +158,7 @@ const _Pay: React.FC<PropsType> = props => {
                   lineHeight: 18,
                   color: Colors.BLUE_TEXT_HOME,
                 }}>
-                {itemTour.name}
+                {dataTourDetail.name}
               </Text>
               <View
                 style={{
@@ -169,7 +176,7 @@ const _Pay: React.FC<PropsType> = props => {
                     fontSize: 10,
                     fontFamily: fontFamily.Medium,
                   }}>
-                  {itemTour.departure_location}
+                  {dataTourDetail.departure_location}
                 </Text>
               </View>
               <Text
@@ -181,7 +188,7 @@ const _Pay: React.FC<PropsType> = props => {
                   left: 10,
                   fontSize: 17,
                 }}>
-                {itemTour.price.toLocaleString('vi-VN')} VNĐ
+                {dataTourDetail.price.toLocaleString('vi-VN')} VNĐ
               </Text>
             </View>
           </View>
@@ -208,7 +215,7 @@ const _Pay: React.FC<PropsType> = props => {
                     fontFamily: fontFamily.Regular,
                   },
                 ]}>
-                Người lớn x2
+                Người lớn x{adult_account}
               </Text>
               <Text
                 style={[
@@ -219,7 +226,10 @@ const _Pay: React.FC<PropsType> = props => {
                     fontFamily: fontFamily.Regular,
                   },
                 ]}>
-                13.380.000 VND
+                {(Number(adult_account) * dataTourDetail.price).toLocaleString(
+                  'vi-VN',
+                )}{' '}
+                VND
               </Text>
             </View>
             <View style={_styles.row}>
@@ -232,7 +242,7 @@ const _Pay: React.FC<PropsType> = props => {
                     fontFamily: fontFamily.Regular,
                   },
                 ]}>
-                Trẻ em x3
+                Trẻ em x{child_account}
               </Text>
               <Text
                 style={[
@@ -243,7 +253,12 @@ const _Pay: React.FC<PropsType> = props => {
                     fontFamily: fontFamily.Regular,
                   },
                 ]}>
-                1.800.000 VND
+                {(
+                  Number(child_account) *
+                  dataTourDetail.price *
+                  0.6
+                ).toLocaleString('vi-VN')}{' '}
+                VND
               </Text>
             </View>
             <View style={_styles.row}>
@@ -267,7 +282,7 @@ const _Pay: React.FC<PropsType> = props => {
                     fontFamily: fontFamily.Regular,
                   },
                 ]}>
-                380.000 VND
+                {discount?.toLocaleString('vi-vn')} VND
               </Text>
             </View>
           </View>
@@ -291,7 +306,7 @@ const _Pay: React.FC<PropsType> = props => {
                   marginHorizontal: 20,
                 },
               ]}>
-              14,800,000 VND
+              {price?.toLocaleString('vi-VN')} VND
             </Text>
           </View>
           <View style={_styles.row}>
@@ -332,7 +347,7 @@ const _Pay: React.FC<PropsType> = props => {
                     fontFamily: fontFamily.Regular,
                   },
                 ]}>
-                14.800.000 VND
+                {price?.toLocaleString('vi-VN')} VND
               </Text>
             </View>
           </View>
@@ -342,6 +357,19 @@ const _Pay: React.FC<PropsType> = props => {
             imageIconRight={ORDER_BT}
             onPress={() => {
               setModalVisiblePay(true);
+              const data = {
+                user_id: user_id,
+                tour_id: tour_id,
+                discount: discount,
+                adult_count: Number(adult_account),
+                child_count: Number(child_account),
+                price: price,
+                note: note,
+                role: role,
+                location_custom: location_custom,
+              };
+
+              dispatch(addBookingTour(data));
             }}
             viewStyle={{
               width: DimensionsStyle.width * 1 - 40,
@@ -365,7 +393,7 @@ const _Pay: React.FC<PropsType> = props => {
           onPress={handleModal}
           text="Bạn đã thanh toán thành công"
           textBold="thành công"
-          titleButton="Tiếp tục khám phá"
+          titleButton="Xem danh sách tour đã đặt"
         />
       </SafeAreaView>
     </BackgroundApp>

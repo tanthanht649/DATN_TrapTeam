@@ -6,6 +6,7 @@ import {
   Pressable,
   Dimensions,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import {
@@ -36,6 +37,11 @@ import {
   getAllLocation,
   useAppDispatch,
   getToursOutstanding,
+  findTourByNames,
+  getBookingTourByUserId,
+  dataUser,
+  deleteFavorite,
+  addFavorite,
 } from '@shared-state';
 import {Event, Tour, Location, TourAndFavorite} from '@domain';
 
@@ -80,10 +86,14 @@ const ItemTourFavorite = ({
   item,
   onPress,
   index,
+  onPressFavorite,
+  user_id,
 }: {
   item: Tour;
   onPress: () => void;
   index: number;
+  onPressFavorite: () => void;
+  user_id: string | undefined;
 }) => {
   return (
     <Pressable
@@ -111,18 +121,22 @@ const ItemTourFavorite = ({
             borderRadius: 20,
           }}
         />
-
-        <Image
-          source={HEART}
+        <TouchableOpacity
           style={{
-            width: 30,
-            height: 30,
-            resizeMode: 'stretch',
             position: 'absolute',
             top: 15,
             left: 15,
           }}
-        />
+          onPress={onPressFavorite}>
+          <Image
+            source={HEART}
+            style={{
+              width: 30,
+              height: 30,
+              resizeMode: 'stretch',
+            }}
+          />
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -255,10 +269,14 @@ export const ItemTourOutstanding = ({
   item,
   index,
   onPress,
+  user_id,
+  onPressFavorite,
 }: {
   item: TourAndFavorite;
   index: number;
   onPress: () => void;
+  user_id?: string | undefined;
+  onPressFavorite: () => void;
 }) => {
   return (
     <Pressable
@@ -284,17 +302,21 @@ export const ItemTourOutstanding = ({
             borderRadius: 20,
           }}
         />
-        <Image
-          source={item.isFavorite ? HEART : HEART_INACTIVE_2}
-          style={{
-            width: 30,
-            height: 30,
-            resizeMode: 'stretch',
-            position: 'absolute',
-            top: 10,
-            right: 10,
-          }}
-        />
+        <TouchableOpacity
+          style={{position: 'absolute', top: 10, right: 10}}
+          onPress={() => {
+            onPressFavorite();
+          }}>
+          <Image
+            source={item.isFavorite ? HEART : HEART_INACTIVE_2}
+            style={{
+              width: 30,
+              height: 30,
+              resizeMode: 'stretch',
+            }}
+          />
+        </TouchableOpacity>
+
         <View
           style={{
             position: 'absolute',
@@ -402,7 +424,15 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item, index}: {item: Tour; index: number}) => {
+      ({
+        item,
+        index,
+        user_id,
+      }: {
+        item: Tour;
+        index: number;
+        user_id: string | undefined;
+      }) => {
         return (
           <ItemTourFavorite
             item={item}
@@ -414,6 +444,15 @@ const _HomeFull: React.FC<PropsType> = props => {
               });
             }}
             index={index}
+            user_id={user_id}
+            onPressFavorite={() => {
+              const data = {
+                user_id: user_id,
+                tour_id: item._id,
+              };
+              dispatch(deleteFavorite(data));
+              dispatch(getDataFavorite(user_id));
+            }}
           />
         );
       },
@@ -428,7 +467,9 @@ const _HomeFull: React.FC<PropsType> = props => {
             item={item}
             key={item._id}
             onPress={() => {
-              navigation.navigate('FeaturedListDetail');
+              navigation.navigate('FeaturedListDetail', {
+                location_id: item._id,
+              });
             }}
           />
         );
@@ -438,14 +479,41 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item, index}: {item: TourAndFavorite; index: number}) => {
+      ({
+        item,
+        index,
+        user_id,
+      }: {
+        item: TourAndFavorite;
+        index: number;
+        user_id: string | undefined;
+      }) => {
         return (
           <ItemTourOutstanding
             item={item}
             key={item._id}
             index={index}
             onPress={() => {
-              navigation.navigate('DetailTour');
+              navigation.navigate('DetailTour', {
+                tour_id: item._id,
+                isFavorite: item.isFavorite,
+              });
+            }}
+            user_id={dataUser?._id}
+            onPressFavorite={() => {
+              const data = {
+                user_id: user_id,
+                tour_id: item._id,
+              };
+              if (item.isFavorite) {
+                dispatch(deleteFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(user_id));
+                });
+              } else {
+                dispatch(addFavorite(data)).then(() => {
+                  dispatch(getDataFavorite(user_id));
+                });
+              }
             }}
           />
         );
@@ -478,15 +546,9 @@ const _HomeFull: React.FC<PropsType> = props => {
     navigation.navigate('FeaturedListHome');
   };
 
-  const handleToFeaturedListDetail = () => {
-    navigation.navigate('FeaturedListDetail');
-  };
-
   const [imageAvatar, setImageAvatar] = useState(
     'https://www.bing.com/th?id=OIP.fN9gx82LKxSZVpTc18meBgHaEo&w=149&h=100&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2',
   );
-
-  const [limitCheck, setLimitCheck] = useState(0);
 
   useEffect(() => {
     if (dataUser && dataUser.avatar) {
@@ -503,15 +565,18 @@ const _HomeFull: React.FC<PropsType> = props => {
     (state: RootState) => state.favorite.loadingFavorite,
   );
 
-  useEffect(() => {
-    dispatch(getAllEvents());
-  }, [limitCheck]);
-
   const [limitCheckFavorite, setLimitCheckFavorite] = useState(false);
 
   useEffect(() => {
-    if (dataUser && dataUser._id) dispatch(getDataFavorite(dataUser?._id));
+    if (dataUser && dataUser._id) {
+      dispatch(getDataFavorite(dataUser?._id));
+      dispatch(getBookingTourByUserId(dataUser?._id));
+    }
   }, [limitCheckFavorite, dataUser]);
+
+  const listBookingTour = useSelector(
+    (state: RootState) => state.bookingTour.listBookingTour,
+  );
 
   const dataFavoriteNoId = useSelector(
     (state: RootState) => state.favorite.dataFavoriteNoId,
@@ -525,7 +590,7 @@ const _HomeFull: React.FC<PropsType> = props => {
     if (dataFavoriteNoId.length > 0) {
       setIsFavorite(true);
     }
-  }, [dataFavoriteNoId]);
+  }, [dataFavoriteNoId, dataFavorite]);
 
   const dataLocations = useSelector(
     (state: RootState) => state.location.dataLocations,
@@ -540,13 +605,6 @@ const _HomeFull: React.FC<PropsType> = props => {
   const dataToursOutstanding = useSelector(
     (state: RootState) => state.tour.dataToursOutstanding,
   );
-
-  const [limitCheckTourOutstanding, setLimitCheckTourOutstanding] =
-    useState(false);
-
-  useEffect(() => {
-    dispatch(getToursOutstanding());
-  }, [limitCheckTourOutstanding]);
 
   const [dataTourAndFavorite, setDataTourAndFavorite] = useState<
     TourAndFavorite[]
@@ -566,6 +624,15 @@ const _HomeFull: React.FC<PropsType> = props => {
   const halfwayIndex = Math.ceil(dataTourAndFavorite.length / 2);
   const column1Data = dataTourAndFavorite.slice(0, halfwayIndex);
   const column2Data = dataTourAndFavorite.slice(halfwayIndex);
+
+  const dataSearch = useSelector(
+    (state: RootState) => state.tour.dataSearchName,
+  );
+
+  const handleSearch = () => {
+    dispatch(findTourByNames(text));
+    setText('');
+  };
 
   return (
     <BackgroundApp source={BACKGROUND_HOME}>
@@ -612,7 +679,10 @@ const _HomeFull: React.FC<PropsType> = props => {
                 marginStart: 0,
               }}
               textInputStyle={{width: '90%'}}
-              onPressLeft={() => navigation.navigate('SearchResult')}
+              onPressLeft={() => {
+                handleSearch();
+                navigation.navigate('SearchResult', {isFilter: false});
+              }}
             />
           </View>
         )}
@@ -703,6 +773,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                         renderItemTourFavorite({
                           item,
                           index,
+                          user_id: dataUser?._id,
                         }),
                       )}
                     </View>
@@ -729,9 +800,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                 }}>
                 Địa điểm nổi bật
               </Text>
-              <Pressable
-                onPress={handleToFeaturedListDetail}
-                style={{display: 'none'}}>
+              <Pressable style={{display: 'none'}}>
                 <Text
                   style={{
                     fontFamily: fontFamily.Medium,
@@ -796,12 +865,20 @@ const _HomeFull: React.FC<PropsType> = props => {
               <View style={_styles.containerFlatlist}>
                 <View>
                   {column1Data.map((item, index) =>
-                    renderItemTourOutstanding({item: item, index: index}),
+                    renderItemTourOutstanding({
+                      item: item,
+                      index: index,
+                      user_id: dataUser?._id,
+                    }),
                   )}
                 </View>
                 <View>
                   {column2Data.map((item, index) =>
-                    renderItemTourOutstanding({item: item, index: index}),
+                    renderItemTourOutstanding({
+                      item: item,
+                      index: index,
+                      user_id: dataUser?._id,
+                    }),
                   )}
                 </View>
               </View>

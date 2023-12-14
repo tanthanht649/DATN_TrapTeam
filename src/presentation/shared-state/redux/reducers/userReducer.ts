@@ -83,7 +83,6 @@ interface DataUpdateProfile {
   avatar: string;
 }
 
-
 // cập nhật thông tin user
 export const updateProfile = createAsyncThunk(
   'user/updateProfile',
@@ -106,7 +105,6 @@ export const updateProfile = createAsyncThunk(
     const res = await fetchData();
     if (res.result) {
       return res.account;
-      console.log('res.account', res.account);
     }
   },
 );
@@ -115,7 +113,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    logout: state => {
+    logoutUser: state => {
       // Reset state về giá trị ban đầu
       return initialState;
     },
@@ -135,5 +133,5 @@ const userSlice = createSlice({
   },
 });
 
-export const {logout} = userSlice.actions;
+export const {logoutUser} = userSlice.actions;
 export const userReducer = userSlice.reducer;
