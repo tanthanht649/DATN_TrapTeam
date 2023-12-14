@@ -37,7 +37,7 @@ const _OnboardingStart: React.FC<PropsType> = props => {
       <SafeAreaView style={_styles.container}>
         <View>
           <Image source={LOGO_APP} style={_styles.imageLogo} />
-          <Text style={_styles.textCenter}>BNB TOUR</Text>
+          <Text style={[_styles.textCenter, {lineHeight:70}]}>BNB TOUR</Text>
         </View>
         <View
           style={{
