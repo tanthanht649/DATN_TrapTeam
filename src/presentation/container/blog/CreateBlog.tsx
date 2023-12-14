@@ -1,17 +1,20 @@
-import { Alert, Image, Pressable, StyleSheet, TextInput, View } from 'react-native';
-import React, { useCallback, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {
+  Alert,
+  Image,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   BlogStackParamList,
   ProfileStackParamList,
   WelcomeTeamStackParamList,
 } from '@navigation';
-import {
-  BackgroundApp,
-  Button,
-  Header,
-} from '@components';
+import {BackgroundApp, Button, Header, Loading} from '@components';
 import {
   ADD_IMAGE,
   BACKGROUND_WHITE,
@@ -19,27 +22,26 @@ import {
   LINE_BLOG,
   fontFamily,
 } from '@assets';
-import { Colors, DimensionsStyle } from '@resources';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { CONSTANTS } from '@core';
-import { useSelector } from 'react-redux';
-import { RootState, addBlog, useAppDispatch } from '@shared-state';
+import {Colors, DimensionsStyle} from '@resources';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {CONSTANTS} from '@core';
+import {useSelector} from 'react-redux';
+import {RootState, addBlog, useAppDispatch} from '@shared-state';
 
 type PropsType = NativeStackScreenProps<BlogStackParamList, 'CreateBlog'> &
   NativeStackScreenProps<ProfileStackParamList>;
 const _CreateBlog: React.FC<PropsType> = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const dispatch = useAppDispatch();
   const dataUser = useSelector((state: RootState) => state.user.dataUsers);
-  const loadingBlog = useSelector(
-    (state: RootState) => state.blog.loadingBlog,
-  );
-  const [image, setImage] = useState(
-    ADD_IMAGE,
-  );
+  const loadingBlog = useSelector((state: RootState) => state.blog.loadingBlog);
+  const [image, setImage] = useState(ADD_IMAGE);
   const [textNote, setTextNote] = React.useState('');
   const [imageadd, setImageAdd] = useState(ADD_IMAGE);
+
+  const [loadingImage, setLoadingImage] = useState(false);
   const handleChoosePhoto = useCallback(async () => {
+    setLoadingImage(true);
     const options: any = {
       saveToPhotos: true,
       mediaType: 'photo',
@@ -74,16 +76,15 @@ const _CreateBlog: React.FC<PropsType> = props => {
             body: formData,
           });
           const res = await response.json();
+          setLoadingImage(false);
           return res;
         };
         const res = await fetchData();
-        setImage({ uri: res.imageURL });
-        setImageAdd(res.imageURL)
+        setImage({uri: res.imageURL});
+        setImageAdd(res.imageURL);
       }
     });
   }, []);
-
-
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -97,18 +98,30 @@ const _CreateBlog: React.FC<PropsType> = props => {
             marginRight: DimensionsStyle.width * 0.06,
           }}
         />
-        <Pressable onPress={handleChoosePhoto}>
-          <Image style={_styles.image} source={image}></Image>
-        </Pressable>
+
+        {loadingImage ? (
+          <View style={{height: 200}}>
+            <Loading height={300} />
+          </View>
+        ) : (
+          <Pressable onPress={handleChoosePhoto}>
+            <Image style={_styles.image} source={image}></Image>
+          </Pressable>
+        )}
+
         {/* <TextInput style={_styles.title} placeholder="Tiêu đề"></TextInput> */}
         <Image style={_styles.line} source={LINE_BLOG}></Image>
         <View style={_styles.content}>
-          <TextInput style={_styles.text} placeholder="Nội dung" value={textNote} onChangeText={textNote => setTextNote(textNote)}></TextInput>
+          <TextInput
+            style={_styles.text}
+            placeholder="Nội dung"
+            value={textNote}
+            onChangeText={textNote => setTextNote(textNote)}></TextInput>
         </View>
       </SafeAreaView>
       <Button
         title="Đăng bài"
-        viewStyle={{ marginTop: 10, width: DimensionsStyle.width * 0.4 }}
+        viewStyle={{marginTop: 10, width: DimensionsStyle.width * 0.4}}
         imageIconLeft={ADD_IMAGE}
         imageIconRight={ADD_IMAGE}
         onPress={() => {
@@ -123,19 +136,17 @@ const _CreateBlog: React.FC<PropsType> = props => {
                   style: 'cancel',
                 },
               ],
-              { cancelable: false },
+              {cancelable: false},
             );
-          } else{
+          } else {
             const data = {
               user_id: dataUser?._id,
               content: textNote,
-              image: imageadd
+              image: imageadd,
             };
             dispatch(addBlog(data));
-            navigation.navigate('Blogs');
+            navigation.goBack();
           }
-            
-          
         }}
       />
     </BackgroundApp>

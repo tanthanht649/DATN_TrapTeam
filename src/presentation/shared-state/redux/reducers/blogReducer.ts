@@ -2,10 +2,10 @@ import {Blog} from '@domain';
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {CONSTANTS} from '@core';
 
-export interface  BlogState {
+export interface BlogState {
   loadingBlog: boolean;
   dataBlogs: Blog[];
-  dataBlogUser:Blog[]
+  dataBlogUser: Blog[];
 }
 
 export const dataBlogs: Blog[] = [];
@@ -70,9 +70,9 @@ export const addBlog = createAsyncThunk(
 
     if (res.result) {
       console.log('resAddBlog', res);
-      return res;
+      return res.blog;
     } else {
-      return [];
+      return null;
     }
   },
 );
@@ -103,7 +103,6 @@ export const getBlogUser = createAsyncThunk(
   },
 );
 
-
 const blogSlice = createSlice({
   name: 'blog',
   initialState,
@@ -129,20 +128,22 @@ const blogSlice = createSlice({
     });
     builder.addCase(addBlog.fulfilled, (state, action) => {
       state.loadingBlog = false;
+      state.dataBlogs.unshift(action.payload);
+      state.dataBlogUser.unshift(action.payload);
     });
     builder.addCase(addBlog.rejected, state => {
       state.loadingBlog = false;
     });
     builder.addCase(getBlogUser.pending, state => {
       state.loadingBlog = true;
-    })
+    });
     builder.addCase(getBlogUser.fulfilled, (state, action) => {
       state.loadingBlog = false;
       state.dataBlogUser = action.payload;
-    })
+    });
     builder.addCase(getBlogUser.rejected, state => {
-      state.loadingBlog= false;
-    })
+      state.loadingBlog = false;
+    });
   },
 });
 

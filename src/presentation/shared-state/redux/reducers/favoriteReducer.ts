@@ -71,7 +71,7 @@ export const addFavorite = createAsyncThunk(
     const res = await fetchData();
 
     if (res.result) {
-      return res.result;
+      return res.favorite;
     }
   },
 );
@@ -104,7 +104,8 @@ export const deleteFavorite = createAsyncThunk(
     const res = await fetchData();
 
     if (res.result) {
-      return res.favorite;
+      console.log(res.data);
+      return res.data;
     }
   },
 );
@@ -139,6 +140,15 @@ const favoriteSlice = createSlice({
         state.loadingFavorite = false;
       })
       .addCase(addFavorite.rejected, state => {
+        state.loadingFavorite = false;
+      })
+      .addCase(deleteFavorite.pending, state => {
+        state.loadingFavorite = true;
+      })
+      .addCase(deleteFavorite.fulfilled, (state, action) => {
+        state.loadingFavorite = false;
+      })
+      .addCase(deleteFavorite.rejected, state => {
         state.loadingFavorite = false;
       });
   },
