@@ -104,7 +104,6 @@ export const deleteFavorite = createAsyncThunk(
     const res = await fetchData();
 
     if (res.result) {
-      console.log(res.data);
       return res.data;
     }
   },

@@ -239,7 +239,6 @@ const _BookTour: React.FC<PropsType> = props => {
         differences++;
       }
     }
-
     return differences;
   };
 
