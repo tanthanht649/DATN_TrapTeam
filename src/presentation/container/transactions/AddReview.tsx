@@ -41,11 +41,11 @@ import {
 } from '@components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ProfileStackParamList, WelcomeTeamStackParamList} from '@navigation';
+import {HomeStackParamList, ProfileStackParamList, WelcomeTeamStackParamList} from '@navigation';
 import {useSelector} from 'react-redux';
 import {RootState, addReview, useAppDispatch} from '@shared-state';
 
-type PropsType = NativeStackScreenProps<ProfileStackParamList, 'AddReview'>;
+type PropsType = NativeStackScreenProps<ProfileStackParamList, 'AddReview'> & NativeStackScreenProps<HomeStackParamList, 'AddReview'>;
 
 const _AddReview: React.FC<PropsType> = props => {
   const {navigation} = props;

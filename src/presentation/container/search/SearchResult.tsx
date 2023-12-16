@@ -14,6 +14,7 @@ import {
   BackgroundApp,
   Header,
   Input,
+  Loading,
   TextPlus,
   ViewSwitcher,
 } from '@components';
@@ -40,6 +41,7 @@ import {
   RootState,
   addFavorite,
   deleteFavorite,
+  findTourByFilter,
   getDataFavorite,
   useAppDispatch,
 } from '@shared-state';
@@ -102,6 +104,8 @@ const _SearchResult: React.FC<PropsType> = props => {
     (state: RootState) => state.tour.dataSearchName,
   );
 
+  
+
   useEffect(() => {
     if (dataSearchName.length === 0) {
       setIsFound(false);
@@ -109,6 +113,8 @@ const _SearchResult: React.FC<PropsType> = props => {
       setIsFound(true);
     }
   }, [dataSearchName]);
+
+  console.log('dataSearchName', dataSearchName);
 
   const dataFavoriteNoId = useSelector(
     (state: RootState) => state.favorite.dataFavoriteNoId,
@@ -129,13 +135,15 @@ const _SearchResult: React.FC<PropsType> = props => {
     setDataTourAndFavorite(tourAndFavorite);
   }, [dataFavoriteNoId, dataSearchName]);
 
+  const loadingTour = useSelector((state: RootState) => state.tour.loadingTour);
+
   const price =
     Number(minPrice).toLocaleString('vi-VN') +
     ' - ' +
     Number(maxPrice).toLocaleString('vi-VN');
   const is_popular_text = is_popular ? 'Phổ biến' : 'Không nổi bật';
 
-  const DATAFIND: string[] = [is_popular_text, locationProvinces + '', price];
+  const DATAFIND: string[] = [is_popular_text, locationProvinces + '', price, dayFind + ''];
 
   const [marginBottom, setMarginBottom] = useState(0);
 
@@ -363,7 +371,7 @@ const _SearchResult: React.FC<PropsType> = props => {
             }}>
             <View>
               <ViewSwitcher
-                quantityEstates={22}
+                quantityEstates={dataSearchName.length}
                 onTabChange={setListViewType}
               />
             </View>
@@ -380,7 +388,8 @@ const _SearchResult: React.FC<PropsType> = props => {
               </View>
             ) : null}
 
-            <View style={_styles.containerListFeatured}>
+            {
+              loadingTour ? <Loading /> : <View style={_styles.containerListFeatured}>
               <FlatList
                 data={dataTourAndFavorite}
                 renderItem={
@@ -392,6 +401,9 @@ const _SearchResult: React.FC<PropsType> = props => {
                 showsVerticalScrollIndicator={false}
               />
             </View>
+            }
+
+            
           </View>
         ) : (
           <View

@@ -226,6 +226,7 @@ export const findTourByFilter = createAsyncThunk(
     const res = await fetchData();
 
     if (res.result) {
+      console.log(res.tours);
       return res.tours;
     } else {
       return [];
