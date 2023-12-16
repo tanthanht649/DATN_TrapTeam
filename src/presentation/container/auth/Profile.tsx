@@ -359,7 +359,7 @@ const _Profile: React.FC<PropsType> = props => {
             </Pressable>
           </View>
           <View>
-            <Text style={_styles.name}>Mathew Adam</Text>
+            <Text style={_styles.name}>{dataUser?.name}</Text>
             {/* <Text style={_styles.email}>mathew@email.com</Text> */}
           </View>
           <View style={_styles.row}>
