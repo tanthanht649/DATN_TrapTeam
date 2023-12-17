@@ -6,8 +6,8 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
-import {BackgroundApp, Button, Header, Loading} from '@components';
+import React, { useEffect } from 'react';
+import { BackgroundApp, Button, Header, Loading } from '@components';
 import {
   AVT,
   BACKGROUND_WHITE,
@@ -24,9 +24,9 @@ import {
   VHL_FL_1,
   fontFamily,
 } from '@assets';
-import {Colors, DimensionsStyle} from '@resources';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {HomeStackParamList, SearchStackParamList} from '@navigation';
+import { Colors, DimensionsStyle } from '@resources';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HomeStackParamList, SearchStackParamList } from '@navigation';
 import {
   RootState,
   addFavorite,
@@ -38,15 +38,15 @@ import {
   getTourById,
   useAppDispatch,
 } from '@shared-state';
-import {useSelector} from 'react-redux';
-import {Location, Review, TourAndLocation} from '@domain';
+import { useSelector } from 'react-redux';
+import { Location, Review, TourAndLocation } from '@domain';
 import moment from 'moment';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'DetailTour'> &
   NativeStackScreenProps<SearchStackParamList, 'DetailTour'>;
 
 const _DetailTour: React.FC<PropsType> = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const dispatch = useAppDispatch();
   const tour_id = props.route.params?.tour_id;
   const isFavorite = props.route.params?.isFavorite;
@@ -100,7 +100,7 @@ const _DetailTour: React.FC<PropsType> = props => {
       }
   }, [dataImageTop]);
 
-  const ITEM_IMG_TOP = ({item, index, onPress}: any) => {
+  const ITEM_IMG_TOP = ({ item, index, onPress }: any) => {
     return (
       <Pressable
         style={{
@@ -116,7 +116,7 @@ const _DetailTour: React.FC<PropsType> = props => {
         }}
         onPress={onPress}>
         <Image
-          source={{uri: item}}
+          source={{ uri: item }}
           style={{
             width: '100%',
             height: '100%',
@@ -128,7 +128,7 @@ const _DetailTour: React.FC<PropsType> = props => {
     );
   };
 
-  const renderItemImgTop = ({item, index, onPress}: any) => {
+  const renderItemImgTop = ({ item, index, onPress }: any) => {
     return (
       <ITEM_IMG_TOP
         item={item}
@@ -141,7 +141,7 @@ const _DetailTour: React.FC<PropsType> = props => {
     );
   };
 
-  const ITEM_SCHEDULE = ({item, index}: any) => {
+  const ITEM_SCHEDULE = ({ item, index }: any) => {
     return (
       <View
         style={{
@@ -163,11 +163,11 @@ const _DetailTour: React.FC<PropsType> = props => {
     );
   };
 
-  const renderItemSchedule = ({item, index}: any) => {
+  const renderItemSchedule = ({ item, index }: any) => {
     return <ITEM_SCHEDULE item={item} index={index} key={index} />;
   };
 
-  const ItemLocation = ({item, index}: {item: Location; index: number}) => {
+  const ItemLocation = ({ item, index }: { item: Location; index: number }) => {
     return (
       <View
         style={{
@@ -179,7 +179,7 @@ const _DetailTour: React.FC<PropsType> = props => {
           borderRadius: 25,
         }}>
         <Image
-          source={{uri: item.image}}
+          source={{ uri: item.image }}
           style={{
             width: '100%',
             height: DimensionsStyle.width * 0.5 - 25,
@@ -187,7 +187,7 @@ const _DetailTour: React.FC<PropsType> = props => {
             borderRadius: 25,
           }}
         />
-        <View style={{marginStart: 10}}>
+        <View style={{ marginStart: 10 }}>
           <Text
             style={{
               fontFamily: fontFamily.Black,
@@ -208,7 +208,7 @@ const _DetailTour: React.FC<PropsType> = props => {
             }}>
             <Image
               source={LOCATION_ORANGE}
-              style={{width: 15, height: 15, marginEnd: 2}}
+              style={{ width: 15, height: 15, marginEnd: 2 }}
             />
             <Text
               numberOfLines={1}
@@ -226,7 +226,7 @@ const _DetailTour: React.FC<PropsType> = props => {
     );
   };
 
-  const renderItemLocation = ({item, index}: any) => {
+  const renderItemLocation = ({ item, index }: any) => {
     return <ItemLocation item={item} index={index} key={index} />;
   };
   const [dataLocations, setDataLocations] = React.useState<Location[]>([]);
@@ -310,7 +310,7 @@ const _DetailTour: React.FC<PropsType> = props => {
     return result;
   };
 
-  const ItemReview = ({item, index}: any) => {
+  const ItemReview = ({ item, index }: any) => {
     return (
       <View
         style={{
@@ -333,7 +333,7 @@ const _DetailTour: React.FC<PropsType> = props => {
             borderRadius: 100,
           }}>
           <Image
-            source={{uri: item.user_id?.avatar}}
+            source={{ uri: item.user_id?.avatar }}
             style={{
               width: 50,
               height: 50,
@@ -380,7 +380,7 @@ const _DetailTour: React.FC<PropsType> = props => {
     );
   };
 
-  const renderItemReview = ({item, index}: any) => {
+  const renderItemReview = ({ item, index }: any) => {
     return <ItemReview item={item} index={index} key={item._id} />;
   };
 
@@ -412,7 +412,7 @@ const _DetailTour: React.FC<PropsType> = props => {
                 <Loading height={DimensionsStyle.height * 0.585} />
               ) : (
                 <Image
-                  source={{uri: imageDetail}}
+                  source={{ uri: imageDetail }}
                   style={{
                     width: '100%',
                     height: DimensionsStyle.height * 0.585,
@@ -428,7 +428,7 @@ const _DetailTour: React.FC<PropsType> = props => {
                 <Loading height={DimensionsStyle.height * 0.585} />
               ) : (
                 <Image
-                  source={{uri: imageDetail}}
+                  source={{ uri: imageDetail }}
                   style={{
                     width: '96%',
                     height: DimensionsStyle.height * 0.565,
@@ -487,13 +487,13 @@ const _DetailTour: React.FC<PropsType> = props => {
                     nestedScrollEnabled={true}
                     showsVerticalScrollIndicator={false}>
                     {dataImageTop.map((item: any, index: any) => {
-                      return renderItemImgTop({item, index});
+                      return renderItemImgTop({ item, index });
                     })}
                   </ScrollView>
                 )}
               </View>
             </View>
-            <View style={{marginHorizontal: 20, marginTop: 10}}>
+            <View style={{ marginHorizontal: 20, marginTop: 10 }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -529,7 +529,7 @@ const _DetailTour: React.FC<PropsType> = props => {
                 }}>
                 <Image
                   source={LOCATION}
-                  style={{width: 15, height: 15, marginEnd: 5}}
+                  style={{ width: 15, height: 15, marginEnd: 5 }}
                 />
                 <Text
                   style={{
@@ -610,7 +610,7 @@ const _DetailTour: React.FC<PropsType> = props => {
                     fontSize: 14,
                     textAlign: 'justify',
                     lineHeight: 18,
-                    marginBottom: 5,
+                    marginBottom: 10,
                   },
                 ]}>
                 {daysDifference(dataTour.end_date, dataTour.departure_date)}{' '}
@@ -618,8 +618,38 @@ const _DetailTour: React.FC<PropsType> = props => {
                 {daysDifference(dataTour.end_date, dataTour.departure_date) - 1}{' '}
                 đêm
               </Text>
+              <View
+                style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+                <Text
+                  style={[
+                    _styles.text,
+                    {
+                      fontFamily: fontFamily.Medium,
+                      fontSize: 14,
+                      textAlign: 'justify',
+                      lineHeight: 18,
+                      marginBottom: 5,
+                    },
+                  ]}
+                >
+                  Ngày khởi hành:{' '}
+                </Text>
+                <Text
+                  style={[
+                    _styles.text,
+                    {
+                      fontFamily: fontFamily.Medium,
+                      fontSize: 14,
+                      textAlign: 'justify',
+                      lineHeight: 18,
+                      marginBottom: 5,
+                    },
+                  ]}>
+                  {moment(dataTour.departure_date).format('DD/MM/YYYY')}</Text>
+              </View>
+
               {dataSchedules.map((item: any, index: any) => {
-                return renderItemSchedule({item, index});
+                return renderItemSchedule({ item, index });
               })}
               <Text
                 style={[
@@ -678,7 +708,7 @@ const _DetailTour: React.FC<PropsType> = props => {
                   ) : (
                     <View>
                       {dataShowReview.map((item: any, index: any) => {
-                        return renderItemReview({item, index});
+                        return renderItemReview({ item, index });
                       })}
                     </View>
                   )}
@@ -730,12 +760,12 @@ const _DetailTour: React.FC<PropsType> = props => {
                 <View style={_styles.containerFlatlist}>
                   <View>
                     {column1Data.map((item, index) =>
-                      renderItemLocation({item: item, index: index}),
+                      renderItemLocation({ item: item, index: index }),
                     )}
                   </View>
                   <View>
                     {column2Data.map((item, index) =>
-                      renderItemLocation({item: item, index: index}),
+                      renderItemLocation({ item: item, index: index }),
                     )}
                   </View>
                 </View>
