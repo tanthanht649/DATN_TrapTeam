@@ -57,6 +57,10 @@ const _Pay: React.FC<PropsType> = props => {
   const location_custom = route.params?.location_custom;
   const priceService = route.params?.priceService;
 
+  const [priceShow, setPriceShow] = React.useState<number>(0);
+  const quantity = useSelector(
+    (state: RootState) => state.bookingTour.quantity,
+  );
   const eventRight = () => { };
   const eventLeft = () => { };
   const eventBack = () => {
@@ -68,6 +72,18 @@ const _Pay: React.FC<PropsType> = props => {
   const dataTourDetail = useSelector(
     (state: RootState) => state.tour.tourDetail,
   );
+
+  useEffect(() => {
+    if (dataTourDetail) {
+      if (quantity > 30) {
+        setPriceShow(dataTourDetail.price * 0.8);
+      } else {
+        setPriceShow(dataTourDetail.price);
+      }
+    }
+  }, [
+    quantity, dataTourDetail
+  ]);
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const { pay } = React.useContext(AppContext);
@@ -190,7 +206,7 @@ const _Pay: React.FC<PropsType> = props => {
                   left: 10,
                   fontSize: 17,
                 }}>
-                {dataTourDetail.price.toLocaleString('vi-VN')} VNĐ
+                {priceShow.toLocaleString('vi-VN')} VNĐ
               </Text>
             </View>
           </View>
@@ -228,7 +244,7 @@ const _Pay: React.FC<PropsType> = props => {
                     fontFamily: fontFamily.Regular,
                   },
                 ]}>
-                {(Number(adult_account) * dataTourDetail.price).toLocaleString(
+                {(Number(adult_account) * priceShow).toLocaleString(
                   'vi-VN',
                 )}{' '}
                 VND
@@ -257,7 +273,7 @@ const _Pay: React.FC<PropsType> = props => {
                 ]}>
                 {(
                   Number(child_account) *
-                  dataTourDetail.price *
+                  priceShow *
                   0.6
                 ).toLocaleString('vi-VN')}{' '}
                 VND

@@ -525,7 +525,7 @@ const _HomeFull: React.FC<PropsType> = props => {
     const interval = setInterval(() => {
       // Tăng giá trị của currentIndex lên 1
       setCurrentIndex(prevIndex => (prevIndex + 1) % dataEvent.length);
-    }, 1500);
+    }, 3000);
     // Xóa interval khi component bị unmount
     return () => clearInterval(interval);
   }, []);
@@ -541,6 +541,15 @@ const _HomeFull: React.FC<PropsType> = props => {
   const handleToListTourFavorite = () => {
     navigation.navigate('FavoriteEmpty');
   };
+  const [hide, setHide] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setHide(true);
+    }, 5000);
+    return () => {
+
+    }
+  }, [])
 
   const handleToFeaturedListHome = () => {
     navigation.navigate('FeaturedListHome');
@@ -630,7 +639,7 @@ const _HomeFull: React.FC<PropsType> = props => {
   );
 
   const handleSearch = () => {
-    dispatch(findTourByNames(text));
+    // dispatch(findTourByNames(text));
     setText('');
   };
 
@@ -644,48 +653,53 @@ const _HomeFull: React.FC<PropsType> = props => {
         }}
       />
       <SafeAreaView style={_styles.containerScrollView}>
-        {hideElement ? null : (
-          <View>
-            <TextPlus
-              textBolds={[dataUser?.name + '']}
-              text={`Xin chào, ${dataUser?.name}! \nHãy bắt đầu khám phá`}
-              boldStyle={{
-                fontFamily: fontFamily.Bold,
-                color: Colors.GREY_DARK_1,
-                fontSize: 25,
-                lineHeight: 40,
-                letterSpacing: 0.75,
-              }}
-              textStyle={{
-                color: Colors.GREY_DARK_1,
-                fontSize: 25,
-                lineHeight: 40,
-                letterSpacing: 0.75,
-                width: '100%',
-              }}
-              numberOfLines={2}
-            />
-            <Input
-              imageIconLeft={FIND}
-              imageIconRight={FIND}
-              iconRightStyle={{ display: 'none' }}
-              label="Tìm kiếm địa điểm, tour du lịch"
-              value={text}
-              onChangeText={text => setText(text)}
-              viewStyle={{
-                marginTop: '5%',
-                marginBottom: '3%',
-                marginEnd: 20,
-                marginStart: 0,
-              }}
-              textInputStyle={{ width: '90%' }}
-              onPressLeft={() => {
-                handleSearch();
-                navigation.navigate('SearchResult', { isFilter: false });
-              }}
-            />
-          </View>
-        )}
+        {hideElement ? null
+          : (
+            <View>
+              <TextPlus
+                textBolds={[dataUser?.name + '']}
+                text={`Xin chào, ${dataUser?.name}! \nHãy bắt đầu khám phá`}
+                boldStyle={{
+                  fontFamily: fontFamily.Bold,
+                  color: Colors.GREY_DARK_1,
+                  fontSize: 25,
+                  lineHeight: 40,
+                  letterSpacing: 0.75,
+
+                }}
+                viewStyle={{ display: hide ? 'none' : 'flex' }}
+                textStyle={{
+                  color: Colors.GREY_DARK_1,
+                  fontSize: 25,
+                  lineHeight: 40,
+                  letterSpacing: 0.75,
+                  width: '100%',
+
+                }}
+                numberOfLines={2}
+              />
+              <Input
+                imageIconLeft={FIND}
+                imageIconRight={FIND}
+                iconRightStyle={{ display: 'none' }}
+                label="Tìm kiếm địa điểm, tour du lịch"
+                value={text}
+                onChangeText={text => setText(text)}
+                viewStyle={{
+                  // marginTop: '5%',
+                  marginBottom: '1%',
+                  marginEnd: 20,
+                  marginStart: 0,
+                }}
+                textInputStyle={{ width: '90%' }}
+                onPressLeft={() => {
+                  handleSearch();
+                  navigation.navigate('SearchResult', { isFilter: false });
+                }}
+              />
+
+            </View>
+          )}
 
         <TopTab
           isCheck={isCheck}
@@ -698,8 +712,7 @@ const _HomeFull: React.FC<PropsType> = props => {
         />
 
         <ScrollView
-          showsVerticalScrollIndicator={false}
-          onScroll={handleScroll}>
+          showsVerticalScrollIndicator={false}>
           <View
             style={{
               flex: 1,

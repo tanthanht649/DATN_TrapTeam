@@ -32,6 +32,7 @@ type SearchResultProps = {
   minPrice?: string;
   maxPrice?: string;
   dayFind?: string;
+  text?: string;
 };
 type DetailTourProps = {
   tour_id: string;

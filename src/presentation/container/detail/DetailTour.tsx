@@ -260,13 +260,15 @@ const _DetailTour: React.FC<PropsType> = props => {
 
   useEffect(() => {
     dispatch(getAllReviews(tour_id));
-  }, []);
+  }, [tour_id]);
   const loadingReview = useSelector(
     (state: RootState) => state.review.loadingReview,
   );
+
   const dataReview = useSelector(
     (state: RootState) => state.review.dataReviews,
   );
+  console.log(dataReview.length);
 
   const [dataShowReview, setDataShowReview] = React.useState<Review[]>([]);
 
@@ -276,6 +278,8 @@ const _DetailTour: React.FC<PropsType> = props => {
         isFull
           ? setDataShowReview(dataReview)
           : setDataShowReview(dataReview.slice(0, 2));
+      } else {
+        setDataShowReview([]);
       }
     }
   }, [dataReview]);
@@ -295,6 +299,8 @@ const _DetailTour: React.FC<PropsType> = props => {
   useEffect(() => {
     if (dataReview.length > 0) {
       setIsReview(true);
+    } else {
+      setIsReview(false)
     }
   }, [dataReview]);
 
@@ -521,8 +527,8 @@ const _DetailTour: React.FC<PropsType> = props => {
                   style={{
                     fontFamily: fontFamily.Bold,
                     fontSize: 18,
-                    color: (50 - quantityPromotion) > 30 ? Colors.BLUE_DARK : Colors.RED,
-                    textDecorationLine: (50 - quantityPromotion) > 30 ? 'line-through' : 'none',
+                    color: quantityPromotion > 30 ? Colors.BLUE_DARK : Colors.RED,
+                    textDecorationLine: quantityPromotion > 30 ? 'line-through' : 'none',
                   }}>
                   {Number(dataTour.price).toLocaleString('vi-VN')} VNĐ
                 </Text>
@@ -533,7 +539,7 @@ const _DetailTour: React.FC<PropsType> = props => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   marginTop: 8,
-                  display: (50 - quantityPromotion) > 30 ? 'flex' : 'none',
+                  display: quantityPromotion > 30 ? 'flex' : 'none',
                 }}>
                 <View
                   style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>

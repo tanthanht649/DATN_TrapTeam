@@ -17,6 +17,7 @@ type SearchResultProps = {
   minPrice?: string;
   maxPrice?: string;
   dayFind?: string;
+  text?: string;
 };
 type FeaturedListHomeProps = {};
 type DetailTourProps = {
