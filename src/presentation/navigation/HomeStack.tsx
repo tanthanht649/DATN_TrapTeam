@@ -1,5 +1,5 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   HomeFull,
   ListTourBanner,
@@ -39,8 +39,12 @@ type DetailTourProps = {
 };
 type BookTourProps = {};
 
+interface LocationInBookTour {
+  _id: string;
+  name: string;
+}
 type PayProps = {
-  user_id: string;
+  user_id: string | undefined;
   tour_id: string;
   discount: number;
   adult_account: number;
@@ -48,7 +52,8 @@ type PayProps = {
   price: number;
   note: string;
   role: boolean;
-  location_custom: [{_id: string; name: string}];
+  location_custom: LocationInBookTour[];
+  priceService: number;
 };
 
 type HistoryDetailProps = {};

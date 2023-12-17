@@ -8,7 +8,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   BACKGROUND_HOME,
   FIND,
@@ -17,7 +17,7 @@ import {
   LOCATION,
   fontFamily,
 } from '@assets';
-import {Colors, DimensionsStyle} from '@resources';
+import { Colors, DimensionsStyle } from '@resources';
 import {
   BackgroundApp,
   HeaderHome2,
@@ -26,10 +26,10 @@ import {
   Input,
   Loading,
 } from '@components';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {HomeStackParamList} from '@navigation';
-import {useSelector} from 'react-redux';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HomeStackParamList } from '@navigation';
+import { useSelector } from 'react-redux';
 import {
   RootState,
   getAllEvents,
@@ -43,15 +43,15 @@ import {
   deleteFavorite,
   addFavorite,
 } from '@shared-state';
-import {Event, Tour, Location, TourAndFavorite} from '@domain';
+import { Event, Tour, Location, TourAndFavorite } from '@domain';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'HomeFull'>;
 
-const ItemBanner = ({item, onPress}: {item: Event; onPress: () => void}) => {
+const ItemBanner = ({ item, onPress }: { item: Event; onPress: () => void }) => {
   return (
     <Pressable onPress={onPress}>
       <Image
-        source={{uri: item.image}}
+        source={{ uri: item.image }}
         style={{
           width: Dimensions.get('screen').width * 0.7,
           height: Dimensions.get('screen').width * 0.5,
@@ -113,7 +113,7 @@ const ItemTourFavorite = ({
           padding: 7,
         }}>
         <Image
-          source={{uri: item.image}}
+          source={{ uri: item.image }}
           style={{
             width: '100%',
             height: '100%',
@@ -163,7 +163,7 @@ const ItemTourFavorite = ({
           }}>
           <Image
             source={LOCATION}
-            style={{width: 12, height: 12, marginEnd: 2}}
+            style={{ width: 12, height: 12, marginEnd: 2 }}
           />
           <Text
             numberOfLines={1}
@@ -215,7 +215,7 @@ const ItemEstates = ({
           padding: 7,
         }}>
         <Image
-          source={{uri: item.image}}
+          source={{ uri: item.image }}
           style={{
             width: '100%',
             height: '100%',
@@ -249,7 +249,7 @@ const ItemEstates = ({
           }}>
           <Image
             source={LOCATION}
-            style={{width: 12, height: 12, marginEnd: 2}}
+            style={{ width: 12, height: 12, marginEnd: 2 }}
           />
           <Text
             numberOfLines={1}
@@ -293,7 +293,7 @@ export const ItemTourOutstanding = ({
       onPress={onPress}>
       <View>
         <Image
-          source={{uri: item.image}}
+          source={{ uri: item.image }}
           style={{
             width: '100%',
             height: DimensionsStyle.width * 0.5,
@@ -303,7 +303,7 @@ export const ItemTourOutstanding = ({
           }}
         />
         <TouchableOpacity
-          style={{position: 'absolute', top: 10, right: 10}}
+          style={{ position: 'absolute', top: 10, right: 10 }}
           onPress={() => {
             onPressFavorite();
           }}>
@@ -356,7 +356,7 @@ export const ItemTourOutstanding = ({
           }}>
           <Image
             source={LOCATION}
-            style={{width: 12, height: 12, marginEnd: 2}}
+            style={{ width: 12, height: 12, marginEnd: 2 }}
           />
           <Text
             numberOfLines={1}
@@ -373,7 +373,7 @@ export const ItemTourOutstanding = ({
 };
 
 const _HomeFull: React.FC<PropsType> = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const dispatch = useAppDispatch();
   const dataUser = useSelector((state: RootState) => state.user.dataUsers);
   const [isFavorite, setIsFavorite] = React.useState(false);
@@ -408,7 +408,7 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemBanner = React.useMemo(
     () =>
-      ({item}: {item: Event}) => {
+      ({ item }: { item: Event }) => {
         return (
           <ItemBanner
             onPress={() => {
@@ -461,7 +461,7 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemEstates = React.useMemo(
     () =>
-      ({item}: {item: Location}) => {
+      ({ item }: { item: Location }) => {
         return (
           <ItemEstates
             item={item}
@@ -615,7 +615,7 @@ const _HomeFull: React.FC<PropsType> = props => {
       const isFavorite = dataFavoriteNoId.some(
         (check: Tour) => check._id === item._id,
       );
-      return {...item, isFavorite: isFavorite};
+      return { ...item, isFavorite: isFavorite };
     });
 
     setDataTourAndFavorite(tourAndFavorite);
@@ -668,7 +668,7 @@ const _HomeFull: React.FC<PropsType> = props => {
             <Input
               imageIconLeft={FIND}
               imageIconRight={FIND}
-              iconRightStyle={{display: 'none'}}
+              iconRightStyle={{ display: 'none' }}
               label="Tìm kiếm địa điểm, tour du lịch"
               value={text}
               onChangeText={text => setText(text)}
@@ -678,10 +678,10 @@ const _HomeFull: React.FC<PropsType> = props => {
                 marginEnd: 20,
                 marginStart: 0,
               }}
-              textInputStyle={{width: '90%'}}
+              textInputStyle={{ width: '90%' }}
               onPressLeft={() => {
                 handleSearch();
-                navigation.navigate('SearchResult', {isFilter: false});
+                navigation.navigate('SearchResult', { isFilter: false });
               }}
             />
           </View>
@@ -720,8 +720,8 @@ const _HomeFull: React.FC<PropsType> = props => {
                   const index = Math.round(contentOffset / ITEM_WIDTH);
                   setCurrentIndex(index);
                 }}>
-                <View style={{flexDirection: 'row'}}>
-                  {dataEvent.map((item, index) => renderItemBanner({item}))}
+                <View style={{ flexDirection: 'row' }}>
+                  {dataEvent.map((item, index) => renderItemBanner({ item }))}
                 </View>
               </ScrollView>
             )}
@@ -768,7 +768,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                     borderBottomLeftRadius: 20,
                   }}>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                       {dataFavoriteNoId.map((item, index) =>
                         renderItemTourFavorite({
                           item,
@@ -800,7 +800,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                 }}>
                 Địa điểm nổi bật
               </Text>
-              <Pressable style={{display: 'none'}}>
+              <Pressable style={{ display: 'none' }}>
                 <Text
                   style={{
                     fontFamily: fontFamily.Medium,
@@ -820,9 +820,9 @@ const _HomeFull: React.FC<PropsType> = props => {
                 borderBottomLeftRadius: 20,
               }}>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   {dataLocations.map((item, index) =>
-                    renderItemEstates({item}),
+                    renderItemEstates({ item }),
                   )}
                 </View>
               </ScrollView>

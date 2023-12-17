@@ -1,5 +1,5 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   Search,
   SearchResult,
@@ -24,8 +24,22 @@ type DetailTourProps = {
   isFavorite: boolean;
 };
 type BookTourProps = {};
-type PayProps = {};
-
+interface LocationInBookTour {
+  _id: string;
+  name: string;
+}
+type PayProps = {
+  user_id: string | undefined;
+  tour_id: string;
+  discount: number;
+  adult_account: number;
+  child_account: number;
+  price: number;
+  note: string;
+  role: boolean;
+  location_custom: LocationInBookTour[];
+  priceService: number;
+};
 export type SearchStackParamList = {
   Search: SearchProps | undefined;
   SearchResult: SearchResultProps | undefined;

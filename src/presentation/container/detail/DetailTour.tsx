@@ -9,9 +9,7 @@ import {
 import React, { useEffect } from 'react';
 import { BackgroundApp, Button, Header, Loading } from '@components';
 import {
-  AVT,
   BACKGROUND_WHITE,
-  DT_1,
   FULL_NAME,
   HEART,
   HEART_INACTIVE_2,
