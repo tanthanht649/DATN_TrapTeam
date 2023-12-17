@@ -8,18 +8,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   BlogStackParamList,
   ProfileStackParamList,
   WelcomeTeamStackParamList,
 } from '@navigation';
-import {BackgroundApp, Header, Input, ViewSwitcherProfile} from '@components';
+import { BackgroundApp, Header, Input, ViewSwitcherProfile } from '@components';
 
 import auth from '@react-native-firebase/auth';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import {
   BACKGROUND_WHITE,
@@ -31,6 +31,7 @@ import {
   HISTORY,
   IMAGE_TEST,
   LOCATION,
+  LOGO,
   LOGO_PROFILE,
   LOG_OUT,
   POLICY,
@@ -38,7 +39,7 @@ import {
   VERSION,
   fontFamily,
 } from '@assets';
-import {Colors, DimensionsStyle} from '@resources';
+import { Colors, DimensionsStyle } from '@resources';
 import {
   AppContext,
   RootState,
@@ -53,8 +54,8 @@ import {
   logoutBookingTour,
   logoutReview,
 } from '@shared-state';
-import {useSelector} from 'react-redux';
-import {store} from '@shared-state';
+import { useSelector } from 'react-redux';
+import { store } from '@shared-state';
 
 type Item = {
   id: string;
@@ -69,9 +70,9 @@ type Item = {
 };
 type PropsType = NativeStackScreenProps<ProfileStackParamList, 'Profile'>;
 const _Profile: React.FC<PropsType> = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const dispatch = useAppDispatch();
-  const {isLoggedIn, setLoggedIn} = React.useContext(AppContext);
+  const { isLoggedIn, setLoggedIn } = React.useContext(AppContext);
   const [selectTab, setSelectTab] = useState(0);
   const dataUser = useSelector((state: RootState) => state.user.dataUsers);
 
@@ -141,7 +142,7 @@ const _Profile: React.FC<PropsType> = props => {
       return (
         <View style={_styles.tab}>
           <ViewSwitcherProfile
-            onAddCardPress={() => {}}
+            onAddCardPress={() => { }}
             quantityEstates={30}
             textProfile="Yêu thích"
             showAddCard={true}
@@ -157,11 +158,11 @@ const _Profile: React.FC<PropsType> = props => {
                   <Text
                     style={[
                       _styles.name,
-                      {fontSize: 12, textAlign: 'left', marginTop: 10},
+                      { fontSize: 12, textAlign: 'left', marginTop: 10 },
                     ]}>
                     {item.title}
                   </Text>
-                  <View style={[_styles.row, {justifyContent: 'flex-start'}]}>
+                  <View style={[_styles.row, { justifyContent: 'flex-start' }]}>
                     {/* <Image style={_styles.icon} source={CLOCK}></Image> */}
                     <Text style={_styles.textItem}>{item.time}</Text>
                   </View>
@@ -178,11 +179,11 @@ const _Profile: React.FC<PropsType> = props => {
                   <Text
                     style={[
                       _styles.name,
-                      {fontSize: 12, textAlign: 'left', marginTop: 10},
+                      { fontSize: 12, textAlign: 'left', marginTop: 10 },
                     ]}>
                     {item.title}
                   </Text>
-                  <View style={[_styles.row, {justifyContent: 'flex-start'}]}>
+                  <View style={[_styles.row, { justifyContent: 'flex-start' }]}>
                     {/* <Image style={_styles.icon} source={CLOCK}></Image> */}
                     <Text style={_styles.textItem}>{item.time}</Text>
                   </View>
@@ -196,7 +197,7 @@ const _Profile: React.FC<PropsType> = props => {
       return (
         <View style={_styles.tab}>
           <ViewSwitcherProfile
-            onAddCardPress={() => {}}
+            onAddCardPress={() => { }}
             quantityEstates={2}
             textProfile="Đã tham gia"
             showAddCard={false}
@@ -217,22 +218,22 @@ const _Profile: React.FC<PropsType> = props => {
                   <Text
                     style={[
                       _styles.name,
-                      {fontSize: 12, textAlign: 'left', marginTop: 10},
+                      { fontSize: 12, textAlign: 'left', marginTop: 10 },
                     ]}>
                     {item.title}
                   </Text>
-                  <View style={[_styles.row, {justifyContent: 'flex-start'}]}>
+                  <View style={[_styles.row, { justifyContent: 'flex-start' }]}>
                     <Image style={_styles.icon} source={STAR_4}></Image>
                     <Text
                       style={[
                         _styles.email,
-                        {fontFamily: fontFamily.Regular, marginRight: 10},
+                        { fontFamily: fontFamily.Regular, marginRight: 10 },
                       ]}>
                       {item.star}
                     </Text>
                     <Image style={_styles.icon} source={LOCATION}></Image>
                     <Text
-                      style={[_styles.email, {fontFamily: fontFamily.Regular}]}>
+                      style={[_styles.email, { fontFamily: fontFamily.Regular }]}>
                       {item.location}
                     </Text>
                   </View>
@@ -254,11 +255,11 @@ const _Profile: React.FC<PropsType> = props => {
                   <Text
                     style={[
                       _styles.name,
-                      {fontSize: 12, textAlign: 'left', marginTop: 10},
+                      { fontSize: 12, textAlign: 'left', marginTop: 10 },
                     ]}>
                     {item.title}
                   </Text>
-                  <View style={[_styles.row, {justifyContent: 'flex-start'}]}>
+                  <View style={[_styles.row, { justifyContent: 'flex-start' }]}>
                     <Image style={_styles.icon} source={STAR_4}></Image>
                     <Text style={_styles.textItem}>{item.star}</Text>
                     <Image style={_styles.icon} source={LOCATION}></Image>
@@ -274,7 +275,7 @@ const _Profile: React.FC<PropsType> = props => {
       return (
         <View style={_styles.tab}>
           <ViewSwitcherProfile
-            onAddCardPress={() => {}}
+            onAddCardPress={() => { }}
             quantityEstates={10}
             textProfile="Đánh giá"
             showAddCard={false}
@@ -290,11 +291,11 @@ const _Profile: React.FC<PropsType> = props => {
                   <Text
                     style={[
                       _styles.name,
-                      {fontSize: 12, textAlign: 'left', marginTop: 10},
+                      { fontSize: 12, textAlign: 'left', marginTop: 10 },
                     ]}>
                     {item.title}
                   </Text>
-                  <View style={[_styles.row, {justifyContent: 'flex-start'}]}>
+                  <View style={[_styles.row, { justifyContent: 'flex-start' }]}>
                     {/* <Image style={_styles.icon} source={CLOCK}></Image> */}
                     <Text style={_styles.textItem}>{item.time}</Text>
                   </View>
@@ -311,11 +312,11 @@ const _Profile: React.FC<PropsType> = props => {
                   <Text
                     style={[
                       _styles.name,
-                      {fontSize: 12, textAlign: 'left', marginTop: 10},
+                      { fontSize: 12, textAlign: 'left', marginTop: 10 },
                     ]}>
                     {item.title}
                   </Text>
-                  <View style={[_styles.row, {justifyContent: 'flex-start'}]}>
+                  <View style={[_styles.row, { justifyContent: 'flex-start' }]}>
                     {/* <Image style={_styles.icon} source={CLOCK}></Image> */}
                     <Text style={_styles.textItem}>{item.time}</Text>
                   </View>
@@ -351,9 +352,9 @@ const _Profile: React.FC<PropsType> = props => {
           <Header
             textCenter="Thông tin cá nhân"
             iconRight={EDIT}
-            styleIconRight={{height: 50, width: 50, opacity: 0}}></Header>
+            styleIconRight={{ height: 50, width: 50, opacity: 0 }}></Header>
           <View style={_styles.avatar}>
-            <Image style={_styles.image} source={{uri: imageAvatar}}></Image>
+            <Image style={_styles.image} source={{ uri: imageAvatar }}></Image>
             <Pressable
               onPress={() => {
                 navigation.navigate('EditProfile');
@@ -374,13 +375,13 @@ const _Profile: React.FC<PropsType> = props => {
               <Image
                 style={[
                   _styles.image,
-                  {width: 24, height: 24, alignSelf: 'center'},
+                  { width: 24, height: 24, alignSelf: 'center' },
                 ]}
                 source={HEART_PROFILE}></Image>
               <Text
                 style={[
                   _styles.email,
-                  {fontFamily: fontFamily.Medium, color: Colors.GREY_DARK_1},
+                  { fontFamily: fontFamily.Medium, color: Colors.GREY_DARK_1 },
                 ]}>
                 Yêu thích
               </Text>
@@ -393,13 +394,13 @@ const _Profile: React.FC<PropsType> = props => {
               <Image
                 style={[
                   _styles.image,
-                  {width: 24, height: 24, alignSelf: 'center'},
+                  { width: 24, height: 24, alignSelf: 'center' },
                 ]}
                 source={HISTORY}></Image>
               <Text
                 style={[
                   _styles.email,
-                  {fontFamily: fontFamily.Medium, color: Colors.GREY_DARK_1},
+                  { fontFamily: fontFamily.Medium, color: Colors.GREY_DARK_1 },
                 ]}>
                 Lịch sử
               </Text>
@@ -424,7 +425,7 @@ const _Profile: React.FC<PropsType> = props => {
               <Text
                 style={[
                   _styles.email,
-                  {fontFamily: fontFamily.Medium, color: Colors.GREY_DARK_1},
+                  { fontFamily: fontFamily.Medium, color: Colors.GREY_DARK_1 },
                 ]}>
                 Bài viết
               </Text>
@@ -438,7 +439,7 @@ const _Profile: React.FC<PropsType> = props => {
             <Image
               style={[
                 _styles.image,
-                {width: 22, height: 22, marginRight: 10, borderRadius: 0},
+                { width: 22, height: 22, marginRight: 10, borderRadius: 0 },
               ]}
               source={POLICY}></Image>
             <Text
@@ -461,7 +462,7 @@ const _Profile: React.FC<PropsType> = props => {
             <Image
               style={[
                 _styles.image,
-                {width: 24, height: 27, marginRight: 8, borderRadius: 0},
+                { width: 24, height: 27, marginRight: 8, borderRadius: 0 },
               ]}
               source={VERSION}></Image>
             <Text
@@ -494,7 +495,7 @@ const _Profile: React.FC<PropsType> = props => {
             <Image
               style={[
                 _styles.image,
-                {width: 18, height: 23, marginRight: 15, borderRadius: 0},
+                { width: 18, height: 23, marginRight: 15, borderRadius: 0 },
               ]}
               source={LOG_OUT}></Image>
             <Text
@@ -509,18 +510,9 @@ const _Profile: React.FC<PropsType> = props => {
               Đăng xuất
             </Text>
           </Pressable>
-          <Image
-            style={[
-              _styles.image,
-              {
-                width: 100,
-                height: 120,
-                alignSelf: 'center',
-                marginTop: 20,
-                borderRadius: 0,
-              },
-            ]}
-            source={LOGO_PROFILE}></Image>
+          <Image source={LOGO} style={[_styles.image,{alignSelf:'center'}]}></Image>
+          <Text numberOfLines={2} style={_styles.textBold}>KHÁM PHÁ THẾ GIỚI {'\n'}
+            MỌI CHUYẾN ĐI TẠI ĐẦU NGÓN TAY</Text>
           {/* Đừng xóa của Linh */}
           {/* <View style={_styles.switchButton}>
             <View style={_styles.bordertab}>
@@ -690,6 +682,17 @@ const _styles = StyleSheet.create({
     top: 16,
     left: 8,
   },
+  textBold: {
+    width: 200,
+    color: Colors.BLACK,
+    fontSize: 9,
+    alignSelf: 'center',
+    textAlign: 'center',
+    marginBottom: 30,
+    fontFamily: fontFamily.Bold,
+     lineHeight: 16
+  }
+
 });
 
 export const Profile = React.memo(_Profile);
