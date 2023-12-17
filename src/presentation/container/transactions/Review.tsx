@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, ScrollView, Dimensions, TouchableOpacity, FlatList } from 'react-native'
 import React from 'react'
 import { Colors, DimensionsStyle } from '@resources';
-import { APARTMENT, ARROW_LEFT_LINE, ARROW_RIGHT_LINE, BACKGROUND_WHITE, CALENDAR, EMAIL, FAVORITE_BLUE, HEART, ICON_BACK, ICON_LOGOUT, LOCATION, LOCATION_GREEN, MESSAGING, MOMO, OVAN, SALE, TICKET, TICKET_2, TOWER, VIETTEL_PAY, ZALO_PAY, fontFamily, } from '@assets';
+import { BACKGROUND_WHITE, EMAIL, FAVORITE_BLUE, ICON_BACK, LOCATION, MESSAGING, MOMO, TOWER, VIETTEL_PAY, ZALO_PAY, fontFamily, } from '@assets';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { WelcomeTeamStackParamList } from '@navigation';

@@ -2,47 +2,27 @@ import {
   StyleSheet,
   Text,
   Image,
-  ScrollView,
-  Pressable,
-  Dimensions,
   FlatList,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect} from 'react';
 import {
-  BACKGROUND_HOME,
   BACKGROUND_WHITE,
-  EMAIL,
-  FIND,
   FULL_NAME,
-  HEART,
   ICON_BACK,
   ICON_CALENDAR,
   ICON_CLOCK,
   ICON_LOCATION_HISTORY,
   ICON_USER,
-  LOCATION,
-  MESSAGING,
-  NOTIFICATION,
-  NOTIFICATION_SELECT,
-  START_SMALL,
   fontFamily,
 } from '@assets';
 import {Colors, DimensionsStyle} from '@resources';
 import {
   BackgroundApp,
-  HeaderHome,
-  HeaderHome2,
-  TopTab,
   Header,
-  HeaderMessager,
   Button,
-  TextPlus,
-  Input,
   Loading,
 } from '@components';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeStackParamList, ProfileStackParamList} from '@navigation';
 import {useSelector} from 'react-redux';
@@ -91,6 +71,7 @@ const ItemHistory = ({
         paddingTop: 5,
         paddingBottom: 15,
       }}>
+
       <View
         style={{
           flexDirection: 'row',
@@ -101,6 +82,7 @@ const ItemHistory = ({
           paddingHorizontal: 7,
           paddingBottom: 12,
         }}>
+
         <View
           style={{
             width: '50%',
@@ -117,6 +99,7 @@ const ItemHistory = ({
             }}>
             {item.tour_id?.name}
           </Text>
+
           <View
             style={{
               flexDirection: 'row',
@@ -124,6 +107,7 @@ const ItemHistory = ({
               justifyContent: 'flex-start',
               marginVertical: 7,
             }}>
+
             <View style={{width: 15, height: 15, marginRight: 10}}>
               <Image
                 source={ICON_LOCATION_HISTORY}
@@ -139,6 +123,7 @@ const ItemHistory = ({
               {item.tour_id.province_id.name}
             </Text>
           </View>
+
           <View
             style={{
               flexDirection: 'row',
@@ -161,6 +146,7 @@ const ItemHistory = ({
               {item.adult_count + item.child_count} người
             </Text>
           </View>
+
           <View
             style={{
               flexDirection: 'row',
@@ -168,6 +154,7 @@ const ItemHistory = ({
               justifyContent: 'flex-start',
               marginVertical: 7,
             }}>
+
             <View style={{width: 15, height: 15, marginRight: 10}}>
               <Image
                 source={ICON_CLOCK}
@@ -192,6 +179,7 @@ const ItemHistory = ({
               đêm
             </Text>
           </View>
+
           <View
             style={{
               flexDirection: 'row',
@@ -216,6 +204,7 @@ const ItemHistory = ({
             </Text>
           </View>
         </View>
+
         <View style={{marginTop: 15}}>
           <Image
             source={{uri: item.tour_id.image}}
@@ -228,6 +217,7 @@ const ItemHistory = ({
           />
         </View>
       </View>
+
       <View
         style={{
           width: '100%',
@@ -265,6 +255,7 @@ const ItemHistory = ({
             {item.price.toLocaleString('vi-VN')} VNĐ
           </Text>
         </View>
+        
         <View
           style={{
             width: '30%',
