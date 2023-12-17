@@ -32,7 +32,7 @@ const _Rule: React.FC<PropsType> = props => {
           styleIconLeft={{marginLeft: -DimensionsStyle.width * 0.06}}
         />
         <Image source={LOGO} style={_styles.image}></Image>
-        <Text numberOfLines={2} style={[_styles.textBold,{width:200, color:Colors.BLACK, fontSize:11, alignSelf:'center',textAlign:'center', marginBottom:30, fontFamily:fontFamily.Medium, lineHeight:24}]}>KHÁM PHÁ THẾ GIỚI {'\n'}
+        <Text numberOfLines={2} style={[_styles.textBold,{width:200, color:Colors.BLACK, fontSize:11, alignSelf:'center',textAlign:'center', marginBottom:20, fontFamily:fontFamily.Medium, lineHeight:20}]}>KHÁM PHÁ THẾ GIỚI {'\n'}
         MỌI CHUYẾN ĐI TẠI ĐẦU NGÓN TAY</Text>
         <ScrollView showsVerticalScrollIndicator={false}>
           <TextPlus
