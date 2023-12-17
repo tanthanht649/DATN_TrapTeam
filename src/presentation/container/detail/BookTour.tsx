@@ -661,6 +661,7 @@ const _BookTour: React.FC<PropsType> = props => {
                           ],
                           { cancelable: false },
                         );
+                        return false;
                       }
                     }
 
@@ -677,6 +678,7 @@ const _BookTour: React.FC<PropsType> = props => {
                         ],
                         { cancelable: false },
                       );
+                      return false;
                     }
 
                     if (adult + child > 50 - quantity) {
@@ -692,6 +694,7 @@ const _BookTour: React.FC<PropsType> = props => {
                         ],
                         { cancelable: false },
                       );
+                      return false;
                     }
 
                     const resulthasDuplicates = hasDuplicates(array.current);
@@ -709,6 +712,7 @@ const _BookTour: React.FC<PropsType> = props => {
                         ],
                         { cancelable: false },
                       );
+                      return false;
                     } else {
                       const resultcompareArrays = compareArrays(
                         dataLocationDefault,
