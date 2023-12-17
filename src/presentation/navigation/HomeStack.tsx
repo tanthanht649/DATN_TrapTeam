@@ -27,12 +27,13 @@ type FeaturedListDetailProps = {
 type FavoriteEmptyProps = {};
 type SearchResultProps = {
   isFilter: boolean;
-  locationProvinces?: string;
+  departureLocation?: string ;
+  locationProvinces?: string ;
   is_popular?: boolean;
   minPrice?: string;
   maxPrice?: string;
   dayFind?: string;
-  text?: string;
+  text?: string | undefined;
 };
 type DetailTourProps = {
   tour_id: string;

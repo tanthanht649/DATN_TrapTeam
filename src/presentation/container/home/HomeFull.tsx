@@ -694,7 +694,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                 textInputStyle={{ width: '90%' }}
                 onPressLeft={() => {
                   handleSearch();
-                  navigation.navigate('SearchResult', { isFilter: false });
+                  navigation.navigate('SearchResult', { isFilter: false, text: text });
                 }}
               />
 

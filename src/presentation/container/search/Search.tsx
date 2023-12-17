@@ -164,6 +164,7 @@ const _Search: React.FC<PropsType> = props => {
   const [textSearch, setTextSearch] = useState('');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const handleModal = (
+    departureLocation: string,
     locationProvinces: string,
     is_popular: boolean,
     minPrice: string,
@@ -173,13 +174,24 @@ const _Search: React.FC<PropsType> = props => {
     setModalVisible(false);
     navigation.navigate('SearchResult', {
       isFilter: true,
+      departureLocation,
       locationProvinces,
       is_popular,
       minPrice,
       maxPrice,
       dayFind,
+      text: undefined,
     });
   };
+
+  // isFilter: boolean;
+  // departureLocation?: string;
+  // locationProvinces?: string;
+  // is_popular?: boolean;
+  // minPrice?: string;
+  // maxPrice?: string;
+  // dayFind?: string;
+  // text?: string | undefined;
 
   const renderItemTourFavorite = React.useMemo(
     () =>
