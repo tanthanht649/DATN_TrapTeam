@@ -18,6 +18,7 @@ import {
   LOCATION_DT,
   LOCATION_ORANGE,
   ORDER_BT,
+  PROMOTION,
   VHL,
   VHL_FL_1,
   fontFamily,
@@ -48,10 +49,16 @@ const _DetailTour: React.FC<PropsType> = props => {
   const dispatch = useAppDispatch();
   const tour_id = props.route.params?.tour_id;
   const isFavorite = props.route.params?.isFavorite;
+  const [isPromotion, setPromotion] = React.useState<boolean>(false);
 
   const [favoriteAddOrDelete, setFavoriteAddOrDelete] = React.useState<
     boolean | undefined
   >(isFavorite);
+
+  useEffect(() => {
+    dispatch(getQuantityBookingTour(tour_id));
+  }, [tour_id]);
+
   const [titleButtonShowReview, setTitleButtonShowReview] =
     React.useState<string>('Xem tất cả bình luận');
 
@@ -68,6 +75,7 @@ const _DetailTour: React.FC<PropsType> = props => {
   const [dataImageTop, setDataImageTop] = React.useState<any>([]);
   const [dataLocationString, setDataLocationString] = React.useState<any>([]);
   const [dataSchedules, setDataSchedules] = React.useState<any>([]);
+  const quantityPromotion = useSelector((state: RootState) => state.bookingTour.quantity);
   const daysDifference = (endDate: any, startDate: any) => {
     const startDay = new Date(startDate);
     const endDay = new Date(endDate);
@@ -75,6 +83,7 @@ const _DetailTour: React.FC<PropsType> = props => {
     const millisecondsPerDay = 24 * 60 * 60 * 1000; // Số mili giây trong một ngày
     const daysDifference = Math.round(timeDifference / millisecondsPerDay);
     return daysDifference;
+
   };
 
   const [imageDetail, setImageDetail] = React.useState('');
@@ -508,12 +517,12 @@ const _DetailTour: React.FC<PropsType> = props => {
                   }}>
                   {dataTour.name}
                 </Text>
-
                 <Text
                   style={{
                     fontFamily: fontFamily.Bold,
                     fontSize: 18,
-                    color: Colors.RED,
+                    color: (50 - quantityPromotion) > 30 ? Colors.BLUE_DARK : Colors.RED,
+                    textDecorationLine: (50 - quantityPromotion) > 30 ? 'line-through' : 'none',
                   }}>
                   {Number(dataTour.price).toLocaleString('vi-VN')} VNĐ
                 </Text>
@@ -521,9 +530,40 @@ const _DetailTour: React.FC<PropsType> = props => {
               <View
                 style={{
                   flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: 8,
+                  display: (50 - quantityPromotion) > 30 ? 'flex' : 'none',
+                }}>
+                <View
+                  style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
+                  <Image
+                    source={PROMOTION}
+                    style={{ width: 18, height: 18, marginEnd: 5 }}
+                  />
+                  <Text
+                    style={{
+                      fontFamily: fontFamily.Medium,
+                      fontSize: 18,
+                      color: Colors.RED,
+                    }}>Giá ưu đãi </Text>
+                </View>
+
+                <Text
+                  style={{
+                    fontFamily: fontFamily.Medium,
+                    fontSize: 18,
+                    color: Colors.RED,
+                  }}>
+                  {Number((dataTour.price) * 0.8).toLocaleString('vi-VN')} VNĐ
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  marginTop: 20,
+                  marginTop: 8,
                 }}>
                 <Image
                   source={LOCATION}
