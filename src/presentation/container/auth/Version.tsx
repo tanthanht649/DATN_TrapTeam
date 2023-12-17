@@ -1,9 +1,9 @@
-import {Image, ScrollView, StyleSheet, View} from 'react-native';
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ProfileStackParamList, WelcomeTeamStackParamList} from '@navigation';
-import {BackgroundApp, Header, TextPlus} from '@components';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ProfileStackParamList, WelcomeTeamStackParamList } from '@navigation';
+import { BackgroundApp, Header, TextPlus } from '@components';
 import {
   BACKGROUND_WHITE,
   ICON_BACK,
@@ -11,11 +11,12 @@ import {
   LOGO_VERSION,
   fontFamily,
 } from '@assets';
-import {Colors, DimensionsStyle} from '@resources';
+import { Colors, DimensionsStyle } from '@resources';
+import { Text } from 'react-native-reanimated/lib/typescript/Animated';
 
 type PropsType = NativeStackScreenProps<ProfileStackParamList, 'Version'>;
 const _Version: React.FC<PropsType> = props => {
-  const {navigation} = props;
+  const { navigation } = props;
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -24,7 +25,7 @@ const _Version: React.FC<PropsType> = props => {
           textCenter={'Phiên bản hiện tại'}
           iconLeft={ICON_BACK}
           eventLeft={() => navigation.goBack()}
-          styleIconLeft={{marginLeft: -DimensionsStyle.width * 0.06}}
+          styleIconLeft={{ marginLeft: -DimensionsStyle.width * 0.06 }}
         />
         <Image source={LOGO_VERSION} style={_styles.image}></Image>
 
