@@ -1,6 +1,6 @@
-import {ARROW_DOWN, CALENDAR_FILTER, EMAIL, LINE, fontFamily} from '@assets';
-import {Colors} from '@resources';
-import React, {useEffect, useState} from 'react';
+import { ARROW_DOWN, CALENDAR_FILTER, EMAIL, LINE, fontFamily } from '@assets';
+import { Colors } from '@resources';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -19,13 +19,13 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import {Button} from '../button';
+import { Button } from '../button';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
-import {useSelector} from 'react-redux';
-import {RootState, findTourByFilter, useAppDispatch} from '@shared-state';
+import { useSelector } from 'react-redux';
+import { RootState, findTourByFilter, useAppDispatch } from '@shared-state';
 import moment from 'moment';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type Props = {
   ModalStyle?: StyleProp<ViewStyle>;
@@ -55,7 +55,7 @@ const _Modal: React.FC<Props> = props => {
     (state: RootState) => state.province.dataProvince,
   );
 
-  const {onPress, Cancel, visible} = props;
+  const { onPress, Cancel, visible } = props;
   const [dataCountry, setDataCountry] = React.useState<ItemCountry[]>([
     {
       id: '1',
@@ -66,7 +66,7 @@ const _Modal: React.FC<Props> = props => {
     return (
       <Image
         source={ARROW_DOWN}
-        // style={_styles.iconLeft}
+      // style={_styles.iconLeft}
       />
     );
   };
@@ -94,17 +94,17 @@ const _Modal: React.FC<Props> = props => {
     color: string;
   };
 
-  const Item = ({item, onPress, backgroundColor, color}: ItemProps) => (
+  const Item = ({ item, onPress, backgroundColor, color }: ItemProps) => (
     <TouchableOpacity
       onPress={onPress}
-      style={[_styles.category, {backgroundColor}]}>
-      <Text style={[_styles.text, {color, fontSize: 13}]}>{item.title}</Text>
+      style={[_styles.category, { backgroundColor }]}>
+      <Text style={[_styles.text, { color, fontSize: 13 }]}>{item.title}</Text>
     </TouchableOpacity>
   );
 
   const [is_popular, setIsPopular] = useState<string>('Nổi bật');
 
-  const renderItem = ({item}: {item: ItemData}) => {
+  const renderItem = ({ item }: { item: ItemData }) => {
     const backgroundColor =
       item.title === is_popular ? Colors.BLUE : Colors.GRAY_SEARCH;
     const color = item.title === is_popular ? Colors.WHITE : Colors.BLUE;
@@ -169,7 +169,7 @@ const _Modal: React.FC<Props> = props => {
           <View style={_styles.modalView}>
             <KeyboardAvoidingView
               enabled
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
               <ScrollView
                 style={_styles.scroll}
@@ -195,9 +195,9 @@ const _Modal: React.FC<Props> = props => {
                     dropdownStyle={_styles.modalViewLocation}
                     selectedRowStyle={[
                       _styles.item,
-                      {backgroundColor: Colors.GREEN},
+                      { backgroundColor: Colors.GREEN },
                     ]}
-                    selectedRowTextStyle={[_styles.text, {color: Colors.WHITE}]}
+                    selectedRowTextStyle={[_styles.text, { color: Colors.WHITE }]}
                     rowStyle={_styles.item}
                     rowTextStyle={_styles.text}
                     data={dataProvince}
@@ -230,9 +230,9 @@ const _Modal: React.FC<Props> = props => {
                     dropdownStyle={_styles.modalViewLocation}
                     selectedRowStyle={[
                       _styles.item,
-                      {backgroundColor: Colors.GREEN},
+                      { backgroundColor: Colors.GREEN },
                     ]}
-                    selectedRowTextStyle={[_styles.text, {color: Colors.WHITE}]}
+                    selectedRowTextStyle={[_styles.text, { color: Colors.WHITE }]}
                     rowStyle={_styles.item}
                     rowTextStyle={_styles.text}
                     data={dataCountry}
@@ -275,8 +275,8 @@ const _Modal: React.FC<Props> = props => {
                     ]}
                     placeholder="Giá thấp nhất"
                   />
-                  <Pressable onPress={() => {}}>
-                    <Text style={[_styles.text, {fontSize: 13}]}>VND</Text>
+                  <Pressable onPress={() => { }}>
+                    <Text style={[_styles.text, { fontSize: 13 }]}>VND</Text>
                   </Pressable>
                 </View>
 
@@ -297,12 +297,12 @@ const _Modal: React.FC<Props> = props => {
                       },
                     ]}
                     placeholder="Giá cao nhất"></TextInput>
-                  <Pressable onPress={() => {}}>
-                    <Text style={[_styles.text, {fontSize: 13}]}>VND</Text>
+                  <Pressable onPress={() => { }}>
+                    <Text style={[_styles.text, { fontSize: 13 }]}>VND</Text>
                   </Pressable>
                 </View>
 
-                <Text style={_styles.textBold}>Ngày khởi hành</Text>
+                <Text style={_styles.textBold}>Ngày khởi hành từ</Text>
 
                 <View style={_styles.input}>
                   <Text

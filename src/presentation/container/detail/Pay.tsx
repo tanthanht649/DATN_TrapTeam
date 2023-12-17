@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BackgroundApp,
   Button,
@@ -27,10 +27,10 @@ import {
   ZALO_PAY,
   fontFamily,
 } from '@assets';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {HomeStackParamList, SearchStackParamList} from '@navigation';
-import {Colors, DimensionsStyle} from '@resources';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HomeStackParamList, SearchStackParamList } from '@navigation';
+import { Colors, DimensionsStyle } from '@resources';
 import {
   AppContext,
   RootState,
@@ -38,13 +38,14 @@ import {
   getBookingTourByUserId,
   useAppDispatch,
 } from '@shared-state';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-type PropsType = NativeStackScreenProps<HomeStackParamList, 'Pay'>;
+type PropsType = NativeStackScreenProps<HomeStackParamList, 'Pay'> &
+  NativeStackScreenProps<SearchStackParamList, 'Pay'>;
 
 const _Pay: React.FC<PropsType> = props => {
-  const {navigation} = props;
-  const {route} = props;
+  const { navigation } = props;
+  const { route } = props;
   const user_id = route.params?.user_id;
   const tour_id = route.params?.tour_id;
   const discount = route.params?.discount;
@@ -54,9 +55,14 @@ const _Pay: React.FC<PropsType> = props => {
   const note = route.params?.note;
   const role = route.params?.role;
   const location_custom = route.params?.location_custom;
+  const priceService = route.params?.priceService;
 
-  const eventRight = () => {};
-  const eventLeft = () => {};
+  const [priceShow, setPriceShow] = React.useState<number>(0);
+  const quantity = useSelector(
+    (state: RootState) => state.bookingTour.quantity,
+  );
+  const eventRight = () => { };
+  const eventLeft = () => { };
   const eventBack = () => {
     navigation.goBack();
   };
@@ -67,8 +73,20 @@ const _Pay: React.FC<PropsType> = props => {
     (state: RootState) => state.tour.tourDetail,
   );
 
+  useEffect(() => {
+    if (dataTourDetail) {
+      if (quantity > 30) {
+        setPriceShow(dataTourDetail.price * 0.8);
+      } else {
+        setPriceShow(dataTourDetail.price);
+      }
+    }
+  }, [
+    quantity, dataTourDetail
+  ]);
+
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const {pay} = React.useContext(AppContext);
+  const { pay } = React.useContext(AppContext);
 
   const [modalVisiblePay, setModalVisiblePay] = useState<boolean>(false);
   const handleModal = () => {
@@ -122,7 +140,7 @@ const _Pay: React.FC<PropsType> = props => {
                 padding: 7,
               }}>
               <Image
-                source={{uri: dataTourDetail.image}}
+                source={{ uri: dataTourDetail.image }}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -168,7 +186,7 @@ const _Pay: React.FC<PropsType> = props => {
                 }}>
                 <Image
                   source={LOCATION}
-                  style={{width: 12, height: 12, marginEnd: 2}}
+                  style={{ width: 12, height: 12, marginEnd: 2 }}
                 />
                 <Text
                   numberOfLines={1}
@@ -188,7 +206,7 @@ const _Pay: React.FC<PropsType> = props => {
                   left: 10,
                   fontSize: 17,
                 }}>
-                {dataTourDetail.price.toLocaleString('vi-VN')} VNĐ
+                {priceShow.toLocaleString('vi-VN')} VNĐ
               </Text>
             </View>
           </View>
@@ -226,7 +244,7 @@ const _Pay: React.FC<PropsType> = props => {
                     fontFamily: fontFamily.Regular,
                   },
                 ]}>
-                {(Number(adult_account) * dataTourDetail.price).toLocaleString(
+                {(Number(adult_account) * priceShow).toLocaleString(
                   'vi-VN',
                 )}{' '}
                 VND
@@ -255,7 +273,7 @@ const _Pay: React.FC<PropsType> = props => {
                 ]}>
                 {(
                   Number(child_account) *
-                  dataTourDetail.price *
+                  priceShow *
                   0.6
                 ).toLocaleString('vi-VN')}{' '}
                 VND
@@ -283,6 +301,33 @@ const _Pay: React.FC<PropsType> = props => {
                   },
                 ]}>
                 {discount?.toLocaleString('vi-vn')} VND
+              </Text>
+            </View>
+            <View style={_styles.row}>
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    fontSize: 13,
+                    color: Colors.BLUE_TEXT,
+                    fontFamily: fontFamily.Regular,
+                  },
+                ]}>
+                Phí dịch vụ
+              </Text>
+              <Text
+                style={[
+                  _styles.text,
+                  {
+                    fontSize: 13,
+                    color: Colors.BLUE_TEXT,
+                    fontFamily: fontFamily.Regular,
+                  },
+                ]}>
+                {(
+                  Number(priceService)
+                ).toLocaleString('vi-VN')}{' '}
+                VND
               </Text>
             </View>
           </View>
@@ -356,6 +401,7 @@ const _Pay: React.FC<PropsType> = props => {
             imageIconLeft={FULL_NAME}
             imageIconRight={ORDER_BT}
             onPress={() => {
+              
               setModalVisiblePay(true);
               const data = {
                 user_id: user_id,

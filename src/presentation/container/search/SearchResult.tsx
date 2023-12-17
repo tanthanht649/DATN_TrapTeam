@@ -9,7 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BackgroundApp,
   Header,
@@ -30,18 +30,19 @@ import {
   LOGO_APP,
   fontFamily,
 } from '@assets';
-import {Colors, DimensionsStyle} from '@resources';
-import {ItemTourOutstanding} from '../home';
+import { Colors, DimensionsStyle } from '@resources';
+import { ItemTourOutstanding } from '../home';
 
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {HomeStackParamList, SearchStackParamList} from '@navigation';
-import {Tour, TourAndFavorite} from '@domain';
-import {useSelector} from 'react-redux';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HomeStackParamList, SearchStackParamList } from '@navigation';
+import { Tour, TourAndFavorite } from '@domain';
+import { useSelector } from 'react-redux';
 import {
   RootState,
   addFavorite,
   deleteFavorite,
   findTourByFilter,
+  findTourByNames,
   getDataFavorite,
   useAppDispatch,
 } from '@shared-state';
@@ -49,7 +50,7 @@ import {
 type PropsType = NativeStackScreenProps<SearchStackParamList, 'SearchResult'> &
   NativeStackScreenProps<HomeStackParamList, 'SearchResult'>;
 
-const ItemFind = ({item}: {item: string}) => {
+const ItemFind = ({ item }: { item: string }) => {
   return (
     <View
       style={{
@@ -67,7 +68,7 @@ const ItemFind = ({item}: {item: string}) => {
         onPress={() => {
           console.log('delete');
         }}>
-        <Image source={CLOSE_ITEM} style={{width: 30, height: 30, margin: 5}} />
+        <Image source={CLOSE_ITEM} style={{ width: 30, height: 30, margin: 5 }} />
       </Pressable>
 
       <Text
@@ -83,7 +84,7 @@ const ItemFind = ({item}: {item: string}) => {
 };
 
 const _SearchResult: React.FC<PropsType> = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const dispatch = useAppDispatch();
 
   const dataUser = useSelector((state: RootState) => state.user.dataUsers);
@@ -93,6 +94,18 @@ const _SearchResult: React.FC<PropsType> = props => {
   const minPrice = props.route.params?.minPrice;
   const maxPrice = props.route.params?.maxPrice;
   const dayFind = props.route.params?.dayFind;
+  const text = props.route.params?.text;
+
+  console.log('text', text);
+
+  useEffect(() => {
+
+
+
+    console.log('handle', 'handle');
+    dispatch(findTourByNames(text));
+
+  }, [text]);
 
   const [textSearch, setTextSearch] = useState('');
   const [isFound, setIsFound] = useState(true);
@@ -104,7 +117,7 @@ const _SearchResult: React.FC<PropsType> = props => {
     (state: RootState) => state.tour.dataSearchName,
   );
 
-  
+
 
   useEffect(() => {
     if (dataSearchName.length === 0) {
@@ -129,7 +142,7 @@ const _SearchResult: React.FC<PropsType> = props => {
       const isFavorite = dataFavoriteNoId.some(
         (check: Tour) => check._id === item._id,
       );
-      return {...item, isFavorite: isFavorite};
+      return { ...item, isFavorite: isFavorite };
     });
 
     setDataTourAndFavorite(tourAndFavorite);
@@ -157,7 +170,7 @@ const _SearchResult: React.FC<PropsType> = props => {
 
   const renderItemFind = React.useMemo(
     () =>
-      ({item}: {item: string}) => {
+      ({ item }: { item: string }) => {
         return <ItemFind item={item} key={item} />;
       },
     [],
@@ -200,7 +213,7 @@ const _SearchResult: React.FC<PropsType> = props => {
             padding: 7,
           }}>
           <Image
-            source={{uri: item.image}}
+            source={{ uri: item.image }}
             style={{
               width: '100%',
               height: '100%',
@@ -210,7 +223,7 @@ const _SearchResult: React.FC<PropsType> = props => {
           />
 
           <TouchableOpacity
-            style={{position: 'absolute', top: 15, right: 15}}
+            style={{ position: 'absolute', top: 15, right: 15 }}
             onPress={() => {
               onPressFavorite();
             }}>
@@ -249,7 +262,7 @@ const _SearchResult: React.FC<PropsType> = props => {
             }}>
             <Image
               source={LOCATION}
-              style={{width: 12, height: 12, marginEnd: 2}}
+              style={{ width: 12, height: 12, marginEnd: 2 }}
             />
             <Text
               numberOfLines={1}
@@ -278,7 +291,7 @@ const _SearchResult: React.FC<PropsType> = props => {
 
   const renderItemTourOutstanding = React.useMemo(
     () =>
-      ({item, index}: {item: TourAndFavorite; index: number}) => {
+      ({ item, index }: { item: TourAndFavorite; index: number }) => {
         return (
           <ItemTourOutstanding
             item={item}
@@ -314,7 +327,7 @@ const _SearchResult: React.FC<PropsType> = props => {
 
   const renderItemTourFavorite = React.useMemo(
     () =>
-      ({item, index}: {item: TourAndFavorite; index: number}) => {
+      ({ item, index }: { item: TourAndFavorite; index: number }) => {
         return (
           <ItemTourFavorite
             item={item}
@@ -348,7 +361,7 @@ const _SearchResult: React.FC<PropsType> = props => {
     [],
   );
 
-  const eventRight = () => {};
+  const eventRight = () => { };
   const eventBack = () => {
     navigation.goBack();
   };
@@ -381,7 +394,7 @@ const _SearchResult: React.FC<PropsType> = props => {
                   data={DATAFIND}
                   renderItem={renderItemFind}
                   keyExtractor={item => item}
-                  style={{marginBottom: 10}}
+                  style={{ marginBottom: 10 }}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                 />
@@ -390,20 +403,20 @@ const _SearchResult: React.FC<PropsType> = props => {
 
             {
               loadingTour ? <Loading /> : <View style={_styles.containerListFeatured}>
-              <FlatList
-                data={dataTourAndFavorite}
-                renderItem={
-                  isLayout ? renderItemTourOutstanding : renderItemTourFavorite
-                }
-                keyExtractor={item => item._id.toString()}
-                numColumns={column}
-                key={column}
-                showsVerticalScrollIndicator={false}
-              />
-            </View>
+                <FlatList
+                  data={dataTourAndFavorite}
+                  renderItem={
+                    isLayout ? renderItemTourOutstanding : renderItemTourFavorite
+                  }
+                  keyExtractor={item => item._id.toString()}
+                  numColumns={column}
+                  key={column}
+                  showsVerticalScrollIndicator={false}
+                />
+              </View>
             }
 
-            
+
           </View>
         ) : (
           <View

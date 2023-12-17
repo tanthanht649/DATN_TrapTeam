@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import React from 'react';
 import {
   BackgroundApp,
@@ -19,9 +19,9 @@ import {
   ONBOARDING_2,
   fontFamily,
 } from '@assets';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {DimensionsStyle} from '@resources';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { DimensionsStyle } from '@resources';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   OnboardingLoginStackParamList,
   WelcomeTeamStackParamList,
@@ -33,7 +33,7 @@ type PropsType = NativeStackScreenProps<
   NativeStackScreenProps<WelcomeTeamStackParamList, 'OnboardingNextTwo'>;
 
 const _OnboardingNextTwo: React.FC<PropsType> = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView
@@ -45,7 +45,7 @@ const _OnboardingNextTwo: React.FC<PropsType> = props => {
             iconLeft={LOGO_APP}
             textRight={'Bỏ qua'}
             eventLeft={() => console.log('IconLeft')}
-            eventRight={() => console.log('EventRight')}
+            eventRight={() => navigation.navigate('Login')}
             isCheck={true}
             styleIconLeft={{
               width: DimensionsStyle.width * 0.1,
@@ -58,8 +58,8 @@ const _OnboardingNextTwo: React.FC<PropsType> = props => {
             text={`Một chuyến đi thú vị cho\nbạn chỉ một cú nhấp chuột`}
             textBolds={['nhấp chuột']}
             textStyle={_styles.textFind}
-            boldStyle={{fontSize: 25}}
-            viewStyle={{marginStart: 30}}
+            boldStyle={{ fontSize: 25 }}
+            viewStyle={{ marginStart: 30 }}
           />
 
           <Text style={_styles.textLorem}>
@@ -114,7 +114,7 @@ const _OnboardingNextTwo: React.FC<PropsType> = props => {
                 imageIcon={ARROW_LEFT_LINE}
                 onPress={() => navigation.goBack()}
                 shadow={false}
-                viewStyle={{marginTop: -35}}
+                viewStyle={{ marginTop: -35 }}
               />
               <Button
                 title="Tiếp"
