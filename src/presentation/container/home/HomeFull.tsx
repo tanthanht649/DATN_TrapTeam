@@ -8,7 +8,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import React, { useEffect, useState, useRef } from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   BACKGROUND_HOME,
   FIND,
@@ -17,7 +17,7 @@ import {
   LOCATION,
   fontFamily,
 } from '@assets';
-import { Colors, DimensionsStyle } from '@resources';
+import {Colors, DimensionsStyle} from '@resources';
 import {
   BackgroundApp,
   HeaderHome2,
@@ -26,10 +26,10 @@ import {
   Input,
   Loading,
 } from '@components';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { HomeStackParamList } from '@navigation';
-import { useSelector } from 'react-redux';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {HomeStackParamList} from '@navigation';
+import {useSelector} from 'react-redux';
 import {
   RootState,
   getAllEvents,
@@ -43,15 +43,15 @@ import {
   deleteFavorite,
   addFavorite,
 } from '@shared-state';
-import { Event, Tour, Location, TourAndFavorite } from '@domain';
+import {Event, Tour, Location, TourAndFavorite} from '@domain';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'HomeFull'>;
 
-const ItemBanner = ({ item, onPress }: { item: Event; onPress: () => void }) => {
+const ItemBanner = ({item, onPress}: {item: Event; onPress: () => void}) => {
   return (
     <Pressable onPress={onPress}>
       <Image
-        source={{ uri: item.image }}
+        source={{uri: item.image}}
         style={{
           width: Dimensions.get('screen').width * 0.7,
           height: Dimensions.get('screen').width * 0.5,
@@ -113,7 +113,7 @@ const ItemTourFavorite = ({
           padding: 7,
         }}>
         <Image
-          source={{ uri: item.image }}
+          source={{uri: item.image}}
           style={{
             width: '100%',
             height: '100%',
@@ -163,7 +163,7 @@ const ItemTourFavorite = ({
           }}>
           <Image
             source={LOCATION}
-            style={{ width: 12, height: 12, marginEnd: 2 }}
+            style={{width: 12, height: 12, marginEnd: 2}}
           />
           <Text
             numberOfLines={1}
@@ -215,7 +215,7 @@ const ItemEstates = ({
           padding: 7,
         }}>
         <Image
-          source={{ uri: item.image }}
+          source={{uri: item.image}}
           style={{
             width: '100%',
             height: '100%',
@@ -249,7 +249,7 @@ const ItemEstates = ({
           }}>
           <Image
             source={LOCATION}
-            style={{ width: 12, height: 12, marginEnd: 2 }}
+            style={{width: 12, height: 12, marginEnd: 2}}
           />
           <Text
             numberOfLines={1}
@@ -293,7 +293,7 @@ export const ItemTourOutstanding = ({
       onPress={onPress}>
       <View>
         <Image
-          source={{ uri: item.image }}
+          source={{uri: item.image}}
           style={{
             width: '100%',
             height: DimensionsStyle.width * 0.5,
@@ -303,7 +303,7 @@ export const ItemTourOutstanding = ({
           }}
         />
         <TouchableOpacity
-          style={{ position: 'absolute', top: 10, right: 10 }}
+          style={{position: 'absolute', top: 10, right: 10}}
           onPress={() => {
             onPressFavorite();
           }}>
@@ -356,7 +356,7 @@ export const ItemTourOutstanding = ({
           }}>
           <Image
             source={LOCATION}
-            style={{ width: 12, height: 12, marginEnd: 2 }}
+            style={{width: 12, height: 12, marginEnd: 2}}
           />
           <Text
             numberOfLines={1}
@@ -373,7 +373,7 @@ export const ItemTourOutstanding = ({
 };
 
 const _HomeFull: React.FC<PropsType> = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const dispatch = useAppDispatch();
   const dataUser = useSelector((state: RootState) => state.user.dataUsers);
   const [isFavorite, setIsFavorite] = React.useState(false);
@@ -383,11 +383,6 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const [hideElement, setHideElement] = useState(false);
 
-  const handleScroll = (event: any) => {
-    const offsetY = event.nativeEvent.contentOffset.y + 10;
-    setHideElement(offsetY > 20);
-  };
-
   useEffect(() => {
     isFavorite ? setIsCheck('homefavorite') : setIsCheck('home');
   }, [isFavorite]);
@@ -396,6 +391,20 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRefSum = useRef<ScrollView>(null);
+
+  const [isScrollEnabled, setScrollEnabled] = useState<boolean>(true);
+  const handleScrollBeginDrag = () => {
+    setScrollEnabled(false); // Ngăn chặn sự kiện cuộn tự động
+  };
+
+  const handleScrollEndDrag = () => {
+    setScrollEnabled(true); // Cho phép sự kiện cuộn lại sau khi kết thúc cuộn
+  };
+
+  const handleScroll = (offsetY: number) => {
+    scrollViewRefSum.current?.scrollTo({y: offsetY, animated: true});
+  };
   const ITEM_WIDTH = DimensionsStyle.width * 0.7 + 15;
 
   const handleToListTourBanner = (item: Event) => {
@@ -408,7 +417,7 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemBanner = React.useMemo(
     () =>
-      ({ item }: { item: Event }) => {
+      ({item}: {item: Event}) => {
         return (
           <ItemBanner
             onPress={() => {
@@ -461,7 +470,7 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const renderItemEstates = React.useMemo(
     () =>
-      ({ item }: { item: Location }) => {
+      ({item}: {item: Location}) => {
         return (
           <ItemEstates
             item={item}
@@ -546,10 +555,8 @@ const _HomeFull: React.FC<PropsType> = props => {
     setTimeout(() => {
       setHide(true);
     }, 5000);
-    return () => {
-
-    }
-  }, [])
+    return () => {};
+  }, []);
 
   const handleToFeaturedListHome = () => {
     navigation.navigate('FeaturedListHome');
@@ -624,7 +631,7 @@ const _HomeFull: React.FC<PropsType> = props => {
       const isFavorite = dataFavoriteNoId.some(
         (check: Tour) => check._id === item._id,
       );
-      return { ...item, isFavorite: isFavorite };
+      return {...item, isFavorite: isFavorite};
     });
 
     setDataTourAndFavorite(tourAndFavorite);
@@ -653,53 +660,52 @@ const _HomeFull: React.FC<PropsType> = props => {
         }}
       />
       <SafeAreaView style={_styles.containerScrollView}>
-        {hideElement ? null
-          : (
-            <View>
-              <TextPlus
-                textBolds={[dataUser?.name + '']}
-                text={`Xin chào, ${dataUser?.name}! \nHãy bắt đầu khám phá`}
-                boldStyle={{
-                  fontFamily: fontFamily.Bold,
-                  color: Colors.GREY_DARK_1,
-                  fontSize: 25,
-                  lineHeight: 40,
-                  letterSpacing: 0.75,
-
-                }}
-                viewStyle={{ display: hide ? 'none' : 'flex' }}
-                textStyle={{
-                  color: Colors.GREY_DARK_1,
-                  fontSize: 25,
-                  lineHeight: 40,
-                  letterSpacing: 0.75,
-                  width: '100%',
-
-                }}
-                numberOfLines={2}
-              />
-              <Input
-                imageIconLeft={FIND}
-                imageIconRight={FIND}
-                iconRightStyle={{ display: 'none' }}
-                label="Tìm kiếm địa điểm, tour du lịch"
-                value={text}
-                onChangeText={text => setText(text)}
-                viewStyle={{
-                  // marginTop: '5%',
-                  marginBottom: '1%',
-                  marginEnd: 20,
-                  marginStart: 0,
-                }}
-                textInputStyle={{ width: '90%' }}
-                onPressLeft={() => {
-                  handleSearch();
-                  navigation.navigate('SearchResult', { isFilter: false, text: text });
-                }}
-              />
-
-            </View>
-          )}
+        {hideElement ? null : (
+          <View>
+            <TextPlus
+              textBolds={[dataUser?.name + '']}
+              text={`Xin chào, ${dataUser?.name}! \nHãy bắt đầu khám phá`}
+              boldStyle={{
+                fontFamily: fontFamily.Bold,
+                color: Colors.GREY_DARK_1,
+                fontSize: 25,
+                lineHeight: 40,
+                letterSpacing: 0.75,
+              }}
+              viewStyle={{display: hide ? 'none' : 'flex'}}
+              textStyle={{
+                color: Colors.GREY_DARK_1,
+                fontSize: 25,
+                lineHeight: 40,
+                letterSpacing: 0.75,
+                width: '100%',
+              }}
+              numberOfLines={2}
+            />
+            <Input
+              imageIconLeft={FIND}
+              imageIconRight={FIND}
+              iconRightStyle={{display: 'none'}}
+              label="Tìm kiếm địa điểm, tour du lịch"
+              value={text}
+              onChangeText={text => setText(text)}
+              viewStyle={{
+                // marginTop: '5%',
+                marginBottom: '1%',
+                marginEnd: 20,
+                marginStart: 0,
+              }}
+              textInputStyle={{width: '90%'}}
+              onPressLeft={() => {
+                handleSearch();
+                navigation.navigate('SearchResult', {
+                  isFilter: false,
+                  text: text,
+                });
+              }}
+            />
+          </View>
+        )}
 
         <TopTab
           isCheck={isCheck}
@@ -709,10 +715,15 @@ const _HomeFull: React.FC<PropsType> = props => {
             borderBottomRightRadius: 0,
             marginBottom: 20,
           }}
+          onPress={handleScroll}
         />
 
         <ScrollView
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+          ref={scrollViewRefSum}
+          scrollEnabled={isScrollEnabled}
+          onScrollBeginDrag={handleScrollBeginDrag}
+          onScrollEndDrag={handleScrollEndDrag}>
           <View
             style={{
               flex: 1,
@@ -733,8 +744,8 @@ const _HomeFull: React.FC<PropsType> = props => {
                   const index = Math.round(contentOffset / ITEM_WIDTH);
                   setCurrentIndex(index);
                 }}>
-                <View style={{ flexDirection: 'row' }}>
-                  {dataEvent.map((item, index) => renderItemBanner({ item }))}
+                <View style={{flexDirection: 'row'}}>
+                  {dataEvent.map((item, index) => renderItemBanner({item}))}
                 </View>
               </ScrollView>
             )}
@@ -781,7 +792,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                     borderBottomLeftRadius: 20,
                   }}>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{flexDirection: 'row'}}>
                       {dataFavoriteNoId.map((item, index) =>
                         renderItemTourFavorite({
                           item,
@@ -811,9 +822,9 @@ const _HomeFull: React.FC<PropsType> = props => {
                   fontSize: 20,
                   marginTop: 20,
                 }}>
-                Địa điểm nổi bật
+                Địa điểm phổ biến
               </Text>
-              <Pressable style={{ display: 'none' }}>
+              <Pressable style={{display: 'none'}}>
                 <Text
                   style={{
                     fontFamily: fontFamily.Medium,
@@ -833,9 +844,9 @@ const _HomeFull: React.FC<PropsType> = props => {
                 borderBottomLeftRadius: 20,
               }}>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{flexDirection: 'row'}}>
                   {dataLocations.map((item, index) =>
-                    renderItemEstates({ item }),
+                    renderItemEstates({item}),
                   )}
                 </View>
               </ScrollView>
