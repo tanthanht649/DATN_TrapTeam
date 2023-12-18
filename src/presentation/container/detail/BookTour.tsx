@@ -327,6 +327,7 @@ const _BookTour: React.FC<PropsType> = props => {
                   position: 'absolute',
                   top: 15,
                   left: 15,
+                  display: 'none',
                 }}
               />
             </View>

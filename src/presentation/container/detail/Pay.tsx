@@ -158,6 +158,7 @@ const _Pay: React.FC<PropsType> = props => {
                   position: 'absolute',
                   top: 15,
                   left: 15,
+                  display: 'none',
                 }}
               />
             </View>
@@ -401,7 +402,7 @@ const _Pay: React.FC<PropsType> = props => {
             imageIconLeft={FULL_NAME}
             imageIconRight={ORDER_BT}
             onPress={() => {
-              
+
               setModalVisiblePay(true);
               const data = {
                 user_id: user_id,

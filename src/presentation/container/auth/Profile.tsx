@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   ImageSourcePropType,
   Pressable,
@@ -77,7 +78,7 @@ const _Profile: React.FC<PropsType> = props => {
   const dataUser = useSelector((state: RootState) => state.user.dataUsers);
 
   const [imageAvatar, setImageAvatar] = useState(
-    'https://www.bing.com/th?id=OIP.fN9gx82LKxSZVpTc18meBgHaEo&w=149&h=100&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2',
+    'https://th.bing.com/th/id/OIP.I1GCfYlplfH24S6JF289mwHaHa?rs=1&pid=ImgDetMain',
   );
 
   useEffect(() => {
@@ -479,17 +480,36 @@ const _Profile: React.FC<PropsType> = props => {
           </Pressable>
           <Pressable
             onPress={() => {
-              store.dispatch(logoutUser());
-              store.dispatch(logoutTour());
-              store.dispatch(logoutLocation());
-              store.dispatch(logoutFavorite());
-              store.dispatch(logoutEvent());
-              store.dispatch(logoutProvince());
-              store.dispatch(logoutBlog());
-              store.dispatch(logoutBookingTour());
-              store.dispatch(logoutReview());
-              onGoogleSignOutPress();
-              setLoggedIn(false);
+              Alert.alert(
+                'Thông báo',
+                'Bạn có muốn đăng xuất không?',
+                [
+                  {
+                    text: 'Huỷ',
+                    onPress: () => console.log('Huỷ được nhấn'),
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'Đăng xuất',
+                    onPress: () => {
+                      console.log('Đăng xuất được nhấn');
+                      store.dispatch(logoutUser());
+                      store.dispatch(logoutTour());
+                      store.dispatch(logoutLocation());
+                      store.dispatch(logoutFavorite());
+                      store.dispatch(logoutEvent());
+                      store.dispatch(logoutProvince());
+                      store.dispatch(logoutBlog());
+                      store.dispatch(logoutBookingTour());
+                      store.dispatch(logoutReview());
+                      onGoogleSignOutPress();
+                      setLoggedIn(false);
+                    },
+                  },
+                ],
+                { cancelable: false },
+              );
+
             }}
             style={_styles.card}>
             <Image
@@ -510,7 +530,7 @@ const _Profile: React.FC<PropsType> = props => {
               Đăng xuất
             </Text>
           </Pressable>
-          <Image source={LOGO} style={[_styles.image,{alignSelf:'center'}]}></Image>
+          <Image source={LOGO} style={[_styles.image, { alignSelf: 'center', marginTop: 40 }]}></Image>
           <Text numberOfLines={2} style={_styles.textBold}>KHÁM PHÁ THẾ GIỚI {'\n'}
             MỌI CHUYẾN ĐI TẠI ĐẦU NGÓN TAY</Text>
           {/* Đừng xóa của Linh */}
@@ -690,7 +710,7 @@ const _styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 30,
     fontFamily: fontFamily.Bold,
-     lineHeight: 16
+    lineHeight: 16
   }
 
 });

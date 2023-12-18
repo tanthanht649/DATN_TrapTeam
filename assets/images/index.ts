@@ -167,3 +167,4 @@ export const VIETTEL_PAY = require('./viettelpay.png');
 export const HEART_INACTIVE_2 = require('./heart_inactive_home.png');
 export const PROMOTION = require('./icon_promotion.png');
 export const LOGO = require('./logo.png');
+export const LOADINGIMAGE = require('./icons_loading.png');
