@@ -198,6 +198,7 @@ export const findTourByScreenSearch = createAsyncThunk(
 );
 
 interface DataFindFilter {
+  departureLocation: string;
   locationProvinces: string;
   is_popular: boolean;
   minPrice: string;
@@ -210,7 +211,7 @@ export const findTourByFilter = createAsyncThunk(
   'tour/findTourByFilter',
   async (data: DataFindFilter) => {
     const fetchData = async () => {
-      let url = `${CONSTANTS.IP}api/tour/getTourByFilter?locationProvinces=${data.locationProvinces}&is_popular=${data.is_popular}&minPrice=${data.minPrice}&maxPrice=${data.maxPrice}&dayFind=${data.dayFind}`;
+      let url = `${CONSTANTS.IP}api/tour/getTourByFilter?departureLocation=${data.departureLocation}&locationProvinces=${data.locationProvinces}&is_popular=${data.is_popular}&minPrice=${data.minPrice}&maxPrice=${data.maxPrice}&dayFind=${data.dayFind}`;
 
       const response = await fetch(url, {
         method: 'GET',
