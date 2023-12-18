@@ -12,12 +12,13 @@ import {
 type SearchProps = {};
 type SearchResultProps = {
   isFilter: boolean;
+  departureLocation?: string ;
   locationProvinces?: string;
   is_popular?: boolean;
   minPrice?: string;
   maxPrice?: string;
   dayFind?: string;
-  text?: string;
+  text?: string | undefined;
 };
 type FeaturedListHomeProps = {};
 type DetailTourProps = {
