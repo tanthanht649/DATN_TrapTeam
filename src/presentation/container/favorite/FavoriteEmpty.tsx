@@ -189,20 +189,20 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
   );
   const renderNull = () => (
     <View style={_styles.nextView}>
-      <TouchableOpacity onPress={() => console.log('goHome')}>
+      <TouchableOpacity>
         <Image source={ALERT_SUCCESS_PLUS} style={{height: 142, width: 142}} />
       </TouchableOpacity>
       <TextPlus
-        text={'Your favorite page is\nempty'}
-        textBolds={['empty']}
+        text={'Trang yêu thích của bạn\ntrống'}
+        textBolds={['trống']}
         numberOfLines={2}
         viewStyle={{flex: 0.18, justifyContent: 'center'}}
         textStyle={StyleSheet.flatten([_styles.text])}
         boldStyle={StyleSheet.flatten([_styles.textBold])}
       />
       <Text style={_styles.textMini}>
-        Click add button above to start exploring and choose{'\n'}your favorite
-        estates.{' '}
+      Nhấp vào nút thêm ở trên để bắt đầu khám phá{'\n'}và chọn tour bạn yêu thích
+      {' '}
       </Text>
     </View>
   );
