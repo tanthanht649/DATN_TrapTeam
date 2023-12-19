@@ -12,10 +12,11 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {Colors, DimensionsStyle} from '@resources';
+import { Colors, DimensionsStyle } from '@resources';
 import {
   AVT,
   CHEVRON_DOWN,
+  LOADINGIMAGE,
   LOCATION,
   LOGO_APP,
   NOTIFICATION,
@@ -93,7 +94,7 @@ const _HeaderHome2: React.FC<HeaderHomeProps> = props => {
           ]}
           onPress={onPressAvatar}>
           <Image
-            source={{uri: avatar}}
+            source={avatar == '' ? LOADINGIMAGE : { uri: avatar }}
             style={{
               width: 45,
               height: 45,

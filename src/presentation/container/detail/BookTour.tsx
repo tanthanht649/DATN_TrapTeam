@@ -327,6 +327,7 @@ const _BookTour: React.FC<PropsType> = props => {
                   position: 'absolute',
                   top: 15,
                   left: 15,
+                  display: 'none',
                 }}
               />
             </View>
@@ -885,6 +886,22 @@ const _BookTour: React.FC<PropsType> = props => {
 
                         } else {
                           console.log(`Có ${resultcompareArrays} thay đổi`);
+                          if(adult + child < 15){
+                            Alert.alert(
+                              'Thông báo',
+                              'Số lượng đặt phải lớn hơn 15 người mới thực hiện được tính năng tuỳ chọn vị trí tham quan',
+                              [
+                                {
+                                  text: 'OK',
+                                  onPress: () => console.log('OK Pressed'),
+                                  style: 'cancel',
+                                },
+                              ],
+                              { cancelable: false },
+                            );
+                            return false;
+                          }
+
                           const user_id = dataUser?._id;
                           const tour_id = dataTourDetail?._id;
                           const discount: number = discountTour(adult);

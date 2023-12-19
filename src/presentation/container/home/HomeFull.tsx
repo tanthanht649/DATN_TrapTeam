@@ -15,6 +15,7 @@ import {
   HEART,
   HEART_INACTIVE_2,
   LOCATION,
+  LOADINGIMAGE,
   fontFamily,
 } from '@assets';
 import { Colors, DimensionsStyle } from '@resources';
@@ -383,11 +384,6 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const [hideElement, setHideElement] = useState(false);
 
-  const handleScroll = (event: any) => {
-    const offsetY = event.nativeEvent.contentOffset.y + 10;
-    setHideElement(offsetY > 20);
-  };
-
   useEffect(() => {
     isFavorite ? setIsCheck('homefavorite') : setIsCheck('home');
   }, [isFavorite]);
@@ -396,6 +392,20 @@ const _HomeFull: React.FC<PropsType> = props => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRefSum = useRef<ScrollView>(null);
+
+  const [isScrollEnabled, setScrollEnabled] = useState<boolean>(true);
+  const handleScrollBeginDrag = () => {
+    setScrollEnabled(false); // Ngăn chặn sự kiện cuộn tự động
+  };
+
+  const handleScrollEndDrag = () => {
+    setScrollEnabled(true); // Cho phép sự kiện cuộn lại sau khi kết thúc cuộn
+  };
+
+  const handleScroll = (offsetY: number) => {
+    scrollViewRefSum.current?.scrollTo({ y: offsetY, animated: true });
+  };
   const ITEM_WIDTH = DimensionsStyle.width * 0.7 + 15;
 
   const handleToListTourBanner = (item: Event) => {
@@ -546,17 +556,15 @@ const _HomeFull: React.FC<PropsType> = props => {
     setTimeout(() => {
       setHide(true);
     }, 5000);
-    return () => {
-
-    }
-  }, [])
+    return () => { };
+  }, []);
 
   const handleToFeaturedListHome = () => {
     navigation.navigate('FeaturedListHome');
   };
 
   const [imageAvatar, setImageAvatar] = useState(
-    'https://www.bing.com/th?id=OIP.fN9gx82LKxSZVpTc18meBgHaEo&w=149&h=100&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2',
+    '',
   );
 
   useEffect(() => {
@@ -653,53 +661,53 @@ const _HomeFull: React.FC<PropsType> = props => {
         }}
       />
       <SafeAreaView style={_styles.containerScrollView}>
-        {hideElement ? null
-          : (
-            <View>
-              <TextPlus
-                textBolds={[dataUser?.name + '']}
-                text={`Xin chào, ${dataUser?.name}! \nHãy bắt đầu khám phá`}
-                boldStyle={{
-                  fontFamily: fontFamily.Bold,
-                  color: Colors.GREY_DARK_1,
-                  fontSize: 25,
-                  lineHeight: 40,
-                  letterSpacing: 0.75,
-
-                }}
-                viewStyle={{ display: hide ? 'none' : 'flex' }}
-                textStyle={{
-                  color: Colors.GREY_DARK_1,
-                  fontSize: 25,
-                  lineHeight: 40,
-                  letterSpacing: 0.75,
-                  width: '100%',
-
-                }}
-                numberOfLines={2}
-              />
-              <Input
-                imageIconLeft={FIND}
-                imageIconRight={FIND}
-                iconRightStyle={{ display: 'none' }}
-                label="Tìm kiếm địa điểm, tour du lịch"
-                value={text}
-                onChangeText={text => setText(text)}
-                viewStyle={{
-                  // marginTop: '5%',
-                  marginBottom: '1%',
-                  marginEnd: 20,
-                  marginStart: 0,
-                }}
-                textInputStyle={{ width: '90%' }}
-                onPressLeft={() => {
-                  handleSearch();
-                  navigation.navigate('SearchResult', { isFilter: false });
-                }}
-              />
-
-            </View>
-          )}
+        {hideElement ? null : (
+          <View>
+            <TextPlus
+              textBolds={[dataUser?.name + '']}
+              text={dataUser?.name == undefined ? `Xin chào! \nHãy bắt đầu khám phá` :
+                `Xin chào, ${dataUser?.name}! \nHãy bắt đầu khám phá`}
+              boldStyle={{
+                fontFamily: fontFamily.Bold,
+                color: Colors.GREY_DARK_1,
+                fontSize: 25,
+                lineHeight: 40,
+                letterSpacing: 0.75,
+              }}
+              viewStyle={{ display: hide ? 'none' : 'flex' }}
+              textStyle={{
+                color: Colors.GREY_DARK_1,
+                fontSize: 25,
+                lineHeight: 40,
+                letterSpacing: 0.75,
+                width: '100%',
+              }}
+              numberOfLines={2}
+            />
+            <Input
+              imageIconLeft={FIND}
+              imageIconRight={FIND}
+              iconRightStyle={{ display: 'none' }}
+              label="Tìm kiếm địa điểm, tour du lịch"
+              value={text}
+              onChangeText={text => setText(text)}
+              viewStyle={{
+                // marginTop: '5%',
+                marginBottom: '1%',
+                marginEnd: 20,
+                marginStart: 0,
+              }}
+              textInputStyle={{ width: '90%' }}
+              onPressLeft={() => {
+                handleSearch();
+                navigation.navigate('SearchResult', {
+                  isFilter: false,
+                  text: text,
+                });
+              }}
+            />
+          </View>
+        )}
 
         <TopTab
           isCheck={isCheck}
@@ -709,10 +717,12 @@ const _HomeFull: React.FC<PropsType> = props => {
             borderBottomRightRadius: 0,
             marginBottom: 20,
           }}
+          onPress={handleScroll}
         />
 
         <ScrollView
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+          ref={scrollViewRefSum}>
           <View
             style={{
               flex: 1,
@@ -811,7 +821,7 @@ const _HomeFull: React.FC<PropsType> = props => {
                   fontSize: 20,
                   marginTop: 20,
                 }}>
-                Địa điểm nổi bật
+                Địa điểm phổ biến
               </Text>
               <Pressable style={{ display: 'none' }}>
                 <Text

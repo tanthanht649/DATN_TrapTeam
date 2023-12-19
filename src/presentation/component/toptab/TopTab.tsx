@@ -11,7 +11,7 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
-import {Colors} from '@resources';
+import {Colors, DimensionsStyle} from '@resources';
 import {
   MASTERCARD,
   MASTERCARD_SELECT,
@@ -28,7 +28,6 @@ interface ItemTab {
   title: string;
   activeImage?: ImageSourcePropType;
   inactiveImage?: ImageSourcePropType;
-  onPress?: () => void;
 }
 
 type TopTabProps = {
@@ -36,10 +35,11 @@ type TopTabProps = {
   isCheck?: 'card' | 'home' | 'review' | 'homefavorite';
   children?: React.ReactNode;
   listTabContainer?: StyleProp<ViewStyle>;
+  onPress: (offsetY: number) => void;
 };
 
 const _TopTab: React.FC<TopTabProps> = props => {
-  const {containerStyle, isCheck, children} = props;
+  const {containerStyle, isCheck, children, onPress} = props;
 
   let data: ItemTab[] = [];
 
@@ -101,15 +101,38 @@ const _TopTab: React.FC<TopTabProps> = props => {
 
   interface ItemCardProps {
     item: ItemTab;
+    onPress: (offsetY: number) => void;
   }
 
   const ItemTab: React.FC<ItemCardProps> = ({item}) => {
+    let offsetY = 0;
+    if (data.length === 3) {
+      if (item.title === 'Tất cả') {
+        offsetY = 0;
+      } else if (item.title === 'Phổ biến') {
+        offsetY = DimensionsStyle.height * 0.25;
+      } else if (item.title === 'Nổi bật') {
+        offsetY = DimensionsStyle.height * 0.5;
+      }
+    } else {
+      if (item.title === 'Tất cả') {
+        offsetY = 0;
+      } else if (item.title === 'Yêu thích') {
+        offsetY = DimensionsStyle.height * 0.25;
+      } else if (item.title === 'Phổ biến') {
+        offsetY = DimensionsStyle.height * 0.5;
+      } else if (item.title === 'Nổi bật') {
+        offsetY = DimensionsStyle.height * 0.75;
+      }
+    }
+
     return (
       <TouchableOpacity
         style={[_styles.btnTab, status === item.title && _styles.btnTabActive]}
         onPress={() => {
           setStatusFilter(item.title);
           setSelectedIndex(item.id);
+          onPress(offsetY);
         }}>
         {item.activeImage && status === item.title && (
           <Image source={item.activeImage} style={_styles.tabImage} />
@@ -137,7 +160,7 @@ const _TopTab: React.FC<TopTabProps> = props => {
             horizontal
             showsHorizontalScrollIndicator={false}>
             {data.map(item => (
-              <ItemTab item={item} key={item.id} />
+              <ItemTab item={item} key={item.id} onPress={onPress} />
             ))}
           </ScrollView>
         </View>
@@ -215,7 +238,6 @@ const DATAHOME: ItemTab[] = [
   {
     id: 0,
     title: 'Tất cả',
-    onPress: () => {},
   },
   {
     id: 1,
@@ -231,7 +253,6 @@ const DATAHOMEFAVORITE: ItemTab[] = [
   {
     id: 0,
     title: 'Tất cả',
-    onPress: () => {},
   },
   {
     id: 1,

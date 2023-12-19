@@ -1,4 +1,4 @@
-import {Image, Pressable, StyleSheet, View} from 'react-native';
+import {Alert, Image, Pressable, StyleSheet, View} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -96,14 +96,52 @@ const _EditProfile: React.FC<PropsType> = props => {
   };
 
   const handleUpdateInfo = () => {
-    const data = {
-      id: dataUser?._id,
-      name: fullName,
-      email: email,
-      phone_number: call,
-      avatar: imageAvatar,
-    };
-    dispatch(updateProfile(data));
+    Alert.alert(
+      'Thông báo',
+      'Bạn có muốn cập nhật thông tin không?',
+      [
+        {
+          text: 'Huỷ',
+          onPress: () => console.log('Huỷ được nhấn'),
+          style: 'cancel',
+        },
+        {
+          text: 'Cập nhật',
+          onPress: () => {
+            // kiểm tra xem call có đúng định dạng số điện thoại hay không
+            const regex = /^[0-9\b]+$/;
+            if (!regex.test(call)) {
+              Alert.alert('Thông báo', 'Số điện thoại không hợp lệ', [
+                {
+                  text: 'OK',
+                  style: 'cancel',
+                },
+              ]);
+              return;
+            }
+          
+            const data = {
+              id: dataUser?._id,
+              name: fullName,
+              email: email,
+              phone_number: call,
+              avatar: imageAvatar,
+            };
+            dispatch(updateProfile(data)).then(res => {
+              Alert.alert('Thông báo', 'Cập nhật thông tin thành công', [
+                {
+                  text: 'OK',
+                  style: 'cancel',
+                },
+              ]);
+            });
+          },
+        },
+      ],
+      { cancelable: false },
+    );
+
+    
   };
 
   return (

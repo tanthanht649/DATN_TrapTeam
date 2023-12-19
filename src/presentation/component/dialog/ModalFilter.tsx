@@ -1,6 +1,6 @@
-import { ARROW_DOWN, CALENDAR_FILTER, EMAIL, LINE, fontFamily } from '@assets';
-import { Colors } from '@resources';
-import React, { useEffect, useState } from 'react';
+import {ARROW_DOWN, CALENDAR_FILTER, EMAIL, LINE, fontFamily} from '@assets';
+import {Colors} from '@resources';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -19,18 +19,19 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import { Button } from '../button';
+import {Button} from '../button';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
-import { useSelector } from 'react-redux';
-import { RootState, findTourByFilter, useAppDispatch } from '@shared-state';
+import {useSelector} from 'react-redux';
+import {RootState, findTourByFilter, useAppDispatch} from '@shared-state';
 import moment from 'moment';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 type Props = {
   ModalStyle?: StyleProp<ViewStyle>;
   visible?: boolean;
   onPress: (
+    departureLocation: string,
     locationProvinces: string,
     is_popular: boolean,
     minPrice: string,
@@ -55,7 +56,7 @@ const _Modal: React.FC<Props> = props => {
     (state: RootState) => state.province.dataProvince,
   );
 
-  const { onPress, Cancel, visible } = props;
+  const {onPress, Cancel, visible} = props;
   const [dataCountry, setDataCountry] = React.useState<ItemCountry[]>([
     {
       id: '1',
@@ -66,7 +67,7 @@ const _Modal: React.FC<Props> = props => {
     return (
       <Image
         source={ARROW_DOWN}
-      // style={_styles.iconLeft}
+        // style={_styles.iconLeft}
       />
     );
   };
@@ -94,20 +95,20 @@ const _Modal: React.FC<Props> = props => {
     color: string;
   };
 
-  const Item = ({ item, onPress, backgroundColor, color }: ItemProps) => (
+  const Item = ({item, onPress, backgroundColor, color}: ItemProps) => (
     <TouchableOpacity
       onPress={onPress}
-      style={[_styles.category, { backgroundColor }]}>
-      <Text style={[_styles.text, { color, fontSize: 13 }]}>{item.title}</Text>
+      style={[_styles.category, {backgroundColor}]}>
+      <Text style={[_styles.text, {color, fontSize: 13}]}>{item.title}</Text>
     </TouchableOpacity>
   );
 
-  const [is_popular, setIsPopular] = useState<string>('Nổi bật');
+  const [is_popularUI, setIsPopular] = useState<string>('Nổi bật');
 
-  const renderItem = ({ item }: { item: ItemData }) => {
+  const renderItem = ({item}: {item: ItemData}) => {
     const backgroundColor =
-      item.title === is_popular ? Colors.BLUE : Colors.GRAY_SEARCH;
-    const color = item.title === is_popular ? Colors.WHITE : Colors.BLUE;
+      item.title === is_popularUI ? Colors.BLUE : Colors.GRAY_SEARCH;
+    const color = item.title === is_popularUI ? Colors.WHITE : Colors.BLUE;
     return (
       <Item
         item={item}
@@ -117,10 +118,11 @@ const _Modal: React.FC<Props> = props => {
       />
     );
   };
-  const [locationProvinces, setLocationProvinces] = useState<string>(
-    dataProvince[0].name,
-  );
-  const [minPrice, setMinPrice] = useState<string>('');
+  const [locationProvinces, setLocationProvinces] = useState<string>('Điểm đi');
+
+  const [departureLocation, setDepartureLocation] =
+    useState<string>('Điểm đến');
+  const [minPrice, setMinPrice] = useState<string>('0');
   const handleOnchangePrice = (value: string) => {
     setMinPrice(value);
   };
@@ -148,6 +150,9 @@ const _Modal: React.FC<Props> = props => {
     setShowPicker(true);
   };
 
+  console.log('departureLocation', departureLocation);
+  console.log('locationProvinces', locationProvinces);
+
   return (
     <Modal
       animationType="slide"
@@ -169,7 +174,7 @@ const _Modal: React.FC<Props> = props => {
           <View style={_styles.modalView}>
             <KeyboardAvoidingView
               enabled
-              style={{ flex: 1 }}
+              style={{flex: 1}}
               behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
               <ScrollView
                 style={_styles.scroll}
@@ -182,7 +187,7 @@ const _Modal: React.FC<Props> = props => {
                     showsVerticalScrollIndicator={false}
                     renderDropdownIcon={renderDropdownIcon}
                     dropdownIconPosition="left"
-                    defaultButtonText={dataProvince[0].name}
+                    defaultButtonText={locationProvinces}
                     buttonStyle={_styles.container}
                     buttonTextStyle={[
                       _styles.text,
@@ -195,9 +200,9 @@ const _Modal: React.FC<Props> = props => {
                     dropdownStyle={_styles.modalViewLocation}
                     selectedRowStyle={[
                       _styles.item,
-                      { backgroundColor: Colors.GREEN },
+                      {backgroundColor: Colors.GREEN},
                     ]}
-                    selectedRowTextStyle={[_styles.text, { color: Colors.WHITE }]}
+                    selectedRowTextStyle={[_styles.text, {color: Colors.WHITE}]}
                     rowStyle={_styles.item}
                     rowTextStyle={_styles.text}
                     data={dataProvince}
@@ -217,7 +222,7 @@ const _Modal: React.FC<Props> = props => {
                     showsVerticalScrollIndicator={false}
                     renderDropdownIcon={renderDropdownIcon}
                     dropdownIconPosition="left"
-                    defaultButtonText="Việt Nam"
+                    defaultButtonText={departureLocation}
                     buttonStyle={_styles.container}
                     buttonTextStyle={[
                       _styles.text,
@@ -230,22 +235,22 @@ const _Modal: React.FC<Props> = props => {
                     dropdownStyle={_styles.modalViewLocation}
                     selectedRowStyle={[
                       _styles.item,
-                      { backgroundColor: Colors.GREEN },
+                      {backgroundColor: Colors.GREEN},
                     ]}
-                    selectedRowTextStyle={[_styles.text, { color: Colors.WHITE }]}
+                    selectedRowTextStyle={[_styles.text, {color: Colors.WHITE}]}
                     rowStyle={_styles.item}
                     rowTextStyle={_styles.text}
-                    data={dataCountry}
+                    data={dataProvince}
                     onSelect={(selectedItem, index) => {
-                      console.log(selectedItem, index);
+                      setDepartureLocation(selectedItem.name);
                     }}
                     buttonTextAfterSelection={(selectedItem, index) => {
                       // Hiển thị giá trị của thuộc tính 'title' sau khi một mục được chọn
-                      return selectedItem.title;
+                      return selectedItem.name;
                     }}
                     rowTextForSelection={(item, index) => {
                       // Hiển thị giá trị của thuộc tính 'title' cho mỗi mục trong dropdown
-                      return item.title;
+                      return item.name;
                     }}
                   />
                 </View>
@@ -275,8 +280,8 @@ const _Modal: React.FC<Props> = props => {
                     ]}
                     placeholder="Giá thấp nhất"
                   />
-                  <Pressable onPress={() => { }}>
-                    <Text style={[_styles.text, { fontSize: 13 }]}>VND</Text>
+                  <Pressable onPress={() => {}}>
+                    <Text style={[_styles.text, {fontSize: 13}]}>VND</Text>
                   </Pressable>
                 </View>
 
@@ -297,8 +302,8 @@ const _Modal: React.FC<Props> = props => {
                       },
                     ]}
                     placeholder="Giá cao nhất"></TextInput>
-                  <Pressable onPress={() => { }}>
-                    <Text style={[_styles.text, { fontSize: 13 }]}>VND</Text>
+                  <Pressable onPress={() => {}}>
+                    <Text style={[_styles.text, {fontSize: 13}]}>VND</Text>
                   </Pressable>
                 </View>
 
@@ -340,25 +345,31 @@ const _Modal: React.FC<Props> = props => {
             imageIconRight={EMAIL}
             onPress={() => {
               const data = {
-                locationProvinces: locationProvinces,
-                is_popular: is_popular === 'Nổi bật' ? true : false,
+                departureLocation:
+                  departureLocation === 'Điểm đến' ? '' : departureLocation,
+                locationProvinces:
+                  locationProvinces === 'Điểm đi' ? '' : locationProvinces,
+                is_popular: is_popularUI === 'Nổi bật' ? true : false,
                 minPrice: minPrice,
-                maxPrice: maxPrice,
+                maxPrice: maxPrice === '' ? '' : maxPrice,
                 dayFind: dayFind,
               };
               dispatch(findTourByFilter(data));
               setDayFind(
                 moment(new Date(), inputDateFormat).format(outputDateFormat),
               );
-              setLocationProvinces(dataProvince[0].name);
-              setMinPrice('');
+              setLocationProvinces('Điểm đi');
+              setDepartureLocation('Điểm đến');
+              setMinPrice('0');
               setMaxPrice('');
               setIsPopular('Nổi bật');
+
               onPress(
+                departureLocation,
                 locationProvinces,
-                is_popular === 'Nổi bật' ? true : false,
+                is_popularUI === 'Nổi bật' ? true : false,
                 minPrice,
-                maxPrice,
+                maxPrice === '' ? '0' : maxPrice,
                 dayFind,
               );
             }}
@@ -496,7 +507,7 @@ const _styles = StyleSheet.create({
   category: {
     marginTop: 15,
     height: 47,
-    width: Dimensions.get('window').width * 0.3,
+    width: Dimensions.get('window').width * 0.35,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

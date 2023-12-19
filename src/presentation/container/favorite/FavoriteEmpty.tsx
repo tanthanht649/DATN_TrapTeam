@@ -54,33 +54,9 @@ export interface Item {
 const _FavoriteEmpty: React.FC<PropsType> = props => {
   const {navigation} = props;
   const dataFavorite = useSelector((state: RootState) => state.favorite.dataFavorites);
-  console.log('dataFavorite: ', dataFavorite.length);
   const dispatch = useAppDispatch();
   const dataUser = useSelector((state: RootState) => state.user.dataUsers);
   const [listViewType, setListViewType] = useState<'grid' | 'list'>('grid');
-  const [data, setData] = useState<Item[]>([
-    {
-      id: 1,
-      image: SHAPE_1,
-      price: 5504000,
-      name: 'Tour Tết 2024: Quy Nhơn – Phú Yên, 2 ngày 1 đêm',
-      location: 'Bình Định - Phú Yên, Việt Nam',
-    },
-    {
-      id: 2,
-      image: SHAPE_3,
-      price: 4250000,
-      name: 'Tour Đồng bằng sông Cửu Long Cửu Long, 2 ngày 1 đêm',
-      location: 'Miền Tây, Việt Nam',
-    },
-    {
-      id: 3,
-      image: SHAPE_2,
-      price: 2090000,
-      name: 'Tour Teambuilding 2 ngày 1 đêm Hồ Tràm vui chơi cực đỉnh quên lối về',
-      location: 'Vũng Tàu, Việt Nam',
-    },
-  ]);
   const onDelete = (user_id : string | undefined, tour_id: string | undefined) => {
     const data = {
       user_id: user_id,
@@ -125,7 +101,7 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
             <View style={_styles.styleStarView}>
               <Image source={LOCATION} style={_styles.styleStar} />
               <Text numberOfLines={1} style={_styles.styleLocationText}>
-                {item.tour_id?.province_id.name}
+                {item.tour_id?.departure_location}
               </Text>
             </View>
           </View>
@@ -164,7 +140,7 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 style={[_styles.styleLocationText, {paddingRight: 35}]}>
-                {item.tour_id?.province_id.name}
+                {item.tour_id?.departure_location}
               </Text>
             </View>
           </View>
@@ -189,20 +165,20 @@ const _FavoriteEmpty: React.FC<PropsType> = props => {
   );
   const renderNull = () => (
     <View style={_styles.nextView}>
-      <TouchableOpacity onPress={() => console.log('goHome')}>
+      <TouchableOpacity>
         <Image source={ALERT_SUCCESS_PLUS} style={{height: 142, width: 142}} />
       </TouchableOpacity>
       <TextPlus
-        text={'Your favorite page is\nempty'}
-        textBolds={['empty']}
+        text={'Trang yêu thích của bạn\ntrống'}
+        textBolds={['trống']}
         numberOfLines={2}
         viewStyle={{flex: 0.18, justifyContent: 'center'}}
         textStyle={StyleSheet.flatten([_styles.text])}
         boldStyle={StyleSheet.flatten([_styles.textBold])}
       />
       <Text style={_styles.textMini}>
-        Click add button above to start exploring and choose{'\n'}your favorite
-        estates.{' '}
+      Nhấp vào nút thêm ở trên để bắt đầu khám phá{'\n'}và chọn tour bạn yêu thích
+      {' '}
       </Text>
     </View>
   );
@@ -472,7 +448,7 @@ const _styles = StyleSheet.create({
     paddingBottom: 8,
   },
   price: {
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.RED,
     fontFamily: fontFamily.Bold,
     letterSpacing: 0.48,

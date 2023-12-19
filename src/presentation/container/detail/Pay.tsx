@@ -158,6 +158,7 @@ const _Pay: React.FC<PropsType> = props => {
                   position: 'absolute',
                   top: 15,
                   left: 15,
+                  display: 'none',
                 }}
               />
             </View>
@@ -401,8 +402,7 @@ const _Pay: React.FC<PropsType> = props => {
             imageIconLeft={FULL_NAME}
             imageIconRight={ORDER_BT}
             onPress={() => {
-              
-              setModalVisiblePay(true);
+             
               const data = {
                 user_id: user_id,
                 tour_id: tour_id,
@@ -415,7 +415,7 @@ const _Pay: React.FC<PropsType> = props => {
                 location_custom: location_custom,
               };
 
-              dispatch(addBookingTour(data));
+              dispatch(addBookingTour(data)).then(() => { setModalVisiblePay(true);});
             }}
             viewStyle={{
               width: DimensionsStyle.width * 1 - 40,
@@ -437,7 +437,7 @@ const _Pay: React.FC<PropsType> = props => {
         <ModalSuccessful
           visible={modalVisiblePay}
           onPress={handleModal}
-          text="Bạn đã thanh toán thành công"
+          text={`Bạn đã thanh toán thành công.\nThông tin đặt chuyến được gửi trong email`}
           textBold="thành công"
           titleButton="Xem danh sách tour đã đặt"
         />
