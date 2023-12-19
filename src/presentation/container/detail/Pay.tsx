@@ -56,6 +56,7 @@ const _Pay: React.FC<PropsType> = props => {
   const role = route.params?.role;
   const location_custom = route.params?.location_custom;
   const priceService = route.params?.priceService;
+  const isSale = route.params?.isSale;
 
   const [priceShow, setPriceShow] = React.useState<number>(0);
   const quantity = useSelector(
@@ -75,9 +76,11 @@ const _Pay: React.FC<PropsType> = props => {
 
   useEffect(() => {
     if (dataTourDetail) {
-      if (quantity > 30) {
+      if (quantity > 30 && isSale === false) {
         setPriceShow(dataTourDetail.price * 0.8);
-      } else {
+      } else if( isSale === true){
+        setPriceShow(dataTourDetail.price);
+      }else if(isSale === false){
         setPriceShow(dataTourDetail.price);
       }
     }

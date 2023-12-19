@@ -700,22 +700,28 @@ const _BookTour: React.FC<PropsType> = props => {
                         return false;
                       }
 
-                      if (adult + child > 50 - quantity) {
-                        Alert.alert(
-                          'Thông báo',
-                          'Số lượng đặt không được vượt quá số lượng còn lại',
-                          [
-                            {
-                              text: 'OK',
-                              onPress: () => console.log('OK Pressed'),
-                              style: 'cancel',
-                            },
-                          ],
-                          { cancelable: false },
-                        );
-                        return false;
-                      }
+                      const resultcompareArrays = compareArrays(
+                        dataLocationDefault,
+                        array,
+                      );
 
+                      if(resultcompareArrays == 0){
+                        if (adult + child > 50 - quantity) {
+                          Alert.alert(
+                            'Thông báo',
+                            'Số lượng đặt không được vượt quá số lượng còn lại',
+                            [
+                              {
+                                text: 'OK',
+                                onPress: () => console.log('OK Pressed'),
+                                style: 'cancel',
+                              },
+                            ],
+                            { cancelable: false },
+                          );
+                          return false;
+                        }
+                      }
                       const resulthasDuplicates = hasDuplicates(array.current);
                       if (resulthasDuplicates) {
                         console.log('Có trùng');
@@ -759,6 +765,7 @@ const _BookTour: React.FC<PropsType> = props => {
                             role: role,
                             location_custom: location_custom,
                             priceService: 0,
+                            isSale: false
                           });
 
                         } else {
@@ -770,7 +777,7 @@ const _BookTour: React.FC<PropsType> = props => {
                           const child_account = child;
                           const priceService = (adult + child) * resultcompareArrays * 300000;
                           const price =
-                            priceUI - discount + priceService;
+                            adult * dataTourDetail?.price + child* dataTourDetail?.price * 0.6  - discount + priceService;
                           const note = noteUI;
                           const role = true;
                           const location_custom: LocationInBookTour[] = array.current;
@@ -785,6 +792,7 @@ const _BookTour: React.FC<PropsType> = props => {
                             role: role,
                             location_custom: location_custom,
                             priceService: priceService,
+                            isSale: true
                           });
                         }
                       }
@@ -823,20 +831,27 @@ const _BookTour: React.FC<PropsType> = props => {
                         return false;
                       }
 
-                      if (adult + child > 50 - quantity) {
-                        Alert.alert(
-                          'Thông báo',
-                          'Số lượng đặt không được vượt quá số lượng còn lại',
-                          [
-                            {
-                              text: 'OK',
-                              onPress: () => console.log('OK Pressed'),
-                              style: 'cancel',
-                            },
-                          ],
-                          { cancelable: false },
-                        );
-                        return false;
+                      const resultcompareArrays = compareArrays(
+                        dataLocationDefault,
+                        array,
+                      );
+
+                      if(resultcompareArrays == 0){
+                        if (adult + child > 50 - quantity) {
+                          Alert.alert(
+                            'Thông báo',
+                            'Số lượng đặt không được vượt quá số lượng còn lại',
+                            [
+                              {
+                                text: 'OK',
+                                onPress: () => console.log('OK Pressed'),
+                                style: 'cancel',
+                              },
+                            ],
+                            { cancelable: false },
+                          );
+                          return false;
+                        }
                       }
 
                       const resulthasDuplicates = hasDuplicates(array.current);
@@ -882,6 +897,7 @@ const _BookTour: React.FC<PropsType> = props => {
                             role: role,
                             location_custom: location_custom,
                             priceService: 0,
+                            isSale: false,
                           });
 
                         } else {
@@ -909,7 +925,7 @@ const _BookTour: React.FC<PropsType> = props => {
                           const child_account = child;
                           const priceService = (adult + child) * resultcompareArrays * 300000;
                           const price =
-                            priceUI - discount + priceService;
+                          adult * dataTourDetail?.price + child* dataTourDetail?.price * 0.6  - discount + priceService;
                           const note = noteUI;
                           const role = true;
                           const location_custom: LocationInBookTour[] = array.current;
@@ -924,6 +940,7 @@ const _BookTour: React.FC<PropsType> = props => {
                             role: role,
                             location_custom: location_custom,
                             priceService: priceService,
+                            isSale: false,
                           });
                         }
                       }

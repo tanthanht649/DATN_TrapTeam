@@ -56,6 +56,7 @@ type PayProps = {
   role: boolean;
   location_custom: LocationInBookTour[];
   priceService: number;
+  isSale: boolean;
 };
 
 type HistoryDetailProps = {};

@@ -268,7 +268,6 @@ const _DetailTour: React.FC<PropsType> = props => {
   const dataReview = useSelector(
     (state: RootState) => state.review.dataReviews,
   );
-  console.log(dataReview.length);
 
   const [dataShowReview, setDataShowReview] = React.useState<Review[]>([]);
 
@@ -410,6 +409,18 @@ const _DetailTour: React.FC<PropsType> = props => {
       dispatch(getQuantityBookingTour(dataTour._id));
     }
   }, [dataTour]);
+
+
+const currentDate = new Date();
+
+const isDateAfter = (date1: Date, date2: Date) => {
+  return date1.getTime() > date2.getTime();
+};
+
+const compareDate = new Date(dataTour?.end_date);
+const isAfter = isDateAfter(currentDate, compareDate);
+
+console.log(isAfter);
 
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
@@ -821,11 +832,12 @@ const _DetailTour: React.FC<PropsType> = props => {
               imageIconLeft={FULL_NAME}
               imageIconRight={ORDER_BT}
               onPress={() => {
+                isAfter ? ()=>{} :
                 navigation.navigate('BookTour');
               }}
               viewStyle={{
                 width: DimensionsStyle.width * 0.7,
-                backgroundColor: Colors.GREEN,
+                backgroundColor: !isAfter ? Colors.GREEN : Colors.GREY,
                 borderRadius: 10,
                 marginVertical: 20,
               }}
