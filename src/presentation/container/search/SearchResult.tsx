@@ -96,13 +96,10 @@ const _SearchResult: React.FC<PropsType> = props => {
   const maxPrice = props.route.params?.maxPrice;
   const dayFind = props.route.params?.dayFind;
 
-  console.log('departureLocation', departureLocation);
-  console.log('locationProvinces', locationProvinces);
-  console.log('is_popular', is_popular);
-  console.log('minPrice', minPrice);
-  console.log('maxPrice', maxPrice);
+ 
 
   const text = props.route.params?.text;
+
 
   const dataSearchName = useSelector(
     (state: RootState) => state.tour.dataSearchName,
@@ -145,31 +142,31 @@ const _SearchResult: React.FC<PropsType> = props => {
   //   Number(maxPrice).toLocaleString('vi-VN');
   const is_popular_text = is_popular ? 'Phổ biến' : 'Không nổi bật';
 
-  const DATAFIND: string[] = [];
+  const [dataFind, setDataFind] = useState<string[]>([]);
 
   useEffect(() => {
     if (departureLocation !== 'Điểm đến') {
-      DATAFIND.push('Điểm đến: ' + departureLocation);
+      dataFind.push('Điểm đến: ' + departureLocation);
     }
 
     if (locationProvinces !== 'Điểm đi') {
-      DATAFIND.push('Điểm đi: ' + locationProvinces);
+      dataFind.push('Điểm đi: ' + locationProvinces);
     }
 
-    DATAFIND.push(is_popular_text);
+    dataFind.push(is_popular_text);
 
     if (minPrice == '0' && maxPrice == '0') {
-      DATAFIND.push('Giá: Tất cả');
+      dataFind.push('Giá: Tất cả');
     }
 
     if (minPrice == '0' && maxPrice != '0') {
-      DATAFIND.push(
+      dataFind.push(
         'Giá: Dưới ' + Number(maxPrice).toLocaleString('vi-VN') + ' VNĐ',
       );
     }
 
-    DATAFIND.push(dayFind + '');
-  }, [dataTourAndFavorite]);
+    dataFind.push(dayFind + '');
+  }, []);
 
   const [marginBottom, setMarginBottom] = useState(0);
 
@@ -407,9 +404,9 @@ const _SearchResult: React.FC<PropsType> = props => {
                 {isFilter ? (
                   <View>
                     <FlatList
-                      data={DATAFIND}
+                      data={dataFind}
                       renderItem={renderItemFind}
-                      keyExtractor={item => item}
+                      keyExtractor={index => index.toString()}
                       style={{marginBottom: 10}}
                       horizontal={true}
                       showsHorizontalScrollIndicator={false}

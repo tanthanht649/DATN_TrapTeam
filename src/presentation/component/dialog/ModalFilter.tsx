@@ -507,7 +507,7 @@ const _styles = StyleSheet.create({
   category: {
     marginTop: 15,
     height: 47,
-    width: Dimensions.get('window').width * 0.3,
+    width: Dimensions.get('window').width * 0.35,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

@@ -402,8 +402,7 @@ const _Pay: React.FC<PropsType> = props => {
             imageIconLeft={FULL_NAME}
             imageIconRight={ORDER_BT}
             onPress={() => {
-
-              setModalVisiblePay(true);
+             
               const data = {
                 user_id: user_id,
                 tour_id: tour_id,
@@ -416,7 +415,7 @@ const _Pay: React.FC<PropsType> = props => {
                 location_custom: location_custom,
               };
 
-              dispatch(addBookingTour(data));
+              dispatch(addBookingTour(data)).then(() => { setModalVisiblePay(true);});
             }}
             viewStyle={{
               width: DimensionsStyle.width * 1 - 40,
