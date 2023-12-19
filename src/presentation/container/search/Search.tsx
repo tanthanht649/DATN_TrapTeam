@@ -267,7 +267,7 @@ const _Search: React.FC<PropsType> = props => {
 
     timeoutId = setTimeout(() => {
       dispatch(findTourByScreenSearch(text));
-    }, 3000);
+    }, 1000);
   };
 
   useEffect(() => {

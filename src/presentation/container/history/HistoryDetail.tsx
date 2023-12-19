@@ -77,7 +77,7 @@ const ItemHistory = ({
   item: BookingTour;
   onPress: () => void;
 }) => {
-  const compareDate = new Date(item.tour_id.end_date);
+  const compareDate = new Date(item.tour_id?.end_date);
   const isAfter = isDateAfter(currentDate, compareDate);
   return (
     <View
@@ -136,7 +136,7 @@ const ItemHistory = ({
                 fontSize: 13,
                 fontFamily: fontFamily.Medium,
               }}>
-              {item.tour_id.province_id.name}
+              {item.tour_id?.province_id.name}
             </Text>
           </View>
           <View
@@ -181,13 +181,13 @@ const ItemHistory = ({
                 fontFamily: fontFamily.Medium,
               }}>
               {daysDifference(
-                item.tour_id.end_date,
-                item.tour_id.departure_date,
+                item.tour_id?.end_date,
+                item.tour_id?.departure_date,
               )}{' '}
               ngày{' '}
               {daysDifference(
-                item.tour_id.end_date,
-                item.tour_id.departure_date,
+                item.tour_id?.end_date,
+                item.tour_id?.departure_date,
               ) - 1}{' '}
               đêm
             </Text>
@@ -211,14 +211,14 @@ const ItemHistory = ({
                 fontSize: 13,
                 fontFamily: fontFamily.Medium,
               }}>
-              {moment(item.tour_id.departure_date).format('DD/MM/YYYY')} -{' '}
-              {moment(item.tour_id.end_date).format('DD/MM/YYYY')}
+              {moment(item.tour_id?.departure_date).format('DD/MM/YYYY')} -{' '}
+              {moment(item.tour_id?.end_date).format('DD/MM/YYYY')}
             </Text>
           </View>
         </View>
         <View style={{marginTop: 15}}>
           <Image
-            source={{uri: item.tour_id.image}}
+            source={{uri: item.tour_id?.image}}
             style={{
               width: DimensionsStyle.width * 0.33,
               height: DimensionsStyle.width * 0.33,

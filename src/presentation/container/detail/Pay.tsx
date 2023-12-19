@@ -438,7 +438,7 @@ const _Pay: React.FC<PropsType> = props => {
         <ModalSuccessful
           visible={modalVisiblePay}
           onPress={handleModal}
-          text="Bạn đã thanh toán thành công"
+          text={`Bạn đã thanh toán thành công.\nThông tin đặt chuyến được gửi trong email`}
           textBold="thành công"
           titleButton="Xem danh sách tour đã đặt"
         />
