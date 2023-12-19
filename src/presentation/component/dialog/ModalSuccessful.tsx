@@ -72,7 +72,7 @@ const _Modal: React.FC<Props> = props => {
             viewStyle={{
               width: 278,
               position: 'absolute',
-              bottom: 70,
+              bottom: 40,
             }}
           />
         </View>

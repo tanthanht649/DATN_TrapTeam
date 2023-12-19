@@ -1,6 +1,6 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import React from 'react';
-import {BackgroundApp, Button, Header, TextPlus} from '@components';
+import { BackgroundApp, Button, Header, TextPlus } from '@components';
 import {
   BACKGROUND_WHITE,
   HEART_INACTIVE,
@@ -11,9 +11,9 @@ import {
   ONBOARDING_1,
   fontFamily,
 } from '@assets';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {DimensionsStyle} from '@resources';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { DimensionsStyle } from '@resources';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   OnboardingLoginStackParamList,
   WelcomeTeamStackParamList,
@@ -24,7 +24,7 @@ type PropsType = NativeStackScreenProps<
 >;
 
 const _OnboardingNextOne: React.FC<PropsType> = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   return (
     <BackgroundApp source={BACKGROUND_WHITE}>
       <SafeAreaView
@@ -36,7 +36,7 @@ const _OnboardingNextOne: React.FC<PropsType> = props => {
             iconLeft={LOGO_APP}
             textRight={'Bỏ qua'}
             eventLeft={() => console.log('IconLeft')}
-            eventRight={() => console.log('EventRight')}
+            eventRight={() => navigation.navigate('Login')}
             isCheck={true}
             styleIconLeft={{
               width: DimensionsStyle.width * 0.1,
@@ -49,8 +49,8 @@ const _OnboardingNextOne: React.FC<PropsType> = props => {
             text={`Tìm địa điểm tốt nhất\nvới giá tốt nhất`}
             textBolds={['tốt nhất']}
             textStyle={_styles.textFind}
-            boldStyle={{fontSize: 25}}
-            viewStyle={{marginStart: 30}}
+            boldStyle={{ fontSize: 25 }}
+            viewStyle={{ marginStart: 30 }}
           />
 
           <Text style={_styles.textLorem}>

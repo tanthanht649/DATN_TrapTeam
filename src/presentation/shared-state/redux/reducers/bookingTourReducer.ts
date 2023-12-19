@@ -42,6 +42,10 @@ export const getQuantityBookingTour = createAsyncThunk(
   },
 );
 
+interface LocationInBookTour {
+  _id: string;
+  name: string;
+}
 interface DataBookingTour {
   user_id: string | undefined;
   tour_id: string | undefined;
@@ -52,12 +56,7 @@ interface DataBookingTour {
   note: string | undefined;
   role: boolean | undefined;
   location_custom:
-    | [
-        {
-          _id: string;
-          name: string;
-        },
-      ]
+    LocationInBookTour[]
     | undefined;
 }
 

@@ -74,6 +74,8 @@ const _DetailFull: React.FC<PropsType> = props => {
     'Ngày 4: KHÁM PHÁ ĐÀ NẴNG.',
   ];
 
+  
+
   return (
     <ScrollView>
       <BackgroundApp source={BACKGROUND_WHITE}>

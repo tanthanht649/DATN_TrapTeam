@@ -42,6 +42,7 @@ import {
   addFavorite,
   deleteFavorite,
   findTourByFilter,
+  findTourByNames,
   getDataFavorite,
   useAppDispatch,
 } from '@shared-state';
@@ -88,33 +89,31 @@ const _SearchResult: React.FC<PropsType> = props => {
 
   const dataUser = useSelector((state: RootState) => state.user.dataUsers);
   const isFilter = props.route.params?.isFilter;
+  const departureLocation = props.route.params?.departureLocation;
   const locationProvinces = props.route.params?.locationProvinces;
   const is_popular = props.route.params?.is_popular;
   const minPrice = props.route.params?.minPrice;
   const maxPrice = props.route.params?.maxPrice;
   const dayFind = props.route.params?.dayFind;
 
-  const [textSearch, setTextSearch] = useState('');
-  const [isFound, setIsFound] = useState(true);
-  const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
-  const [isLayout, setIsLayout] = useState(false);
-  const [column, setColumn] = useState(2);
+ 
+
+  const text = props.route.params?.text;
+
 
   const dataSearchName = useSelector(
     (state: RootState) => state.tour.dataSearchName,
   );
 
-  
-
   useEffect(() => {
-    if (dataSearchName.length === 0) {
-      setIsFound(false);
-    } else {
-      setIsFound(true);
+    if (text !== undefined) {
+      dispatch(findTourByNames(text));
     }
-  }, [dataSearchName]);
+  }, [text]);
 
-  console.log('dataSearchName', dataSearchName);
+  const [listViewType, setListViewType] = useState<'list' | 'grid'>('grid');
+  const [isLayout, setIsLayout] = useState(false);
+  const [column, setColumn] = useState(2);
 
   const dataFavoriteNoId = useSelector(
     (state: RootState) => state.favorite.dataFavoriteNoId,
@@ -137,13 +136,37 @@ const _SearchResult: React.FC<PropsType> = props => {
 
   const loadingTour = useSelector((state: RootState) => state.tour.loadingTour);
 
-  const price =
-    Number(minPrice).toLocaleString('vi-VN') +
-    ' - ' +
-    Number(maxPrice).toLocaleString('vi-VN');
+  // const price =
+  //   Number(minPrice).toLocaleString('vi-VN') +
+  //   ' - ' +
+  //   Number(maxPrice).toLocaleString('vi-VN');
   const is_popular_text = is_popular ? 'Phổ biến' : 'Không nổi bật';
 
-  const DATAFIND: string[] = [is_popular_text, locationProvinces + '', price, dayFind + ''];
+  const [dataFind, setDataFind] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (departureLocation !== 'Điểm đến') {
+      dataFind.push('Điểm đến: ' + departureLocation);
+    }
+
+    if (locationProvinces !== 'Điểm đi') {
+      dataFind.push('Điểm đi: ' + locationProvinces);
+    }
+
+    dataFind.push(is_popular_text);
+
+    if (minPrice == '0' && maxPrice == '0') {
+      dataFind.push('Giá: Tất cả');
+    }
+
+    if (minPrice == '0' && maxPrice != '0') {
+      dataFind.push(
+        'Giá: Dưới ' + Number(maxPrice).toLocaleString('vi-VN') + ' VNĐ',
+      );
+    }
+
+    dataFind.push(dayFind + '');
+  }, []);
 
   const [marginBottom, setMarginBottom] = useState(0);
 
@@ -363,7 +386,127 @@ const _SearchResult: React.FC<PropsType> = props => {
           textCenter="Kết quả tìm kiếm"
         />
 
-        {isFound ? (
+        {loadingTour ? (
+          <Loading height={DimensionsStyle.height * 1} />
+        ) : (
+          <View
+            style={{
+              flex: 1,
+            }}>
+            {dataTourAndFavorite.length > 0 ? (
+              <View>
+                <View>
+                  <ViewSwitcher
+                    quantityEstates={dataSearchName.length}
+                    onTabChange={setListViewType}
+                  />
+                </View>
+                {isFilter ? (
+                  <View>
+                    <FlatList
+                      data={dataFind}
+                      renderItem={renderItemFind}
+                      keyExtractor={index => index.toString()}
+                      style={{marginBottom: 10}}
+                      horizontal={true}
+                      showsHorizontalScrollIndicator={false}
+                    />
+                  </View>
+                ) : null}
+                <View style={_styles.containerListFeatured}>
+                  <FlatList
+                    data={dataTourAndFavorite}
+                    renderItem={
+                      isLayout
+                        ? renderItemTourOutstanding
+                        : renderItemTourFavorite
+                    }
+                    keyExtractor={item => item._id.toString()}
+                    numColumns={column}
+                    key={column}
+                    showsVerticalScrollIndicator={false}
+                    style={{
+                      marginBottom: isFilter ? 270 : 120,
+                    }}
+                  />
+                </View>
+              </View>
+            ) : (
+              <View
+                style={{
+                  height: DimensionsStyle.height * 0.8,
+                  width: '100%',
+                }}>
+                <View
+                  style={{
+                    flex: 1,
+                  }}>
+                  <TextPlus
+                    text="Tìm thấy 0 chuyến đi"
+                    textBolds={['0']}
+                    numberOfLines={1}
+                    textStyle={{
+                      fontSize: 20,
+                      marginStart: 20,
+                      marginTop: 10,
+                    }}
+                    boldStyle={{
+                      fontSize: 20,
+                      fontFamily: fontFamily.Bold,
+                    }}
+                  />
+
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flex: 1,
+                    }}>
+                    <Image
+                      source={ALERT_DANGER}
+                      style={{
+                        width: 200,
+                        height: 200,
+                        alignSelf: 'center',
+                        resizeMode: 'stretch',
+                      }}
+                    />
+                    <TextPlus
+                      text="Tìm kiếm không thấy"
+                      textBolds={['không thấy']}
+                      numberOfLines={1}
+                      textStyle={{
+                        fontSize: 25,
+                        marginTop: 10,
+                        textAlign: 'center',
+                        width: '100%',
+                      }}
+                      boldStyle={{
+                        fontSize: 25,
+                        fontFamily: fontFamily.Bold,
+                      }}
+                    />
+                    <Text
+                      style={{
+                        fontFamily: fontFamily.Medium,
+                        textAlign: 'center',
+                        marginHorizontal: 30,
+                        lineHeight: 20,
+                        marginTop: 20,
+                        fontSize: 14,
+                      }}>
+                      Rất tiếc, chúng tôi không thể tìm thấy chuyến đi mà bạn
+                      đang tìm kiếm. Có lẽ, một chút lỗi chính tả?
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            )}
+          </View>
+        )}
+
+        {/* {isFound ? (
           <View
             style={{
               flex: 1,
@@ -388,22 +531,24 @@ const _SearchResult: React.FC<PropsType> = props => {
               </View>
             ) : null}
 
-            {
-              loadingTour ? <Loading /> : <View style={_styles.containerListFeatured}>
-              <FlatList
-                data={dataTourAndFavorite}
-                renderItem={
-                  isLayout ? renderItemTourOutstanding : renderItemTourFavorite
-                }
-                keyExtractor={item => item._id.toString()}
-                numColumns={column}
-                key={column}
-                showsVerticalScrollIndicator={false}
-              />
-            </View>
-            }
-
-            
+            {loadingTour ? (
+              <Loading />
+            ) : (
+              <View style={_styles.containerListFeatured}>
+                <FlatList
+                  data={dataTourAndFavorite}
+                  renderItem={
+                    isLayout
+                      ? renderItemTourOutstanding
+                      : renderItemTourFavorite
+                  }
+                  keyExtractor={item => item._id.toString()}
+                  numColumns={column}
+                  key={column}
+                  showsVerticalScrollIndicator={false}
+                />
+              </View>
+            )}
           </View>
         ) : (
           <View
@@ -470,7 +615,7 @@ const _SearchResult: React.FC<PropsType> = props => {
               </Text>
             </View>
           </View>
-        )}
+        )} */}
       </SafeAreaView>
     </BackgroundApp>
   );
@@ -478,14 +623,13 @@ const _SearchResult: React.FC<PropsType> = props => {
 
 const _styles = StyleSheet.create({
   container: {
-    flex: 1,
     marginTop: 10,
+    flex: 1,
   },
 
   containerListFeatured: {
     marginHorizontal: 20,
     alignSelf: 'center',
-    flex: 1,
   },
 
   iconRight: {

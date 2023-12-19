@@ -66,3 +66,5 @@ yarn.lock
 .yarn
 # testing
 /coverage
+yarn.lock
+*.lock

@@ -31,6 +31,7 @@ type Props = {
   ModalStyle?: StyleProp<ViewStyle>;
   visible?: boolean;
   onPress: (
+    departureLocation: string,
     locationProvinces: string,
     is_popular: boolean,
     minPrice: string,
@@ -102,12 +103,12 @@ const _Modal: React.FC<Props> = props => {
     </TouchableOpacity>
   );
 
-  const [is_popular, setIsPopular] = useState<string>('Nổi bật');
+  const [is_popularUI, setIsPopular] = useState<string>('Nổi bật');
 
   const renderItem = ({item}: {item: ItemData}) => {
     const backgroundColor =
-      item.title === is_popular ? Colors.BLUE : Colors.GRAY_SEARCH;
-    const color = item.title === is_popular ? Colors.WHITE : Colors.BLUE;
+      item.title === is_popularUI ? Colors.BLUE : Colors.GRAY_SEARCH;
+    const color = item.title === is_popularUI ? Colors.WHITE : Colors.BLUE;
     return (
       <Item
         item={item}
@@ -117,10 +118,11 @@ const _Modal: React.FC<Props> = props => {
       />
     );
   };
-  const [locationProvinces, setLocationProvinces] = useState<string>(
-    dataProvince[0].name,
-  );
-  const [minPrice, setMinPrice] = useState<string>('');
+  const [locationProvinces, setLocationProvinces] = useState<string>('Điểm đi');
+
+  const [departureLocation, setDepartureLocation] =
+    useState<string>('Điểm đến');
+  const [minPrice, setMinPrice] = useState<string>('0');
   const handleOnchangePrice = (value: string) => {
     setMinPrice(value);
   };
@@ -147,6 +149,9 @@ const _Modal: React.FC<Props> = props => {
   const showDatePicker = () => {
     setShowPicker(true);
   };
+
+  console.log('departureLocation', departureLocation);
+  console.log('locationProvinces', locationProvinces);
 
   return (
     <Modal
@@ -182,7 +187,7 @@ const _Modal: React.FC<Props> = props => {
                     showsVerticalScrollIndicator={false}
                     renderDropdownIcon={renderDropdownIcon}
                     dropdownIconPosition="left"
-                    defaultButtonText={dataProvince[0].name}
+                    defaultButtonText={locationProvinces}
                     buttonStyle={_styles.container}
                     buttonTextStyle={[
                       _styles.text,
@@ -217,7 +222,7 @@ const _Modal: React.FC<Props> = props => {
                     showsVerticalScrollIndicator={false}
                     renderDropdownIcon={renderDropdownIcon}
                     dropdownIconPosition="left"
-                    defaultButtonText="Việt Nam"
+                    defaultButtonText={departureLocation}
                     buttonStyle={_styles.container}
                     buttonTextStyle={[
                       _styles.text,
@@ -235,17 +240,17 @@ const _Modal: React.FC<Props> = props => {
                     selectedRowTextStyle={[_styles.text, {color: Colors.WHITE}]}
                     rowStyle={_styles.item}
                     rowTextStyle={_styles.text}
-                    data={dataCountry}
+                    data={dataProvince}
                     onSelect={(selectedItem, index) => {
-                      console.log(selectedItem, index);
+                      setDepartureLocation(selectedItem.name);
                     }}
                     buttonTextAfterSelection={(selectedItem, index) => {
                       // Hiển thị giá trị của thuộc tính 'title' sau khi một mục được chọn
-                      return selectedItem.title;
+                      return selectedItem.name;
                     }}
                     rowTextForSelection={(item, index) => {
                       // Hiển thị giá trị của thuộc tính 'title' cho mỗi mục trong dropdown
-                      return item.title;
+                      return item.name;
                     }}
                   />
                 </View>
@@ -302,7 +307,7 @@ const _Modal: React.FC<Props> = props => {
                   </Pressable>
                 </View>
 
-                <Text style={_styles.textBold}>Ngày khởi hành</Text>
+                <Text style={_styles.textBold}>Ngày khởi hành từ</Text>
 
                 <View style={_styles.input}>
                   <Text
@@ -340,25 +345,31 @@ const _Modal: React.FC<Props> = props => {
             imageIconRight={EMAIL}
             onPress={() => {
               const data = {
-                locationProvinces: locationProvinces,
-                is_popular: is_popular === 'Nổi bật' ? true : false,
+                departureLocation:
+                  departureLocation === 'Điểm đến' ? '' : departureLocation,
+                locationProvinces:
+                  locationProvinces === 'Điểm đi' ? '' : locationProvinces,
+                is_popular: is_popularUI === 'Nổi bật' ? true : false,
                 minPrice: minPrice,
-                maxPrice: maxPrice,
+                maxPrice: maxPrice === '' ? '' : maxPrice,
                 dayFind: dayFind,
               };
               dispatch(findTourByFilter(data));
               setDayFind(
                 moment(new Date(), inputDateFormat).format(outputDateFormat),
               );
-              setLocationProvinces(dataProvince[0].name);
-              setMinPrice('');
+              setLocationProvinces('Điểm đi');
+              setDepartureLocation('Điểm đến');
+              setMinPrice('0');
               setMaxPrice('');
               setIsPopular('Nổi bật');
+
               onPress(
+                departureLocation,
                 locationProvinces,
-                is_popular === 'Nổi bật' ? true : false,
+                is_popularUI === 'Nổi bật' ? true : false,
                 minPrice,
-                maxPrice,
+                maxPrice === '' ? '0' : maxPrice,
                 dayFind,
               );
             }}
@@ -496,7 +507,7 @@ const _styles = StyleSheet.create({
   category: {
     marginTop: 15,
     height: 47,
-    width: Dimensions.get('window').width * 0.3,
+    width: Dimensions.get('window').width * 0.35,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
