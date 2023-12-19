@@ -182,7 +182,7 @@ const ItemTourFavorite = ({
             position: 'absolute',
             bottom: 20,
             left: 10,
-            fontSize: 17,
+            fontSize: 14,
           }}>
           {item.price.toLocaleString('vi-VN')} VNĐ
         </Text>
