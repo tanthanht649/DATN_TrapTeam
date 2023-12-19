@@ -544,6 +544,7 @@ console.log(isAfter);
                   {Number(dataTour.price).toLocaleString('vi-VN')} VNĐ
                 </Text>
               </View>
+              
               <View
                 style={{
                   flexDirection: 'row',
@@ -575,6 +576,14 @@ console.log(isAfter);
                   {Number((dataTour.price) * 0.8).toLocaleString('vi-VN')} VNĐ
                 </Text>
               </View>
+              <Text style={{
+                fontFamily: fontFamily.Medium,
+                fontSize: 14,
+                color: Colors.RED,
+                marginTop: 8,
+                lineHeight: 18,
+                display: quantityPromotion > 30 ? 'flex' : 'none',
+              }}>Lưu ý: Khi đặt chuyến dạng tuỳ chọn sẽ không được áp dụng giá ưu đãi</Text>
               <View
                 style={{
                   flexDirection: 'row',
