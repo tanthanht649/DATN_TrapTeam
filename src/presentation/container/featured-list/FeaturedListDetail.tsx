@@ -287,8 +287,8 @@ const _FeaturedListDetail: React.FC<PropsType> = props => {
   );
 
   const handleScroll = (event: any) => {
-    const offsetY = event.nativeEvent.contentOffset.y + 10;
-    setHideElement(offsetY > 20);
+    const offsetY = event.nativeEvent.contentOffset.y + 1;
+    setHideElement(offsetY > 10);
   };
   const dataFavoriteNoId = useSelector(
     (state: RootState) => state.favorite.dataFavoriteNoId,
@@ -442,14 +442,15 @@ const _FeaturedListDetail: React.FC<PropsType> = props => {
         ) : (
           <View style={_styles.containetTextCenter}>
             <Text style={_styles.textCenterTop}>{locationById?.name}</Text>
-            <Text style={_styles.textCenterBottom}>
+            <Text 
+            numberOfLines={7} style={_styles.textCenterBottom}>
               {locationById?.description}
             </Text>
           </View>
         )}
 
         <View>
-          <ViewSwitcher quantityEstates={22} onTabChange={setListViewType} />
+          <ViewSwitcher quantityEstates={dataTourAndFavorite.length} onTabChange={setListViewType} />
         </View>
 
         <View style={_styles.containerListFeatured}>
@@ -462,8 +463,7 @@ const _FeaturedListDetail: React.FC<PropsType> = props => {
             numColumns={column}
             key={column}
             style={{
-              height: DimensionsStyle.height * 0.6,
-              marginBottom: isLayout ? 120 : 20,
+              marginBottom:  20,
             }}
             showsVerticalScrollIndicator={false}
             onScroll={handleScroll}
@@ -483,6 +483,8 @@ const _styles = StyleSheet.create({
   containerListFeatured: {
     marginHorizontal: 20,
     alignSelf: 'center',
+    height: DimensionsStyle.height * 0.6,
+    paddingBottom: 20,
   },
 
   viewHeder: {

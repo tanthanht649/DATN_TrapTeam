@@ -263,7 +263,7 @@ const _FeaturedListHome: React.FC<PropsType> = props => {
 
   const handleScroll = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y + 10;
-    setHideElement(offsetY > 20);
+    setHideElement(offsetY > 10);
   };
 
   return (
