@@ -305,7 +305,7 @@ const _ListTourBanner: React.FC<PropsType> = props => {
           </View>
         )}
         <View>
-          <ViewSwitcher quantityEstates={22} onTabChange={setListViewType} />
+          <ViewSwitcher quantityEstates={dataTourAndFavorite.length} onTabChange={setListViewType} />
         </View>
 
         {loadingTour ? (
